@@ -141,6 +141,7 @@ public class BestellungResource {
 		
 		bestellung.setKunde(kunde);
 //		kunde.getBestellungen().add(bestellung);
+		//
 		
 		ArrayList<BestellPosition> bestellPositionen = new ArrayList<>();
 		final URI artikelURI = uriHelperArtikel.getUriArtikel(bestellPosition.getArtikel(), uriInfo);
