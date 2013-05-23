@@ -58,9 +58,6 @@ public class BestellungResource {
 	private UriHelperArtikel uriHelperArtikel;
 	
 	@Inject
-	private UriHelperBestellPosition uriHelperBestellPosition;
-	
-	@Inject
 	private BestellungService bs;
 	
 	@Inject
@@ -89,7 +86,7 @@ public class BestellungResource {
 		final BestellPosition bestellPosition = bp.findBestellPositionById(id);
 		// URLs innerhalb der gefundenen Bestellung anpassen
 		
-		List<BestellPosition> bestellPositionen = new ArrayList<>();
+		final List<BestellPosition> bestellPositionen = new ArrayList<>();
 		
 		uriHelperBestellung.updateUriBestellung(bestellung, uriInfo);
 		bestellPosition.setArtikelUri(uriHelperArtikel.getUriArtikel(artikel, uriInfo));
@@ -123,7 +120,7 @@ public class BestellungResource {
 	@POST
 	@Consumes(APPLICATION_JSON)
 	@Produces
-	public Response createBestellung(Bestellung bestellung){
+	public Response createBestellung(Bestellung bestellung) {
 		
 		final Locale locale = localeHelper.getLocale(headers);
 		
@@ -133,23 +130,22 @@ public class BestellungResource {
 		final String stringKundeId = kundeUriString.substring(kundeUriString.lastIndexOf("/") + 1);
 		final Long kundeId = Long.valueOf(stringKundeId);
 		final AbstractKunde kunde  = ks.findKundeById(kundeId, locale);
-		
-	
+		bestellung.setKunde(kunde);	
 		final BestellPosition bestellPosition = bp.createBestellPosition(new BestellPosition());
 		
 		
 		
-		bestellung.setKunde(kunde);
-//		kunde.getBestellungen().add(bestellung);
-		//
 		
-		ArrayList<BestellPosition> bestellPositionen = new ArrayList<>();
+//		kunde.getBestellungen().add(bestellung);
+	
+		final ArrayList<BestellPosition> bestellPositionen = new ArrayList<>();
 		final URI artikelURI = uriHelperArtikel.getUriArtikel(bestellPosition.getArtikel(), uriInfo);
-
+			
 		bestellPosition.setArtikelUri(artikelURI);
 		bestellPositionen.add(bestellPosition);
 		bestellung.setBestellPositionen(bestellPositionen);	
 		bestellung = bs.createBestellung(bestellung, locale);
+		
 		
 		final URI bestellungUri = uriHelperBestellung.getUriBestellung(bestellung, uriInfo);
 		return Response.created(bestellungUri).build();

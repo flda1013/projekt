@@ -71,7 +71,7 @@ public class ArtikelService implements Serializable {
 	public Collection<Artikel> findArtikelByBezeichnung(String bezeichnung,
 			Locale locale) {
 		
-		List<Artikel> artikelPlural = Mock.findArtikelByBezeichnung(bezeichnung);
+		final List<Artikel> artikelPlural = Mock.findArtikelByBezeichnung(bezeichnung);
 		return artikelPlural;
 	}
 	public void deleteArtikel(Long artikelId, Locale locale) {

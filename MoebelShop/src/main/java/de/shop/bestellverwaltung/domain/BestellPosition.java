@@ -22,7 +22,7 @@ public class BestellPosition implements Serializable  {
 	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellPosition.id.min}", groups = IdGroup.class)
 	private Long id;
 	
-	@Min(value = MIN_ID,message = "{bestellverwaltung.bestellPosition.anzahl.Min}", groups = IdGroup.class)
+	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellPosition.anzahl.Min}", groups = IdGroup.class)
 	private long anzahl;
 	
 	@JsonIgnore
@@ -30,11 +30,11 @@ public class BestellPosition implements Serializable  {
 	private Artikel artikel;
 	
 	// TODO bestellungURI
-    //@NotNull(message = "{bestellverwaltung.bestellPosition.bestellungURI.notNull}")
+   // @NotNull(message = "{bestellverwaltung.bestellPosition.bestellungURI.notNull}")
 	private URI bestellungURI;
 	
 	// TODO  artikelURI
-   @NotNull(message = "{bestellverwaltung.bestellPosition.artikelURI.notNull}")
+    @NotNull(message = "{bestellverwaltung.bestellPosition.artikelURI.notNull}")
 	private URI artikelUri;
 	
 	@JsonIgnore

@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import de.shop.util.IdGroup;
@@ -15,13 +16,16 @@ public class Artikel implements Serializable {
 	
 	public static final int BEZEICHNUNG_LENGTH_MIN = 2;
 	public static final int BEZEICHNUNG_LENGTH_MAX = 32;
+	private static final String BEZEICHNUNG_PATTERN = "[A-Z\u00C4\u00D6\u00DC][a-z\u00E4\u00F6\u00FC\u00DF]+[1-9]*";
 	
 	@Min(value = MIN_ID, message = "{artikelverwaltung.artikel.id.min}", groups = IdGroup.class)
 	private Long id;
 	
 	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
+	
 	@Size(min = BEZEICHNUNG_LENGTH_MIN, max = BEZEICHNUNG_LENGTH_MAX,
 	      message = "{artikelverwaltung.artikel.bezeichnung.length}")
+	@Pattern(regexp = BEZEICHNUNG_PATTERN, message = "{artikelverwaltung.artikel.bezeichnung.pattern}")
 	private String bezeichnung;
 	
 		
@@ -59,7 +63,8 @@ public class Artikel implements Serializable {
 		if (bezeichnung == null) {
 			if (other.bezeichnung != null)
 				return false;
-		} else if (!bezeichnung.equals(other.bezeichnung))
+		}
+		else if (!bezeichnung.equals(other.bezeichnung))
 			return false;
 		return true;
 	}
