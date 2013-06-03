@@ -1,12 +1,16 @@
 package de.shop.artikelverwaltung.service;
 
+
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -15,6 +19,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
@@ -22,6 +29,8 @@ import com.google.common.base.Strings;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.util.Log;
+import de.shop.util.ValidatorProvider;
+import static de.shop.util.Constants.KEINE_ID;
 
 @Log
 public class ArtikelService implements Serializable {
@@ -123,6 +132,38 @@ public class ArtikelService implements Serializable {
 				                        .getResultList();
 		return artikel;
 	}
+	
+	@Inject
+	private ValidatorProvider validatorProvider;
+	
+	private void validateArtikel(Artikel artikel, Locale locale, Class<?>... groups) {
+		// Werden alle Constraints beim Einfuegen gewahrt?
+		final Validator validator = validatorProvider.getValidator(locale);
+		
+		final Set<ConstraintViolation<Artikel>> violations = validator.validate(artikel, groups);
+		if (!violations.isEmpty()) {
+			throw new InvalidArtikelException(artikel, violations);
+		}
+	}
+	
+	
+	public Artikel createArtikel(Artikel artikel, Locale locale) {
+		
+		if (artikel == null) {
+			return artikel;
+		}
+		// Werden alle Constraints beim Einfuegen gewahrt?
+		validateArtikel(artikel, locale, Default.class);
+		
+		artikel.setId(KEINE_ID);
+		em.persist(artikel);
+
+
+		//artikel = em.createArtikel(artikel);
+
+		return artikel;
+	}
+		
 }
 
 /*package de.shop.artikelverwaltung.service;
