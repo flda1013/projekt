@@ -28,7 +28,7 @@ import org.jboss.logging.Logger;
 
 import de.shop.util.IdGroup;
 
-
+//Test mit Proxy
 @Entity
 @Table(name = "artikel")
 @NamedQueries({
