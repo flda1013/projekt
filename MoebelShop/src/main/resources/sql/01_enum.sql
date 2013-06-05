@@ -16,6 +16,11 @@ INSERT INTO artikel (id, bezeichnung, preis, ausgesondert, erzeugt, aktualisiert
 INSERT INTO artikel (id, bezeichnung, preis, ausgesondert, erzeugt, aktualisiert) VALUES (304,'Spiegel ''Mach mich schöner''',60,0,'05.08.2006 00:00:00','05.08.2006 00:00:00');
 INSERT INTO artikel (id, bezeichnung, preis, ausgesondert, erzeugt, aktualisiert) VALUES (305,'Kleiderschrank ''Viel Platz''',500,0,'06.08.2006 00:00:00','06.08.2006 00:00:00');
 INSERT INTO artikel (id, bezeichnung, preis, ausgesondert, erzeugt, aktualisiert) VALUES (306,'Bett ''Mit Holzwurm''',600,0,'07.08.2006 00:00:00','07.08.2006 00:00:00');
+INSERT INTO artikel (id, bezeichnung, preis, ausgesondert, erzeugt, aktualisiert) VALUES (307,'Bette ''Mit Holzwurm''',600,0,'07.08.2006 00:00:00','07.08.2006 00:00:00');
+
+DROP TABLE kunde
+CREATE TABLE kunde																																				(id NUMBER(4) PRIMARY KEY, nachname VARCHAR2(50) NOT NULL, vorname VARCHAR2(50) NOT NULL,seit date , art VARCHAR2(1), familienstand_fk NUMBER(1),geschlecht_fk NUMBER(1), newsletter NUMBER(1), rabatt NUMBER(5), email VARCHAR2(100), password VARCHAR2(50), erzeugt TIMESTAMP,aktualisiert TIMESTAMP) CACHE;
+INSERT INTO kunde (id, nachname, vorname, seit, art, familienstand_fk, geschlecht_fk, newsletter, rabatt, umsatz, email, password, erzeugt, aktualisiert) VALUES (1,'Admin','Admin','01.01.2001','F',NULL,NULL,1,0,'admin@hska.de','1','01.08.2006 00:00:00','01.08.2006 00:00:00');
 
 DROP TABLE geschlecht;
 CREATE TABLE geschlecht(id NUMBER(1) NOT NULL PRIMARY KEY, txt VARCHAR2(10) NOT NULL UNIQUE) CACHE;

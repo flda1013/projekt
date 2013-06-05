@@ -65,6 +65,7 @@ public class Artikel implements Serializable {
 	public static final String FIND_ARTIKEL_BY_BEZ = PREFIX + "findArtikelByBez";
 	public static final String FIND_ARTIKEL_MAX_PREIS = PREFIX + "findArtikelByMaxPreis";
 	public static final String FIND_ARTIKEL_BY_ID = PREFIX + "findArtikelById";
+	public static final String INSERT_ARTIKEL = PREFIX + "INSERT_ARTIKEL";
 
 	public static final String PARAM_BEZEICHNUNG = "bezeichnung";
 	public static final String PARAM_PREIS = "preis";
@@ -99,10 +100,11 @@ public class Artikel implements Serializable {
 		super();
 	}
 	
-	public Artikel(String bezeichnung, double preis) {
+	public Artikel(String bezeichnung, double preis,boolean ausgesondert) {
 		super();
 		this.bezeichnung = bezeichnung;
 		this.preis = preis;
+		this.ausgesondert = ausgesondert;
 	}
 
 	@PrePersist
