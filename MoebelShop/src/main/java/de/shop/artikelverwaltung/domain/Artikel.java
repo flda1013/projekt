@@ -85,7 +85,7 @@ public class Artikel implements Serializable {
 	private double preis;
 	
 	private boolean ausgesondert;
-	
+	//Test
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
 	@JsonIgnore
