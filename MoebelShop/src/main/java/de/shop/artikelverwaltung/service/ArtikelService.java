@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -29,10 +30,13 @@ import com.google.common.base.Strings;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.util.Log;
+import de.shop.util.Transactional;
 import de.shop.util.ValidatorProvider;
 import static de.shop.util.Constants.KEINE_ID;
 
+@Named
 @Log
+@Transactional
 public class ArtikelService implements Serializable {
 	private static final long serialVersionUID = 3076865030092242363L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -159,8 +163,21 @@ public class ArtikelService implements Serializable {
 		em.persist(artikel);
 
 
-		//artikel = em.createArtikel(artikel);
+		//artikel = createArtikel(artikel);
 
+		return artikel;
+	}
+	
+	public Artikel updateArtikel(Artikel artikel, Locale locale) {
+		if (artikel == null) {
+			return null;
+		}
+		// Werden alle Constraints beim Modifizieren gewahrt?
+		validateArtikel(artikel, locale, Default.class);
+
+		// TODO Datenbanzugriffsschicht statt Mock
+		em.merge(artikel);
+		
 		return artikel;
 	}
 		

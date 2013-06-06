@@ -12,9 +12,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+//import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -42,6 +45,8 @@ import de.shop.util.Transactional;
 public class ArtikelResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
+
+	
 	@Context
 	private UriInfo uriInfo;
 	
@@ -51,11 +56,15 @@ public class ArtikelResource {
 	@Inject
 	private LocaleHelper localeHelper;
 	
+	@Inject
+	private EntityManager em;
+	
 	@Context
 	private HttpHeaders headers;
 	
 	@Inject
 	private UriHelperArtikel uriHelperArtikel;
+
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -80,16 +89,30 @@ public class ArtikelResource {
 		return artikel;
 	}
 	
+
 	@POST
 	@Consumes(APPLICATION_JSON)
-	@Produces//("application/json")
+	@Produces("application/json")
 	public Response createArtikel(Artikel artikel) {
+		
 		
 		final Locale locale = localeHelper.getLocale(headers);
 		artikel = as.createArtikel(artikel, locale);
 		final URI artikelUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
+		em.close();
 		
 		return Response.created(artikelUri).build();
+	}
+	
+	@PUT
+	@Consumes(APPLICATION_JSON)
+	@Produces
+	public Response updateArtikel(Artikel artikel) {
+		final Locale locale = localeHelper.getLocale(headers);
+		
+		as.updateArtikel(artikel, locale);
+		
+		return Response.noContent().build();
 	}
 }
 
