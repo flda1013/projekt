@@ -53,46 +53,47 @@ public class BestellungObserver implements Serializable {
 		absenderName = config.getAbsenderName();
 	}
 	
-	@Asynchronous
-	public void onCreateBestellung(@Observes @NeueBestellung Bestellung bestellung) {
-		final AbstractKunde kunde = bestellung.getKunde();
-		final String mailEmpfaenger = kunde.getEmail();
-		if (absenderMail == null || mailEmpfaenger == null) {
-			return;
-		}
-		final String nameEmpfaenger = kunde.getNachname();
-		
-		final MimeMessage message = new MimeMessage(mailSession);
-
-		try {
-			// Absender setzen
-			final InternetAddress absenderObj = new InternetAddress(absenderMail, absenderName);
-			message.setFrom(absenderObj);
-			
-			// Empfaenger setzen
-			final InternetAddress empfaenger = new InternetAddress(mailEmpfaenger, nameEmpfaenger);
-			message.setRecipient(RecipientType.TO, empfaenger);   // RecipientType: TO, CC, BCC
-
-			// Subject setzen
-			message.setSubject("Neue Bestellung Nr. " + bestellung.getId());
-			
-			// Text setzen mit MIME Type "text/plain"
-			final StringBuilder sb = new StringBuilder(32);
-			sb.append("Neue Bestellung Nr. " + bestellung.getId() + NEWLINE);
-			final String text = sb.toString();
-			LOGGER.trace(text);
-			message.setText(text);
-
-			// Hohe Prioritaet einstellen
-			//message.setHeader("Importance", "high");
-			//message.setHeader("Priority", "urgent");
-			//message.setHeader("X-Priority", "1");
-
-			Transport.send(message);
-		}
-		catch (MessagingException | UnsupportedEncodingException e) {
-			LOGGER.error(e.getMessage());
-			return;
-		}
-	}
+	
+//	@Asynchronous
+//	public void onCreateBestellung(@Observes @NeueBestellung Bestellung bestellung) {
+//		final AbstractKunde kunde = bestellung.getKunde();
+//		final String mailEmpfaenger = kunde.getEmail();
+//		if (absenderMail == null || mailEmpfaenger == null) {
+//			return;
+//		}
+//		final String nameEmpfaenger = kunde.getNachname();
+//		
+//		final MimeMessage message = new MimeMessage(mailSession);
+//
+//		try {
+//			// Absender setzen
+//			final InternetAddress absenderObj = new InternetAddress(absenderMail, absenderName);
+//			message.setFrom(absenderObj);
+//			
+//			// Empfaenger setzen
+//			final InternetAddress empfaenger = new InternetAddress(mailEmpfaenger, nameEmpfaenger);
+//			message.setRecipient(RecipientType.TO, empfaenger);   // RecipientType: TO, CC, BCC
+//
+//			// Subject setzen
+//			message.setSubject("Neue Bestellung Nr. " + bestellung.getId());
+//			
+//			// Text setzen mit MIME Type "text/plain"
+//			final StringBuilder sb = new StringBuilder(32);
+//			sb.append("Neue Bestellung Nr. " + bestellung.getId() + NEWLINE);
+//			final String text = sb.toString();
+//			LOGGER.trace(text);
+//			message.setText(text);
+//
+//			// Hohe Prioritaet einstellen
+//			//message.setHeader("Importance", "high");
+//			//message.setHeader("Priority", "urgent");
+//			//message.setHeader("X-Priority", "1");
+//
+//			Transport.send(message);
+//		}
+//		catch (MessagingException | UnsupportedEncodingException e) {
+//			LOGGER.error(e.getMessage());
+//			return;
+//		}
+//	}
 }
