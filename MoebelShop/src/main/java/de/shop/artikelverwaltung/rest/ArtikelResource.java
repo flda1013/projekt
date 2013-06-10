@@ -97,9 +97,11 @@ public class ArtikelResource {
 		
 		
 		final Locale locale = localeHelper.getLocale(headers);
+		LOGGER.tracef("Artikel: %s", artikel);
 		artikel = as.createArtikel(artikel, locale);
+		
 		final URI artikelUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
-		em.close();
+		
 		
 		return Response.created(artikelUri).build();
 	}
