@@ -8,7 +8,7 @@
 -- Beim ALLERERSTEN Aufruf die Zeilen mit "DROP TABLE ..." durch -- auskommentieren
 -- ===============================================================================
 DROP TABLE artikel;
-CREATE TABLE artikel(id NUMBER(4) NOT NULL PRIMARY KEY, bezeichnung VARCHAR2(50), preis NUMBER(4), ausgesondert NUMBER(2), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
+CREATE TABLE artikel(id NUMBER(4) NOT NULL PRIMARY KEY, bezeichnung VARCHAR2(50), preis NUMBER(4), ausgesondert VARCHAR2(5), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
 
 --DROP TABLE kunde
 --CREATE TABLE kunde(id NUMBER(4)NOT NULL PRIMARY KEY, nachname VARCHAR2(50) NOT NULL, vorname VARCHAR2(50) NOT NULL,seit date , art VARCHAR2(1), familienstand_fk NUMBER(1), geschlecht_fk NUMBER(1), newsletter NUMBER(1), rabatt NUMBER(5), email VARCHAR2(100), password VARCHAR2(50), erzeugt TIMESTAMP,aktualisiert TIMESTAMP) CACHE;
