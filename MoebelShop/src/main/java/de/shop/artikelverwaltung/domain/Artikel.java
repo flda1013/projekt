@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,6 +32,7 @@ import de.shop.util.IdGroup;
 //Test mit Proxy
 @Entity
 @Table(name = "artikel")
+@Cacheable
 @NamedQueries({
 	@NamedQuery(name  = Artikel.FIND_VERFUEGBARE_ARTIKEL,
             	query = "SELECT      a"
@@ -120,7 +122,9 @@ public class Artikel implements Serializable {
 	
 	@PreUpdate
 	private void preUpdate() {
+		erzeugt = new Date();
 		aktualisiert = new Date();
+		
 	}
 
 	public Long getId() {
@@ -169,6 +173,15 @@ public class Artikel implements Serializable {
 
 	public void setAktualisiert(Date aktualisiert) {
 		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
+	}
+	
+	public void setValues(Artikel a) {
+		bezeichnung = a.bezeichnung;
+		preis = a.preis;
+		ausgesondert = a.ausgesondert;
+		erzeugt = a.erzeugt;
+		aktualisiert = a.aktualisiert;
+		
 	}
 
 	@Override

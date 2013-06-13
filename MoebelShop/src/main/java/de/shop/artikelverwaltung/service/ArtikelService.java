@@ -172,6 +172,7 @@ public class ArtikelService implements Serializable {
 		if (artikel == null) {
 			return null;
 		}
+		em.detach(artikel);
 		// Werden alle Constraints beim Modifizieren gewahrt?
 		validateArtikel(artikel, locale, Default.class);
 

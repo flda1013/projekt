@@ -106,17 +106,45 @@ public class ArtikelResource {
 		return Response.created(artikelUri).build();
 	}
 	
-	@PUT
+	/*@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
 	public Response updateArtikel(Artikel artikel) {
 		final Locale locale = localeHelper.getLocale(headers);
-		
+		LOGGER.tracef("Artikel: %s", artikel);
 		as.updateArtikel(artikel, locale);
 		
 		return Response.noContent().build();
-	}
+	}*/
+	
+	   @PUT
+	    @Consumes(APPLICATION_JSON)
+	    @Produces
+	    public void updateArtikel(Artikel artikel) {
+	        // Vorhandenen Artikel ermitteln
+	        final Locale locale = localeHelper.getLocale(headers);
+	        final Artikel orginalArtikel = as.findArtikelById(artikel.getId());
+	        if (orginalArtikel == null) {
+	            // TODO msg passend zu locale
+	            final String msg = "Kein Artikel gefunden mit der ID " + artikel.getId();
+	            throw new NotFoundException(msg);
+	        }
+	        LOGGER.tracef("Artikel vorher: %s", orginalArtikel);
+	    
+	        // Daten des vorhandenen Artikels ueberschreiben
+	        orginalArtikel.setValues(artikel);
+	        LOGGER.tracef("Kunde nachher: %s", orginalArtikel);
+	        
+	        // Update durchfuehren
+	        artikel = as.updateArtikel(orginalArtikel, locale);
+	        if (artikel == null) {
+	            // TODO msg passend zu locale
+	            final String msg = "Kein Artikel gefunden mit der ID " + orginalArtikel.getId();
+	            throw new NotFoundException(msg);
+	        }
+	   }
 }
+
 
 /*package de.shop.artikelverwaltung.rest;
 
