@@ -10,8 +10,8 @@
 DROP TABLE artikel;
 CREATE TABLE artikel(id NUMBER(4) NOT NULL PRIMARY KEY, bezeichnung VARCHAR2(50), preis NUMBER(4), ausgesondert VARCHAR2(5), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
 
---DROP TABLE kunde
---CREATE TABLE kunde(id NUMBER(4)NOT NULL PRIMARY KEY, nachname VARCHAR2(50) NOT NULL, vorname VARCHAR2(50) NOT NULL,seit date , art VARCHAR2(1), familienstand_fk NUMBER(1), geschlecht_fk NUMBER(1), newsletter NUMBER(1), rabatt NUMBER(5), email VARCHAR2(100), password VARCHAR2(50), erzeugt TIMESTAMP,aktualisiert TIMESTAMP) CACHE;
+DROP TABLE kunde;
+CREATE TABLE kunde(id NUMBER(4)NOT NULL PRIMARY KEY, nachname VARCHAR2(50) NOT NULL, vorname VARCHAR2(50) NOT NULL,seit date , art VARCHAR2(1), familienstand_fk NUMBER(1), geschlecht_fk NUMBER(1), newsletter NUMBER(1), rabatt NUMBER(5), umsatz DECIMAL(8), email VARCHAR2(100), password VARCHAR2(50), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
 
 --DROP TABLE bestellung
 --CREATE TABLE bestellung (id NUMBER(4) NOT NULL PRIMARY KEY, ausgeliefert NUMBER(1), kunde_fk NUMBER(4), erzeugt TIMESTAMP) CACHE;
@@ -28,8 +28,8 @@ CREATE TABLE artikel(id NUMBER(4) NOT NULL PRIMARY KEY, bezeichnung VARCHAR2(50)
 --DROP TABLE transport_art;
 --CREATE TABLE transport_art(id NUMBER(1) NOT NULL PRIMARY KEY, txt VARCHAR2(8) NOT NULL UNIQUE) CACHE;
 
---DROP SEQUENCE hibernate_sequence;
---CREATE SEQUENCE hibernate_sequence START WITH 5000;
+DROP SEQUENCE hibernate_sequence;
+CREATE SEQUENCE hibernate_sequence START WITH 5000;
 
 --DROP TABLE adresse;
 --CREATE TABLE adresse (id NUMBER(4) NOT NULL PRIMARY KEY, plz NUMBER(5) NOT NULL, ort VARCHAR2(30) NOT NULL, strasse VARCHAR2(30) NOT NULL, hausnr VARCHAR2(10) NOT NULL, kunde_fk NUMBER(4))CACHE;
@@ -59,10 +59,10 @@ CREATE TABLE artikel(id NUMBER(4) NOT NULL PRIMARY KEY, bezeichnung VARCHAR2(50)
 -- ===============================================================================
 -- Fremdschluessel in den bereits *generierten* Tabellen auf die obigen "Enum-Tabellen" anlegen
 -- ===============================================================================
---ALTER TABLE kunde ADD CONSTRAINT kunde__geschlecht_fk FOREIGN KEY (geschlecht_fk) REFERENCES geschlecht;
---ALTER TABLE kunde ADD CONSTRAINT kunde__familienstand_fk FOREIGN KEY (familienstand_fk) REFERENCES familienstand;
---ALTER TABLE kunde_hobby ADD CONSTRAINT kunde_hobby__hobby_fk FOREIGN KEY (hobby_fk) REFERENCES hobby;
---ALTER TABLE kunde_hobby ADD CONSTRAINT kunde_hobby__kunde_fk FOREIGN KEY (kunde_fk) REFERENCES hobby;
+ALTER TABLE kunde ADD CONSTRAINT kunde__geschlecht_fk FOREIGN KEY (geschlecht_fk) REFERENCES geschlecht on delete cascade;
+ALTER TABLE kunde ADD CONSTRAINT kunde__familienstand_fk FOREIGN KEY (familienstand_fk) REFERENCES familienstand on delete cascade;
+--ALTER TABLE kunde_hobby ADD CONSTRAINT kunde_hobby__hobby_fk FOREIGN KEY (hobby_fk) REFERENCES hobby on delete cascade;
+--ALTER TABLE kunde_hobby ADD CONSTRAINT kunde_hobby__kunde_fk FOREIGN KEY (kunde_fk) REFERENCES hobby on delete cascade;
 --ALTER TABLE lieferung ADD CONSTRAINT lieferung__transport_art_fk FOREIGN KEY (transport_art_fk) REFERENCES transport_art;
 --ALTER TABLE adresse ADD CONSTRAINT adresse__kunde_fk FOREIGN KEY (kunde_fk) REFERENCES kunde;
 --ALTER TABLE wartungsvertrag ADD CONSTRAINT wartungsvertrag__kunde_fk FOREIGN KEY (kunde_fk) REFERENCES kunde;
