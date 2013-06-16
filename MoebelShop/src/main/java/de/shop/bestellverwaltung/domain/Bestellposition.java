@@ -31,7 +31,12 @@ import de.shop.artikelverwaltung.domain.Artikel;
     @NamedQuery(name  = Bestellposition.FIND_LADENHUETER,
    	            query = "SELECT a"
    	            	    + " FROM   Artikel a"
-   	            	    + " WHERE  a NOT IN (SELECT bp.artikel FROM Bestellposition bp)")
+   	            	    + " WHERE  a NOT IN (SELECT bp.artikel FROM Bestellposition bp)"),
+   	            	
+   	@NamedQuery(name  = Bestellposition.FIND_BESTELLPOSITION_BY_ID,
+   	           	query = "SELECT bp"
+   	            	   	+ " FROM   Bestellposition bp"
+   	            	   	+ " WHERE  bp.id = :" + Bestellposition.PARAM_ID)
 })
 public class Bestellposition implements Serializable {
 	private static final long serialVersionUID = 2222771733641950913L;
@@ -39,7 +44,9 @@ public class Bestellposition implements Serializable {
 	
 	private static final String PREFIX = "Bestellposition.";
 	public static final String FIND_LADENHUETER = PREFIX + "findLadenhueter";
+	public static final String FIND_BESTELLPOSITION_BY_ID = PREFIX + "findBestellpositionById";
 	private static final int ANZAHL_MIN = 1;
+	public static final String PARAM_ID = "id";
 	
 	@Id
 	@GeneratedValue
@@ -110,6 +117,25 @@ public class Bestellposition implements Serializable {
 	public void setAnzahl(short anzahl) {
 		this.anzahl = anzahl;
 	}
+	
+	
+//	public Bestellung getBestellung() {
+//		return bestellung;
+//	}
+//
+//	public void setBestellung(Bestellung bestellung) {
+//		this.bestellung = bestellung;
+//	}
+//	
+//	public URI getUriBestellung() {
+//		return bestellungUri;
+//	}
+//	
+//	public void setBestellungURI(URI bestellungUri) {
+//		this.bestellunglUri = bestellungUri;
+//	}
+
+	
 	
 	@Override
 	public String toString() {

@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+//import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -235,6 +236,33 @@ public class BestellungResource {
 		
 		return response;
 	}
+	
+//	 @PUT
+//	    @Consumes(APPLICATION_JSON)
+//	    @Produces
+//	    public void updateBestellung(Bestellung bestellung) {
+//	        // Vorhandenen Artikel ermitteln
+//	        final Locale locale = localeHelper.getLocale(headers);
+//	        final Bestellung orginalBestellung = bs.findBestellungById(bestellung.getId());
+//	        if (orginalBestellung == null) {
+//	            // TODO msg passend zu locale
+//	            final String msg = "Keine Bestellung gefunden mit der ID " + bestellung.getId();
+//	            throw new NotFoundException(msg);
+//	        }
+//	        LOGGER.tracef("Artikel vorher: %s", orginalBestellung);
+//	    
+//	        // Daten des vorhandenen Bestellung ueberschreiben
+//	        orginalBestellung.setValues(bestellung);
+//	        LOGGER.tracef("Kunde nachher: %s", orginalBestellung);
+//	        
+//	        // Update durchfuehren
+//	        bestellung = bs.updateBestellung(orginalBestellung, locale);
+//	        if (bestellung == null) {
+//	            // TODO msg passend zu locale
+//	            final String msg = "Keine Bestellung gefunden mit der ID " + orginalBestellung.getId();
+//	            throw new NotFoundException(msg);
+//	        }
+//	   }
 }
 
 

@@ -43,6 +43,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jboss.logging.Logger;
 
+import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.util.IdGroup;
 import de.shop.util.PreExistingGroup;
@@ -149,6 +150,7 @@ public class Bestellung implements Serializable {
 	@PreUpdate
 	private void preUpdate() {
 		aktualisiert = new Date();
+		erzeugt = new Date();
 	}
 	
 	public Long getId() {
@@ -262,6 +264,13 @@ public class Bestellung implements Serializable {
 			   + ", kundeUri=" + kundeUri
 		       + ", erzeugt=" + erzeugt
 		       + ", aktualisiert=" + aktualisiert + ']';
+	}
+
+	public void setValues(Bestellung b) {
+		
+		erzeugt = b.erzeugt;
+		aktualisiert = b.aktualisiert;
+		
 	}
 
 	@Override

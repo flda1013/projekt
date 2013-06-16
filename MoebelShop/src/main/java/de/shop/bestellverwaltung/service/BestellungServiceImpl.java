@@ -264,4 +264,19 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		final List<Bestellung> bestellungen = query.getResultList();
 		return bestellungen;
 	}
+	
+	@Override
+	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
+		if (bestellung == null) {
+			return null;
+		}
+		em.detach(bestellung);
+		// Werden alle Constraints beim Modifizieren gewahrt?
+		validateBestellung(bestellung, locale, Default.class);
+
+		// TODO Datenbanzugriffsschicht statt Mock
+		em.merge(bestellung);
+		
+		return bestellung;
+	}
 }
