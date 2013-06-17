@@ -3,13 +3,11 @@ package de.shop.bestellverwaltung.service;
 import static de.shop.util.Constants.KEINE_ID;
 
 import java.io.Serializable;
-import java.util.Locale;
-
+//import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 //import javax.validation.groups.Default;
-
+//import javax.validation.groups.Default;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 
 

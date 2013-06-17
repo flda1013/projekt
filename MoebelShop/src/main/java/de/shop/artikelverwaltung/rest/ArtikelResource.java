@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
+//import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -56,8 +56,8 @@ public class ArtikelResource {
 	@Inject
 	private LocaleHelper localeHelper;
 	
-	@Inject
-	private EntityManager em;
+//	@Inject
+//	private EntityManager em;
 	
 	@Context
 	private HttpHeaders headers;
@@ -105,17 +105,6 @@ public class ArtikelResource {
 		
 		return Response.created(artikelUri).build();
 	}
-	
-	/*@PUT
-	@Consumes(APPLICATION_JSON)
-	@Produces
-	public Response updateArtikel(Artikel artikel) {
-		final Locale locale = localeHelper.getLocale(headers);
-		LOGGER.tracef("Artikel: %s", artikel);
-		as.updateArtikel(artikel, locale);
-		
-		return Response.noContent().build();
-	}*/
 	
 	   @PUT
 	    @Consumes(APPLICATION_JSON)

@@ -1,15 +1,7 @@
 package de.shop.bestellverwaltung.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-
-
-
-
-
-
-
-import java.net.URI;
-
+//import java.net.URI;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -21,12 +13,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 //import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
-
-import de.shop.artikelverwaltung.domain.Artikel;
+//import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.service.BestellPositionService;
-import de.shop.util.LocaleHelper;
+//import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
 import de.shop.util.Transactional;

@@ -7,10 +7,10 @@ import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import de.shop.artikelverwaltung.domain.Artikel;
+//import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.rest.UriHelperArtikel;
 import de.shop.bestellverwaltung.domain.Bestellposition;
-import de.shop.bestellverwaltung.domain.Bestellung;
+//import de.shop.bestellverwaltung.domain.Bestellung;
 
 
 @ApplicationScoped

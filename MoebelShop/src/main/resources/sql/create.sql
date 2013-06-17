@@ -12,7 +12,7 @@
 
 
 --DROP TABLE kunde;
---CREATE TABLE kunde(id NUMBER(4)NOT NULL PRIMARY KEY, nachname VARCHAR2(50) NOT NULL, vorname VARCHAR2(50) NOT NULL,seit date , art VARCHAR2(1), familienstand_fk NUMBER(1), geschlecht_fk NUMBER(1), newsletter NUMBER(1), rabatt NUMBER(5), umsatz DECIMAL(8), email VARCHAR2(100), password VARCHAR2(50), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
+--CREATE TABLE kunde(id NUMBER(4)NOT NULL PRIMARY KEY, nachname VARCHAR2(50) NOT NULL, vorname VARCHAR2(50) NOT NULL,seit DATE , art VARCHAR2(1), familienstand_fk NUMBER(1), geschlecht_fk NUMBER(1), newsletter VARCHAR2(5), rabatt DECIMAL(10), umsatz DECIMAL(10), email VARCHAR2(100), password VARCHAR2(50), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
 --ALTER TABLE kunde ADD CONSTRAINT ON DELETE CASCADE;
 
 

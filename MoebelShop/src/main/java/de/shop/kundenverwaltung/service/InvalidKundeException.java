@@ -2,7 +2,7 @@ package de.shop.kundenverwaltung.service;
 
 import java.util.Collection;
 
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct;
 import javax.ejb.ApplicationException;
 import javax.validation.ConstraintViolation;
 
@@ -39,31 +39,3 @@ public class InvalidKundeException extends AbstractKundeValidationException {
 		return kunde;
 	}
 }
-
-
-//package de.shop.kundenverwaltung.service;
-//
-//import java.util.Collection;
-//
-//import javax.validation.ConstraintViolation;
-//
-//import de.shop.kundenverwaltung.domain.AbstractKunde;
-//
-//
-///**
-// * Exception, die ausgel&ouml;st wird, wenn die Attributwerte eines Kunden nicht korrekt sind
-// */
-//public class InvalidKundeException extends AbstractKundeValidationException {
-//	private static final long serialVersionUID = 4255133082483647701L;
-//	private final AbstractKunde kunde;
-//	
-//	public InvalidKundeException(AbstractKunde kunde,
-//			                     Collection<ConstraintViolation<AbstractKunde>> violations) {
-//		super(violations);
-//		this.kunde = kunde;
-//	}
-//
-//	public AbstractKunde getKunde() {
-//		return kunde;
-//	}
-//}

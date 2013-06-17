@@ -102,7 +102,7 @@ public class Artikel implements Serializable {
 		super();
 	}
 	
-	public Artikel(String bezeichnung, double preis,boolean ausgesondert) {
+	public Artikel(String bezeichnung, double preis, boolean ausgesondert) {
 		super();
 		this.bezeichnung = bezeichnung;
 		this.preis = preis;
