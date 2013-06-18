@@ -114,6 +114,7 @@ public class Bestellung implements Serializable {
 	private Set<Lieferung> lieferungen;
 	
 	@Transient
+	@JsonIgnore
 	private URI lieferungenUri;
 	
 	@Column(nullable = false)
