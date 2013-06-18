@@ -277,18 +277,4 @@ public class KundeResource {
 		}
 		
 	}
-	
-	
-	/**
-	 * Mit der URL /kunden{id} einen Kunden per DELETE l&ouml;schen
-	 * @param kundeId des zu l&ouml;schenden Kunden
-	 */
-	/*@Path("{id:[0-9]+}")
-	@DELETE
-	@Produces
-	public void deleteKunde(@PathParam("id") Long kundeId) {
-		final Locale locale = localeHelper.getLocale(headers);
-		final AbstractKunde kunde = ks.findKundeById(kundeId, FetchType.NUR_KUNDE, locale);
-		ks.deleteKunde(kunde);
-	}*/
 
