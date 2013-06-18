@@ -14,11 +14,11 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
+//import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
+//import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -28,7 +28,7 @@ import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
-import de.shop.bestellverwaltung.domain.Lieferung;
+//import de.shop.bestellverwaltung.domain.Lieferung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.rest.UriHelperKunde;
@@ -103,25 +103,25 @@ public class BestellungResource {
 	 * @param id ID der Bestellung
 	 * @return Objekt mit Lieferdaten, falls die ID vorhanden ist
 	 */
-	/*@GET
-	@Path("{id:[1-9][0-9]*}/lieferungen")
-	public Collection<Lieferung> findLieferungenByBestellungId(@PathParam("id") Long id) {
-		// Diese Methode ist bewusst NICHT implementiert, um zu zeigen,
-		// wie man Methodensignaturen an der Schnittstelle fuer andere
-		// Teammitglieder schon mal bereitstellt, indem einfach "null"
-		// zurueckgeliefert oder eine Exception geworfen wird oder...
-		// Die Kollegen koennen nun weiterarbeiten, waehrend man selbst
-		// gerade keine Zeit hat, weil andere Aufgaben Vorrang haben.
-		
-		final String errorMsg = "findLieferungenByBestellungId: NOT YET IMPLEMENTED"; 
-		LOGGER.fatal(errorMsg);
-		final Response response = Response.serverError()
-	                                      .entity(errorMsg)
-	                                      .build();
-		throw new WebApplicationException(response);
-		
-		// TODO findLieferungenByBestellungId noch nicht implementiert
-	}*/
+//	@GET
+//	@Path("{id:[1-9][0-9]*}/lieferungen")
+//	public Collection<Lieferung> findLieferungenByBestellungId(@PathParam("id") Long id) {
+//		// Diese Methode ist bewusst NICHT implementiert, um zu zeigen,
+//		// wie man Methodensignaturen an der Schnittstelle fuer andere
+//		// Teammitglieder schon mal bereitstellt, indem einfach "null"
+//		// zurueckgeliefert oder eine Exception geworfen wird oder...
+//		// Die Kollegen koennen nun weiterarbeiten, waehrend man selbst
+//		// gerade keine Zeit hat, weil andere Aufgaben Vorrang haben.
+//		
+//		final String errorMsg = "findLieferungenByBestellungId: NOT YET IMPLEMENTED"; 
+//		LOGGER.fatal(errorMsg);
+//		final Response response = Response.serverError()
+//	                                      .entity(errorMsg)
+//	                                      .build();
+//		throw new WebApplicationException(response);
+//		
+//		// TODO findLieferungenByBestellungId noch nicht implementiert
+//	}
 
 	
 	/**

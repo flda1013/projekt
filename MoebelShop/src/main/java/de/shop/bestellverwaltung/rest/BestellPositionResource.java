@@ -14,7 +14,7 @@ import javax.ws.rs.core.Context;
 //import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
 //import de.shop.artikelverwaltung.domain.Artikel;
-import de.shop.artikelverwaltung.service.ArtikelService;
+//import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.service.BestellPositionService;
 //import de.shop.util.LocaleHelper;
@@ -45,8 +45,8 @@ public class BestellPositionResource {
 	@Inject
 	private BestellPositionService bs;
 
-	@Inject
-	private ArtikelService as;
+//	@Inject
+//	private ArtikelService as;
 	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
