@@ -1,6 +1,5 @@
 package de.shop.kundenverwaltung.domain;
 
-import static de.shop.kundenverwaltung.domain.AbstractKunde.FIRMENKUNDE;
 
 import javax.persistence.Cacheable;
 import javax.persistence.DiscriminatorValue;
