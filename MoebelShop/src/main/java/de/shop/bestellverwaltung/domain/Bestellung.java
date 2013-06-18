@@ -47,7 +47,7 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.util.IdGroup;
 import de.shop.util.PreExistingGroup;
 
-
+//SQL Anweisungen
 @Entity
 @Table(name = "bestellung")
 @NamedQueries({
@@ -152,7 +152,7 @@ public class Bestellung implements Serializable {
 		aktualisiert = new Date();
 		erzeugt = new Date();
 	}
-	
+// Get-Set Methoden
 	public Long getId() {
 		return id;
 	}
@@ -174,7 +174,7 @@ public class Bestellung implements Serializable {
 			return;
 		}
 		
-		// Wiederverwendung der vorhandenen Collection
+		// Wiederverwendung der vorhandenen Collection(Liste)
 		this.bestellpositionen.clear();
 		if (bestellpositionen != null) {
 			this.bestellpositionen.addAll(bestellpositionen);
@@ -244,6 +244,7 @@ public class Bestellung implements Serializable {
 		this.lieferungenUri = lieferungenUri;
 	}
 
+// Datum Get-Set
 	@JsonProperty("datum")
 	public Date getErzeugt() {
 		return erzeugt == null ? null : (Date) erzeugt.clone();
@@ -257,6 +258,8 @@ public class Bestellung implements Serializable {
 	public void setAktualisiert(Date aktualisiert) {
 		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
 	}
+
+//Object Methoden
 	@Override
 	public String toString() {
 		final Long kundeId = kunde == null ? null : kunde.getId();
