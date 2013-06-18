@@ -73,6 +73,7 @@ public class ArtikelService implements Serializable {
 	/**
 	 */
 	public List<Artikel> findArtikelByIds(List<Long> ids) {
+		// Ist die ID null oder leer so gebe eine leere Liste zurück
 		if (ids == null || ids.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -82,13 +83,20 @@ public class ArtikelService implements Serializable {
 		 * FROM   Artikel a
 		 * WHERE  a.id = ? OR a.id = ? OR ...
 		 */
+		// Über das Objekt des Entitiymanagers wird die Methode getCriteriaBuilder() 
+		// aufgerufen und dem CriteriaBuilder Objekt builder zugewiesen
 		final CriteriaBuilder builder = em.getCriteriaBuilder();
+		// Über das Objekt builder von CriteriaBuilder wird die Methode CreateQuery aufgerufen die,
+		// die Klasse Artikel beinhaltet bildet das "Select" ab
 		final CriteriaQuery<Artikel> criteriaQuery = builder.createQuery(Artikel.class);
+		// Über das Objekt criteriaQuery wird die Methode from(Artikel.class) aufgerufen die,
+		// dem Attribut a die Wurzel zuweist auf was sich die Abfrage beziehen soll
 		final Root<Artikel> a = criteriaQuery.from(Artikel.class);
-
+		//Keine AHnung
 		final Path<Long> idPath = a.get("id");
 		//final Path<String> idPath = a.get(Artikel_.id);   // Metamodel-Klassen funktionieren nicht mit Eclipse
 		
+		//Ist ein Attribut für True oder False
 		Predicate pred = null;
 		if (ids.size() == 1) {
 			// Genau 1 id: kein OR notwendig
@@ -96,20 +104,31 @@ public class ArtikelService implements Serializable {
 		}
 		else {
 			// Mind. 2x id, durch OR verknuepft
+			// Dem Array aus Predicate equal wird das erzeugt durch new Predicate mit der Größe von dem Rückgabe Wert
+			// der Ids 
 			final Predicate[] equals = new Predicate[ids.size()];
 			int i = 0;
+			
+			// Schleife die Solange läuft wie viele IDS es gibt
 			for (Long id : ids) {
+				
+				//equals[i++] die stelle wird um 1 erhöht = aus dem Objekt builder wird die MEthode equal aufgerufen
+				// die vergleicht ob die id mit der Id im IDPath übereinstimmt und gibt true oder fals ein
 				equals[i++] = builder.equal(idPath, id);
 			}
 			
+			// pred wird die ergebnise zugewiesen
 			pred = builder.or(equals);
 		}
-		
+		// Im Objek criteriaQuery wird die Methode where(...) aufgerufen die als Parameter pred erhält
 		criteriaQuery.where(pred);
 		
+		//Über das Objekt em wird die Methode createQuery aufgerufen die als Parameter die criteriaQuery mitbekommt
+		// und diese dann entgültig ausführt
 		final TypedQuery<Artikel> query = em.createQuery(criteriaQuery);
-
+		// dem Objekt artikel wir das Ergebnis aus query über die Methode getResultList() zugewiesen
 		final List<Artikel> artikel = query.getResultList();
+		// Wird zurück gegeben
 		return artikel;
 	}
 
