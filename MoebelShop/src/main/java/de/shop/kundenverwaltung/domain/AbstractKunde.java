@@ -286,6 +286,11 @@ public abstract class AbstractKunde implements Serializable {
 		passwordWdh = k.password;
 		erzeugt = k.erzeugt;
 		aktualisiert = k.aktualisiert;
+		adresse.setId(k.adresse.getId());
+		adresse.setOrt(k.adresse.getOrt());
+		adresse.setPlz(k.adresse.getPlz());
+		adresse.setStrasse(k.adresse.getStrasse());
+		adresse.setHausnr(k.adresse.getHausnr());
 	}
 	
 	public Long getId() {
