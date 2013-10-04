@@ -44,6 +44,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonSubTypes;
@@ -52,6 +54,7 @@ import org.codehaus.jackson.annotate.JsonSubTypes.Type;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.ScriptAssert;
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.util.IdGroup;
@@ -65,6 +68,9 @@ import de.shop.util.IdGroup;
 @Table(name = "kunde")
 @Inheritance
 @DiscriminatorColumn(name = "art", length = 1)
+@XmlRootElement
+@Formatted
+@XmlSeeAlso({ Firmenkunde.class, Privatkunde.class })
 @NamedQueries({
 	@NamedQuery(name  = AbstractKunde.FIND_KUNDEN,
                 query = "SELECT k"

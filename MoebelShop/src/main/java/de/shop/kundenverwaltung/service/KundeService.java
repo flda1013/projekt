@@ -152,8 +152,8 @@ public class KundeService implements Serializable {
 
 	/**
 	 */
-	public AbstractKunde findKundeById(Long id, FetchType fetch, Locale locale) {
-		validateKundeId(id, locale);
+	public AbstractKunde findKundeById(Long id, FetchType fetch) {
+
 		
 		AbstractKunde kunde = null;
 		try {
@@ -187,8 +187,8 @@ public class KundeService implements Serializable {
 		return kunde;
 	}
 	
-	private void validateKundeId(Long kundeId, Locale locale) {
-		final Validator validator = validatorProvider.getValidator(locale);
+	private void validateKundeId(Long kundeId) {
+		final Validator validator = validatorProvider.getValidator(Locale.getDefault());
 		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
 				                                                                           "id",
 				                                                                           kundeId,
@@ -302,7 +302,7 @@ public class KundeService implements Serializable {
 		
 		// Bestellungen laden, damit sie anschl. ueberprueft werden koennen
 		try {
-			kunde = findKundeById(kunde.getId(), FetchType.MIT_BESTELLUNGEN, Locale.getDefault());
+			kunde = findKundeById(kunde.getId(), FetchType.MIT_BESTELLUNGEN);
 		}
 		catch (InvalidKundeIdException e) {
 			return;
@@ -405,7 +405,7 @@ public class KundeService implements Serializable {
 		}
 		
 		try {
-			kunde = findKundeById(kunde.getId(), FetchType.NUR_KUNDE, Locale.getDefault());
+			kunde = findKundeById(kunde.getId(), FetchType.NUR_KUNDE);
 		}
 		catch (InvalidKundeIdException e) {
 			return null;

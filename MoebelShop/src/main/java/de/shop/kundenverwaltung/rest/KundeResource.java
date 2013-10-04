@@ -3,13 +3,23 @@ package de.shop.kundenverwaltung.rest;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static de.shop.util.Constants.KEINE_ID;
+//import static de.shop.util.Constants.ADD_LINK;
+//import static de.shop.util.Constants.FIRST_LINK;
+//import static de.shop.util.Constants.KEINE_ID;
+//import static de.shop.util.Constants.LAST_LINK;
+//import static de.shop.util.Constants.LIST_LINK;
+//import static de.shop.util.Constants.REMOVE_LINK;
+//import static de.shop.util.Constants.SELF_LINK;
+//import static de.shop.util.Constants.UPDATE_LINK;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+//import java.util.List;
 import java.util.Locale;
 
+//import javax.ws.rs.core.Link;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
@@ -43,6 +53,7 @@ import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
 import de.shop.util.Transactional;
+import de.shop.util.UriHelper;
 //import de.shop.kundenverwaltung.domain.Firmenkunde;
 
 @Path("/kunden")
@@ -54,12 +65,17 @@ import de.shop.util.Transactional;
 public class KundeResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	private static final String VERSION = "1.0";
+	public static final String KUNDEN_ID_PATH_PARAM = "id";
+	private static final String NOT_FOUND_ID = "kunde.notFound.id";
 
     @Context
     private UriInfo uriInfo;
     
     @Context
     private HttpHeaders headers;
+    
+//	@Inject
+//	private UriHelper uriHelper;
     
 	@Inject
 	private KundeService ks;
@@ -92,26 +108,91 @@ public class KundeResource {
 	public String getVersion() {
 		return VERSION;
 	}
+	//TODO Wiedereinblenden wen benötigt	
+//	public Link[] getTransitionalLinks(AbstractKunde kunde, UriInfo uriInfo) {
+//		final Link self = Link.fromUri(getUriKunde(kunde, uriInfo))
+//	                          .rel(SELF_LINK)
+//	                          .build();
+//
+//		final Link list = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
+//                              .rel(LIST_LINK)
+//                              .build();
+//		
+//		final Link add = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
+//                             .rel(ADD_LINK)
+//                             .build();
+//
+//		final Link update = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
+//				                .rel(UPDATE_LINK)
+//				                .build();
+//
+//		final Link remove = Link.fromUri(uriHelper.getUri(KundeResource.class, "deleteKunde", kunde.getId(), uriInfo))
+//                                .rel(REMOVE_LINK)
+//                                .build();
+//
+//		return new Link[] { self, list, add, update,remove};
+//	}
 	
+//	public URI getUriKunde(AbstractKunde kunde, UriInfo uriInfo) {
+//		return uriHelper.getUri(KundeResource.class, "findKundeById", kunde.getId(), uriInfo);
+//	}
+//	
+//	private URI getUriBestellungen(AbstractKunde kunde, UriInfo uriInfo) {
+//		return uriHelper.getUri(KundeResource.class, "findBestellungenByKundeId", kunde.getId(), uriInfo);
+//	}
+//	
+//	public void setStructuralLinks(AbstractKunde kunde, UriInfo uriInfo) {
+//		// URI fuer Bestellungen setzen
+//		final URI uri = getUriBestellungen(kunde, uriInfo);
+//		kunde.setBestellungenUri(uri);
+//		
+//		LOGGER.trace(kunde);
+//	}
+//	
+//	private Link[] getTransitionalLinksKunden(List<? extends AbstractKunde> kunden, UriInfo uriInfo) {
+//		if (kunden == null || kunden.isEmpty()) {
+//			return null;
+//		}
+//		
+//		final Link first = Link.fromUri(getUriKunde(kunden.get(0), uriInfo))
+//	                           .rel(FIRST_LINK)
+//	                           .build();
+//		final int lastPos = kunden.size() - 1;
+//		final Link last = Link.fromUri(getUriKunde(kunden.get(lastPos), uriInfo))
+//                              .rel(LAST_LINK)
+//                              .build();
+//		
+//		return new Link[] { first, last };
+//	}
 	/**
 	 * Mit der URL /kunden/{id} einen Kunden ermitteln
 	 * @param id ID des Kunden
 	 * @return Objekt mit Kundendaten, falls die ID vorhanden ist
 	 */
-	@GET
-	@Path("{id:[1-9][0-9]*}")
-	public AbstractKunde findKundeById(@PathParam("id") Long id) {
-		final Locale locale = localeHelper.getLocale(headers);
-		final AbstractKunde kunde = ks.findKundeById(id, FetchType.NUR_KUNDE, locale);
-		if (kunde == null) {
-			// TODO msg passend zu locale
-			final String msg = "Kein Kunde gefunden mit der ID " + id;
-			throw new NotFoundException(msg);
-		}
 	
-		// URLs innerhalb des gefundenen Kunden anpassen
+//	@GET
+//	@Path("{" + KUNDEN_ID_PATH_PARAM + ":[1-9][0-9]*}")
+//	public Response findKundeById(@PathParam(KUNDEN_ID_PATH_PARAM) Long id) {
+//		final AbstractKunde kunde = ks.findKundeById(id, FetchType.NUR_KUNDE);
+//		if (kunde == null) {
+//			throw new NotFoundException(NOT_FOUND_ID, id);
+//		}
+//		
+//		setStructuralLinks(kunde, uriInfo);
+//		
+//		return Response.ok(kunde)
+//				       .links(getTransitionalLinks(kunde, uriInfo))
+//				       .build();
+//	}
+	
+	@GET
+	@Path("{" + KUNDEN_ID_PATH_PARAM + ":[1-9][0-9]*}")
+	public AbstractKunde findKundeById(@PathParam(KUNDEN_ID_PATH_PARAM) Long id) {
+		final AbstractKunde kunde = ks.findKundeById(id, FetchType.NUR_KUNDE);
+		if (kunde == null) {
+			throw new NotFoundException(NOT_FOUND_ID, id);
+		}
 		uriHelperKunde.updateUriKunde(kunde, uriInfo);
-		
 		return kunde;
 	}
 	
@@ -172,9 +253,9 @@ public class KundeResource {
 	@GET
 	@Path("{id:[1-9][0-9]*}/bestellungen")
 	public Collection<Bestellung> findBestellungenByKundeId(@PathParam("id") Long kundeId) {
-		final Locale locale = localeHelper.getLocale(headers);
+
 		
-		final AbstractKunde kunde = ks.findKundeById(kundeId, FetchType.MIT_BESTELLUNGEN, locale);
+		final AbstractKunde kunde = ks.findKundeById(kundeId, FetchType.MIT_BESTELLUNGEN);
 		if (kunde == null) {
 			throw new NotFoundException("Kein Kunde mit der ID " + kundeId + " gefunden.");
 		}
@@ -246,7 +327,7 @@ public class KundeResource {
 	public void updatePrivatkunde(Privatkunde kunde) {
 		// Vorhandenen Kunden ermitteln
 		final Locale locale = localeHelper.getLocale(headers);
-		final AbstractKunde origKunde = ks.findKundeById(kunde.getId(), FetchType.NUR_KUNDE, locale);
+		final AbstractKunde origKunde = ks.findKundeById(kunde.getId(), FetchType.NUR_KUNDE);
 		if (origKunde == null) {
 			// TODO msg passend zu locale
 			final String msg = "Kein Kunde gefunden mit der ID " + kunde.getId();
