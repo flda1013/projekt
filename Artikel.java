@@ -3,18 +3,11 @@ package de.shop.artikelverwaltung.domain;
 import static de.shop.util.Constants.KEINE_ID;
 import static de.shop.util.Constants.MIN_ID;
 import static javax.persistence.TemporalType.TIMESTAMP;
-import static de.shop.util.Constants.ERSTE_VERSION;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
 
-
-
-
-
-
-import javax.persistence.Basic;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,23 +20,19 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.logging.Logger;
 
 import de.shop.util.IdGroup;
 
-
-
+//Test mit Proxy
 @Entity
 @Table(name = "artikel")
 @Cacheable
-@XmlRootElement
 @NamedQueries({
 	@NamedQuery(name  = Artikel.FIND_VERFUEGBARE_ARTIKEL,
             	query = "SELECT      a"
@@ -98,29 +87,17 @@ public class Artikel implements Serializable {
 	private double preis;
 	
 	private boolean ausgesondert;
-
+	//Test
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@XmlTransient
+	@JsonIgnore
 	private Date erzeugt;
 
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@XmlTransient
+	@JsonIgnore
 	private Date aktualisiert;
 	
-	@Version
-	@Basic(optional = false)
-	private int version = ERSTE_VERSION;
-	
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
 	public Artikel() {
 		super();
 	}
@@ -136,7 +113,6 @@ public class Artikel implements Serializable {
 	private void prePersist() {
 		erzeugt = new Date();
 		aktualisiert = new Date();
-
 	}
 	
 	@PostPersist

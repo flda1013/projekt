@@ -3,6 +3,7 @@ package de.shop.artikelverwaltung.rest;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import static javax.ws.rs.core.MediaType.TEXT_XML;
+import static de.shop.util.Constants.SELF_LINK;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
@@ -23,6 +24,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -33,31 +35,28 @@ import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
+import de.shop.util.UriHelper;
 
 
 @Path("/artikel")
-@Produces({ APPLICATION_XML, TEXT_XML, APPLICATION_JSON })
+@Produces({ APPLICATION_JSON, APPLICATION_XML + ";qs=0.75", TEXT_XML + ";qs=0.5" })
 @Consumes
-@RequestScoped
-@Transactional
 @Log
+@RequestScoped
 public class ArtikelResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
-
-	
 	@Context
 	private UriInfo uriInfo;
+	
+	@Inject
+	private UriHelper uriHelper;
 	
 	@Inject
 	private ArtikelService as;
 	
 	@Inject
 	private LocaleHelper localeHelper;
-	
-//	@Inject
-//	private EntityManager em;
 	
 	@Context
 	private HttpHeaders headers;
@@ -78,17 +77,29 @@ public class ArtikelResource {
 	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
-	@Produces("application/json")
-	public Artikel findArtikel(@PathParam("id") Long id) {
+	public Response findArtikel(@PathParam("id") Long id) {
 		final Artikel artikel = as.findArtikelById(id);
 		if (artikel == null) {
 			final String msg = "Kein Artikel gefunden mit der ID " + id;
 			throw new NotFoundException(msg);
 		}
 
-		return artikel;
+		return Response.ok(artikel)
+				.links(getTransitionalLinks(artikel, uriInfo))
+				.build();
 	}
 	
+	private Link[] getTransitionalLinks(Artikel artikel, UriInfo uriInfo) {
+		final Link self = Link.fromUri(getUriArtikel(artikel, uriInfo))
+                              .rel(SELF_LINK)
+                              .build();
+
+		return new Link[] { self };
+	}
+	
+	public URI getUriArtikel(Artikel artikel, UriInfo uriInfo) {
+		return uriHelper.getUri(ArtikelResource.class, "findArtikel", artikel.getId(), uriInfo);
+	}
 
 	@POST
 	@Consumes(APPLICATION_JSON)

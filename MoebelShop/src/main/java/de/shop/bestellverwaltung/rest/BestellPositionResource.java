@@ -20,14 +20,13 @@ import de.shop.bestellverwaltung.service.BestellPositionService;
 //import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
-import de.shop.util.Transactional;
+
 
 
 @Path("/bestellposition")
 @Produces(APPLICATION_JSON)
 @Consumes
 @RequestScoped
-@Transactional
 @Log
 public class BestellPositionResource {
 //	@Context

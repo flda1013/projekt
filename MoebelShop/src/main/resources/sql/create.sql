@@ -17,7 +17,7 @@ DROP TABLE bestellung
 CREATE TABLE bestellung (id NUMBER(4) NOT NULL PRIMARY KEY, ausgeliefert NUMBER(1), kunde_fk NUMBER(4), idx NUMBER(2), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
 
 DROP TABLE artikel;
-CREATE TABLE artikel(id NUMBER(4) NOT NULL PRIMARY KEY, bezeichnung VARCHAR2(50), preis NUMBER(4), ausgesondert VARCHAR2(5), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
+CREATE TABLE artikel(id NUMBER(4) NOT NULL PRIMARY KEY,version NUMBER(4) NOT NULL,bezeichnung VARCHAR2(50), preis NUMBER(4), ausgesondert VARCHAR2(5), erzeugt TIMESTAMP NOT NULL, aktualisiert TIMESTAMP NOT NULL) CACHE;
 
 DROP TABLE kunde_hobby;
 CREATE TABLE kunde_hobby(kunde_fk NUMBER(4), hobby_fk NUMBER(4)) CACHE;
