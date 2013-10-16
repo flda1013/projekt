@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import de.shop.util.EntityManagerProducer;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -30,7 +31,6 @@ import com.google.common.base.Strings;
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.util.Log;
 import de.shop.util.ValidatorProvider;
-import static de.shop.util.Constants.KEINE_ID;
 
 
 @Log
@@ -38,8 +38,8 @@ public class ArtikelService implements Serializable {
 	private static final long serialVersionUID = 3076865030092242363L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	
-	@PersistenceContext
-	private transient EntityManager em;
+	@Inject
+	private EntityManager em;
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -67,8 +67,7 @@ public class ArtikelService implements Serializable {
 		return artikel;
 	}
 	
-	/**
-	 */
+
 	public List<Artikel> findArtikelByIds(List<Long> ids) {
 		// Ist die ID null oder leer so gebe eine leere Liste zurück
 		if (ids == null || ids.isEmpty()) {
@@ -130,8 +129,7 @@ public class ArtikelService implements Serializable {
 	}
 
 	
-	/**
-	 */
+
 	public List<Artikel> findArtikelByBezeichnung(String bezeichnung) {
 		if (Strings.isNullOrEmpty(bezeichnung)) {
 			final List<Artikel> artikel = findVerfuegbareArtikel();
@@ -144,8 +142,7 @@ public class ArtikelService implements Serializable {
 		return artikel;
 	}
 	
-	/**
-	 */
+	
 	public List<Artikel> findArtikelByMaxPreis(double preis) {
 		final List<Artikel> artikel = em.createNamedQuery(Artikel.FIND_ARTIKEL_MAX_PREIS, Artikel.class)
 				                        .setParameter(Artikel.PARAM_PREIS, preis)
@@ -153,31 +150,13 @@ public class ArtikelService implements Serializable {
 		return artikel;
 	}
 	
-	@Inject
-	private ValidatorProvider validatorProvider;
-	
-	private void validateArtikel(Artikel artikel, Locale locale, Class<?>... groups) {
-		// Werden alle Constraints beim Einfuegen gewahrt?
-		final Validator validator = validatorProvider.getValidator(locale);
 		
-		final Set<ConstraintViolation<Artikel>> violations = validator.validate(artikel, groups);
-		if (!violations.isEmpty()) {
-			throw new InvalidArtikelException(artikel, violations);
-		}
-	}
-	
-	
-	public Artikel createArtikel(Artikel artikel, Locale locale) {
+	public Artikel createArtikel(Artikel artikel) {
 		
 		if (artikel == null) {
 			return artikel;
-		}
-		// Werden alle Constraints beim Einfuegen gewahrt?
-		validateArtikel(artikel, locale, Default.class);
-		
-		artikel.setId(KEINE_ID);
+		}		
 		em.persist(artikel);
-
 
 		return artikel;
 	}
@@ -188,7 +167,6 @@ public class ArtikelService implements Serializable {
 		}
 		em.detach(artikel);
 		// Werden alle Constraints beim Modifizieren gewahrt?
-		validateArtikel(artikel, locale, Default.class);
 
 		// TODO Datenbanzugriffsschicht statt Mock
 		em.merge(artikel);

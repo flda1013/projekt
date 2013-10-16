@@ -4,6 +4,11 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import static javax.ws.rs.core.MediaType.TEXT_XML;
 import static de.shop.util.Constants.SELF_LINK;
+import static de.shop.util.Constants.ADD_LINK;
+import static de.shop.util.Constants.UPDATE_LINK;
+import static de.shop.util.Constants.REMOVE_LINK;
+import static de.shop.util.Constants.KEINE_ID;
+import static de.shop.util.Constants.ERSTE_VERSION;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
@@ -13,7 +18,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-//import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -61,10 +67,6 @@ public class ArtikelResource {
 	@Context
 	private HttpHeaders headers;
 	
-	@Inject
-	private UriHelperArtikel uriHelperArtikel;
-
-	
 	@PostConstruct
 	private void postConstruct() {
 		LOGGER.debugf("CDI-faehiges Bean %s wurde erzeugt", this);
@@ -91,10 +93,23 @@ public class ArtikelResource {
 	
 	private Link[] getTransitionalLinks(Artikel artikel, UriInfo uriInfo) {
 		final Link self = Link.fromUri(getUriArtikel(artikel, uriInfo))
-                              .rel(SELF_LINK)
-                              .build();
+                              		.rel(SELF_LINK)
+                              		.build();
+		final Link add = Link.fromUri(getUriArtikel(artikel, uriInfo))
+                					.rel(ADD_LINK)
+                					.build();
+		final Link update = Link.fromUri(getUriArtikel(artikel, uriInfo))
+                					.rel(UPDATE_LINK)
+                					.build();
+		final Link list = Link.fromUri(getUriArtikel(artikel, uriInfo))
+									.rel("LIST_LINK")
+									.build();
+		final Link remove = Link.fromUri(getUriArtikel(artikel, uriInfo))
+									.rel("REMOVE_LINK")
+									.build();
 
-		return new Link[] { self };
+
+		return new Link[] { self,add,update,list,remove };
 	}
 	
 	public URI getUriArtikel(Artikel artikel, UriInfo uriInfo) {
@@ -102,24 +117,25 @@ public class ArtikelResource {
 	}
 
 	@POST
-	@Consumes(APPLICATION_JSON)
-	@Produces("application/json")
-	public Response createArtikel(Artikel artikel) {
+	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+	@Produces
+	@Transactional
+	public Response createArtikel(@Valid Artikel artikel) {
 		
-		
-		final Locale locale = localeHelper.getLocale(headers);
+		artikel.setId(KEINE_ID);
+		artikel.setVersion(ERSTE_VERSION);
 		LOGGER.tracef("Artikel: %s", artikel);
-		artikel = as.createArtikel(artikel, locale);
-		
-		final URI artikelUri = uriHelperArtikel.getUriArtikel(artikel, uriInfo);
-		
-		
-		return Response.created(artikelUri).build();
+		artikel = as.createArtikel(artikel);
+		LOGGER.tracef("Angelegt Artikel: ", artikel);		
+		return Response.created(getUriArtikel(artikel,uriInfo))
+				.build();
+
 	}
 	
-	   @PUT
-	    @Consumes(APPLICATION_JSON)
-	    @Produces
+	    @PUT
+		@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+		@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+		@Transactional
 	    public void updateArtikel(Artikel artikel) {
 	        // Vorhandenen Artikel ermitteln
 	        final Locale locale = localeHelper.getLocale(headers);
