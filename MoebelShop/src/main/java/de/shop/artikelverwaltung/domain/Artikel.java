@@ -11,9 +11,6 @@ import java.util.Date;
 
 
 
-
-
-
 import javax.persistence.Basic;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -83,12 +80,16 @@ public class Artikel implements Serializable {
 	public static final String PARAM_BEZEICHNUNG = "bezeichnung";
 	public static final String PARAM_PREIS = "preis";
 	public static final String PARAM_ID = "id";
+	
+	public static final int ERSTE_VERSION = 0;
 
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	@Min(value = MIN_ID, message = "{artikelverwaltung.artikel.id.min}", groups = IdGroup.class)
 	private Long id = KEINE_ID;
+	
+
 	
 	@Column(length = BEZEICHNUNG_LENGTH_MAX, nullable = false)
 	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
@@ -113,13 +114,7 @@ public class Artikel implements Serializable {
 	@Basic(optional = false)
 	private int version = ERSTE_VERSION;
 	
-	public int getVersion() {
-		return version;
-	}
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
 
 	public Artikel() {
 		super();
@@ -256,10 +251,16 @@ public class Artikel implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Artikel [id=" + id + ", bezeichnung=" + bezeichnung
-		       + ", preis=" + preis + ", ausgesondert=" + ausgesondert
-		       + ", erzeugt=" + erzeugt
-			   + ", aktualisiert=" + aktualisiert + "]";
+		return "Artikel [id=" + id + ", version=" + version
+		       + ", bezeichnung=" + bezeichnung + ", ausgesondert=" + ausgesondert + "]";
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 }

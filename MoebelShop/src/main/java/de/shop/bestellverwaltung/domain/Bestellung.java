@@ -37,6 +37,8 @@ import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -69,6 +71,7 @@ import de.shop.util.PreExistingGroup;
 	    				+ " WHERE  b.id = :" + Bestellung.PARAM_ID
 	    				+ " ORDER BY b.id ASC")
 })
+@XmlRootElement
 public class Bestellung implements Serializable {
 	private static final long serialVersionUID = 7560752199018702446L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -93,7 +96,7 @@ public class Bestellung implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "kunde_fk", nullable = false, insertable = false, updatable = false)
 	@NotNull(message = "{bestellverwaltung.bestellung.kunde.notNull}", groups = PreExistingGroup.class)
-	@JsonIgnore
+	@XmlTransient
 	private AbstractKunde kunde;
 	
 	@Transient
@@ -110,21 +113,21 @@ public class Bestellung implements Serializable {
 	@JoinTable(name = "bestellung_lieferung",
 			   joinColumns = @JoinColumn(name = "bestellung_fk"),
 			                 inverseJoinColumns = @JoinColumn(name = "lieferung_fk"))
-	@JsonIgnore
+	@XmlTransient
 	private Set<Lieferung> lieferungen;
 	
 	@Transient
-	@JsonIgnore
+	@XmlTransient
 	private URI lieferungenUri;
 	
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date erzeugt;
 
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date aktualisiert;
 
 	public Bestellung() {

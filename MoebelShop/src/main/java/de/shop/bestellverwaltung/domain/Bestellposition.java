@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.logging.Logger;
@@ -38,6 +40,7 @@ import de.shop.artikelverwaltung.domain.Artikel;
    	            	   	+ " FROM   Bestellposition bp"
    	            	   	+ " WHERE  bp.id = :" + Bestellposition.PARAM_ID)
 })
+@XmlRootElement
 public class Bestellposition implements Serializable {
 	private static final long serialVersionUID = 2222771733641950913L;
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
@@ -56,7 +59,7 @@ public class Bestellposition implements Serializable {
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)
 	@NotNull(message = "{bestellverwaltung.bestellposition.artikel.notNull}")
-	@JsonIgnore
+	@XmlTransient
 	private Artikel artikel;
 
 	@Transient
