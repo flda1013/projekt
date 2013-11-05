@@ -21,4 +21,10 @@ public class InvalidKundeIdException extends AbstractKundeValidationException {
 	public Long getKundeId() {
 		return kundeId;
 	}
+
+	@Override
+	public String getMessageKey() {
+		// TODO Auto-generated method stub
+		return MESSAGE_KEY;
+	}
 }

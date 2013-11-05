@@ -21,4 +21,10 @@ public class InvalidNachnameException extends AbstractKundeValidationException {
 	public String getNachname() {
 		return nachname;
 	}
+
+	@Override
+	public String getMessageKey() {
+		// TODO Auto-generated method stub
+		return MESSAGE_KEY;;
+	}
 }

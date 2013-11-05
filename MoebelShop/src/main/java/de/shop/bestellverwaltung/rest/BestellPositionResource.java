@@ -49,8 +49,8 @@ public class BestellPositionResource {
 	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
-	@Produces("application/json")
-	public Bestellposition findBestellposition(@PathParam("id") Long id, @Context UriInfo uriInfo) {
+	//@Produces("application/json")
+	public Bestellposition findBestellpositionById(@PathParam("id") Long id, @Context UriInfo uriInfo) {
 		final Bestellposition bestellposition = bs.findBestellpositionById(id);
 		if (bestellposition == null) {
 			final String msg = "Keine BestellPosition gefunden mit der ID " + id;

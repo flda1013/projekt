@@ -2,6 +2,7 @@ package de.shop.kundenverwaltung.service;
 
 import java.util.Collection;
 
+
 //import javax.annotation.PostConstruct;
 import javax.ejb.ApplicationException;
 import javax.validation.ConstraintViolation;
@@ -37,5 +38,11 @@ public class InvalidKundeException extends AbstractKundeValidationException {
 
 	public AbstractKunde getKunde() {
 		return kunde;
+	}
+
+	@Override
+	public String getMessageKey() {
+		// TODO Auto-generated method stub
+		return MESSAGE_KEY;
 	}
 }

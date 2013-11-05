@@ -27,5 +27,11 @@ public class KundeDeleteBestellungException extends AbstractKundeServiceExceptio
 	public int getAnzahlBestellungen() {
 		return anzahlBestellungen;
 	}
+
+	@Override
+	public String getMessageKey() {
+		// TODO Auto-generated method stub
+		return MESSAGE_KEY;
+	}
 }
 

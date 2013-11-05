@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.PostPersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -51,10 +53,16 @@ public class Bestellposition implements Serializable {
 	private static final int ANZAHL_MIN = 1;
 	public static final String PARAM_ID = "id";
 	
+	public static final int ERSTE_VERSION = 0;
+	
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	private Long id = KEINE_ID;
+	
+//	@Version
+//	@Basic(optional = false)
+//	private int version = ERSTE_VERSION;
 	
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)
@@ -98,6 +106,14 @@ public class Bestellposition implements Serializable {
 		this.id = id;
 	}
 	
+//	public int getVersion() {
+//		return version;
+//	}
+//
+//	public void setVersion(int version) {
+//		this.version = version;
+//	}
+//	
 	public Artikel getArtikel() {
 		return artikel;
 	}

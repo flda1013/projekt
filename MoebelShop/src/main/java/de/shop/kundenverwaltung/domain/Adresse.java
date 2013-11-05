@@ -19,10 +19,12 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Version;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.jboss.logging.Logger;
@@ -47,6 +49,10 @@ public class Adresse implements Serializable {
 	@Column(nullable = false, updatable = false)
 	@Min(value = MIN_ID, message = "{kundenverwaltung.adresse.id.min}", groups = IdGroup.class)
 	private Long id = KEINE_ID;
+	
+//	@Version
+//	@Basic(optional = false)
+//	private int version = ERSTE_VERSION;
 
 	@Column(length = PLZ_LENGTH_MAX, nullable = false)
 	@NotNull(message = "{kundenverwaltung.adresse.plz.notNull}")
@@ -70,18 +76,18 @@ public class Adresse implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "kunde_fk", nullable = false)
 	@NotNull(message = "{kundenverwaltung.adresse.kunde.notNull}")
-	@JsonIgnore
+	@XmlTransient
 	private AbstractKunde kunde;
 
 	
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date erzeugt;
 
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
-	@JsonIgnore
+	@XmlTransient
 	private Date aktualisiert;
 	
 	@PrePersist
@@ -106,6 +112,14 @@ public class Adresse implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+//	public int getVersion() {
+//		return version;
+//	}
+//
+//	public void setVersion(int version) {
+//		this.version = version;
+//	}
 
 	public String getPlz() {
 		return plz;

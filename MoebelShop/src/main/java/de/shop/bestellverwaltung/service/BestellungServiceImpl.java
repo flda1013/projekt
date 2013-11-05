@@ -50,8 +50,6 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	@Inject
 	private KundeService ks;
 	
-	@Inject
-	private ValidatorProvider validatorProvider;
 	
 	@Inject
 	@NeueBestellung
@@ -127,16 +125,14 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	 * wird sowohl fuer einen Web Service aus auch fuer eine Webanwendung benoetigt.
 	 */
 	@Override
-	public Bestellung createBestellung(Bestellung bestellung,
-			                           Long kundeId,
-			                           Locale locale) {
+	public Bestellung createBestellung(Bestellung bestellung,String username) {
 		if (bestellung == null) {
 			return null;
 		}
 		
 		// Den persistenten Kunden mit der transienten Bestellung verknuepfen
-		final AbstractKunde kunde = ks.findKundeById(kundeId, KundeService.FetchType.MIT_BESTELLUNGEN);
-		return createBestellung(bestellung, kunde, locale);
+		final AbstractKunde kunde = ks.findKundeByUserName(username);
+		return createBestellung(bestellung, kunde);
 	}
 	
 	/**
@@ -146,9 +142,9 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	 */
 	@Override
 	public Bestellung createBestellung(Bestellung bestellung,
-			                           AbstractKunde kunde,
-			                           Locale locale) {
-		if (bestellung == null) {
+			                           AbstractKunde kunde
+			                           ) {
+		if (bestellung == null || kunde == null) {
 			return null;
 		}
 		
@@ -167,22 +163,13 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 			LOGGER.tracef("Bestellposition: %s", bp);				
 		}
 		
-		validateBestellung(bestellung, locale, Default.class);
 		em.persist(bestellung);
 		event.fire(bestellung);
 
 		return bestellung;
 	}
 	
-	private void validateBestellung(Bestellung bestellung, Locale locale, Class<?>... groups) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		
-		final Set<ConstraintViolation<Bestellung>> violations = validator.validate(bestellung);
-		if (violations != null && !violations.isEmpty()) {
-			LOGGER.debugf("createBestellung: violations=%s", violations);
-			throw new InvalidBestellungException(bestellung, violations);
-		}
-	}
+	
 
 
 	/**
@@ -271,8 +258,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 			return null;
 		}
 		em.detach(bestellung);
-		// Werden alle Constraints beim Modifizieren gewahrt?
-		validateBestellung(bestellung, locale, Default.class);
+		
 
 		// TODO Datenbanzugriffsschicht statt Mock
 		em.merge(bestellung);

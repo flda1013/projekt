@@ -187,6 +187,21 @@ public class KundeService implements Serializable {
 		return kunde;
 	}
 	
+	
+	public AbstractKunde findKundeByUserName(String userName) {
+		try {
+			return em.createNamedQuery(AbstractKunde.FIND_KUNDE_BY_USERNAME, AbstractKunde.class)
+					 .setParameter(AbstractKunde.PARAM_KUNDE_USERNAME, userName)
+					 .getSingleResult();
+		}
+		catch (NoResultException e) {
+			return null;
+		}
+	}
+	
+	
+	
+	
 	private void validateKundeId(Long kundeId) {
 		final Validator validator = validatorProvider.getValidator(Locale.getDefault());
 		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,

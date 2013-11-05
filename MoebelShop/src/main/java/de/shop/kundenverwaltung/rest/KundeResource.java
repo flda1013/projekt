@@ -2,6 +2,8 @@ package de.shop.kundenverwaltung.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static javax.ws.rs.core.MediaType.TEXT_XML;
 import static de.shop.util.Constants.KEINE_ID;
 //import static de.shop.util.Constants.ADD_LINK;
 //import static de.shop.util.Constants.FIRST_LINK;
@@ -13,12 +15,14 @@ import static de.shop.util.Constants.KEINE_ID;
 //import static de.shop.util.Constants.UPDATE_LINK;
 
 
+
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 //import java.util.List;
 import java.util.Locale;
+
 
 
 //import javax.ws.rs.core.Link;
@@ -39,10 +43,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.jboss.logging.Logger;
+import static de.shop.util.Constants.SELF_LINK;
+import static de.shop.util.Constants.ADD_LINK;
+import static de.shop.util.Constants.UPDATE_LINK;
+import static de.shop.util.Constants.REMOVE_LINK;
+import static de.shop.util.Constants.LIST_LINK;
+
 
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.rest.UriHelperBestellung;
@@ -76,8 +87,8 @@ public class KundeResource {
     @Context
     private HttpHeaders headers;
     
-//	@Inject
-//	private UriHelper uriHelper;
+	@Inject
+	private UriHelper uriHelper;
     
 	@Inject
 	private KundeService ks;
@@ -111,45 +122,45 @@ public class KundeResource {
 		return VERSION;
 	}
 	//TODO Wiedereinblenden wen benötigt	
-//	public Link[] getTransitionalLinks(AbstractKunde kunde, UriInfo uriInfo) {
-//		final Link self = Link.fromUri(getUriKunde(kunde, uriInfo))
-//	                          .rel(SELF_LINK)
-//	                          .build();
-//
-//		final Link list = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
-//                              .rel(LIST_LINK)
-//                              .build();
-//		
-//		final Link add = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
-//                             .rel(ADD_LINK)
-//                             .build();
-//
-//		final Link update = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
-//				                .rel(UPDATE_LINK)
-//				                .build();
-//
-//		final Link remove = Link.fromUri(uriHelper.getUri(KundeResource.class, "deleteKunde", kunde.getId(), uriInfo))
-//                                .rel(REMOVE_LINK)
-//                                .build();
-//
-//		return new Link[] { self, list, add, update,remove};
-//	}
+	public Link[] getTransitionalLinks(AbstractKunde kunde, UriInfo uriInfo) {
+		final Link self = Link.fromUri(getUriKunde(kunde, uriInfo))
+	                          .rel(SELF_LINK)
+	                          .build();
+
+		final Link list = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
+                              .rel(LIST_LINK)
+                              .build();
+		
+		final Link add = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
+                             .rel(ADD_LINK)
+                             .build();
+
+		final Link update = Link.fromUri(uriHelper.getUri(KundeResource.class, uriInfo))
+				                .rel(UPDATE_LINK)
+				                .build();
+
+		final Link remove = Link.fromUri(uriHelper.getUri(KundeResource.class, "deleteKunde", kunde.getId(), uriInfo))
+                                .rel(REMOVE_LINK)
+                                .build();
+
+		return new Link[] { self, list, add, update,remove};
+	}
 	
-//	public URI getUriKunde(AbstractKunde kunde, UriInfo uriInfo) {
-//		return uriHelper.getUri(KundeResource.class, "findKundeById", kunde.getId(), uriInfo);
-//	}
+	public URI getUriKunde(AbstractKunde kunde, UriInfo uriInfo) {
+		return uriHelper.getUri(KundeResource.class, "findKundeById", kunde.getId(), uriInfo);
+	}
 //	
-//	private URI getUriBestellungen(AbstractKunde kunde, UriInfo uriInfo) {
-//		return uriHelper.getUri(KundeResource.class, "findBestellungenByKundeId", kunde.getId(), uriInfo);
-//	}
-//	
-//	public void setStructuralLinks(AbstractKunde kunde, UriInfo uriInfo) {
-//		// URI fuer Bestellungen setzen
-//		final URI uri = getUriBestellungen(kunde, uriInfo);
-//		kunde.setBestellungenUri(uri);
-//		
-//		LOGGER.trace(kunde);
-//	}
+	private URI getUriBestellungen(AbstractKunde kunde, UriInfo uriInfo) {
+		return uriHelper.getUri(KundeResource.class, "findBestellungenByKundeId", kunde.getId(), uriInfo);
+	}
+	
+	public void setStructuralLinks(AbstractKunde kunde, UriInfo uriInfo) {
+		// URI fuer Bestellungen setzen
+		final URI uri = getUriBestellungen(kunde, uriInfo);
+		kunde.setBestellungenUri(uri);
+		
+		LOGGER.trace(kunde);
+	}
 //	
 //	private Link[] getTransitionalLinksKunden(List<? extends AbstractKunde> kunden, UriInfo uriInfo) {
 //		if (kunden == null || kunden.isEmpty()) {
@@ -297,9 +308,9 @@ public class KundeResource {
 	 * @return Response-Objekt mit URL des neuen Privatkunden
 	 */
 	@POST
-	@Consumes(APPLICATION_JSON)
+	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces
-	public Response createPrivatkunde(Privatkunde kunde) {
+	public Response createKunde(AbstractKunde kunde) {
 		final Locale locale = localeHelper.getLocale(headers);
 
 		kunde.setId(KEINE_ID);
@@ -311,7 +322,7 @@ public class KundeResource {
 		}
 		kunde.setBestellungenUri(null);
 		
-		kunde = (Privatkunde) ks.createKunde(kunde, locale);
+		kunde = (AbstractKunde) ks.createKunde(kunde, locale);
 		LOGGER.tracef("Kunde: %s", kunde);
 		
 		final URI kundeUri = uriHelperKunde.getUriKunde(kunde, uriInfo);
@@ -326,7 +337,7 @@ public class KundeResource {
 	@PUT
 	@Consumes(APPLICATION_JSON)
 	@Produces
-	public void updatePrivatkunde(Privatkunde kunde) {
+	public void updateAbstractKunde(AbstractKunde kunde) {
 		// Vorhandenen Kunden ermitteln
 		final Locale locale = localeHelper.getLocale(headers);
 		final AbstractKunde origKunde = ks.findKundeById(kunde.getId(), FetchType.NUR_KUNDE);
@@ -342,7 +353,7 @@ public class KundeResource {
 		LOGGER.tracef("Kunde nachher: %s", origKunde);
 		// Update durchfuehren
 		//if (kunde = Privatkunde){
-		kunde = (Privatkunde) ks.updateKunde(origKunde, locale);
+		kunde = (AbstractKunde) ks.updateKunde(origKunde, locale);
 		if (kunde == null) {
 			// TODO msg passend zu locale
 			final String msg = "Kein Kunde gefunden mit der ID " + origKunde.getId();
