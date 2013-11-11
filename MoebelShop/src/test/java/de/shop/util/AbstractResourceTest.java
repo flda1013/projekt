@@ -71,13 +71,16 @@ public abstract class AbstractResourceTest {
 		       | KeyManagementException | UnrecoverableKeyException e) {
 			throw new IllegalStateException(e);
 		}
+	
 	}
 	
 	@Before
 	public void before() {
+		
 		httpClient = newHttpClient();
 		final ClientHttpEngine engine = new ApacheHttpClient4Engine(httpClient);
 		client = resteasyClientBuilder.httpEngine(engine).build();
+	
 	}
 	
 	// fuer HttpsHelper

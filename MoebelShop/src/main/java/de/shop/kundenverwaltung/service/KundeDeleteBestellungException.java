@@ -13,6 +13,7 @@ public class KundeDeleteBestellungException extends AbstractKundeServiceExceptio
 	private static final long serialVersionUID = 2237194289969083093L;
 	private final Long kundeId;
 	private final int anzahlBestellungen;
+	private static final String MESSAGE_KEY = "kunde.DeleteBestellung";
 	
 	public KundeDeleteBestellungException(AbstractKunde kunde) {
 		super("Kunde mit ID=" + kunde.getId() + " kann nicht geloescht werden: "
@@ -30,7 +31,7 @@ public class KundeDeleteBestellungException extends AbstractKundeServiceExceptio
 
 	@Override
 	public String getMessageKey() {
-		// TODO Auto-generated method stub
+		
 		return MESSAGE_KEY;
 	}
 }

@@ -8,17 +8,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import de.shop.artikelverwaltung.service.ArtikelServiceException;
-
+import de.shop.artikelverwaltung.service.AbstractArtikelValidationException;
 import de.shop.util.Log;
 
 
 	@Provider
 	@ApplicationScoped
 	@Log
-	public class ArtikelResourceExceptionMapper implements ExceptionMapper<ArtikelServiceException> {
+	public class ArtikelResourceExceptionMapper implements ExceptionMapper<AbstractArtikelValidationException> {
 		@Override
-		public Response toResponse(ArtikelServiceException e) {
+		public Response toResponse(AbstractArtikelValidationException e) {
 			final String msg = e.getMessage();
 			final Response response = Response.status(CONFLICT)
 			                                  .type(TEXT_PLAIN)

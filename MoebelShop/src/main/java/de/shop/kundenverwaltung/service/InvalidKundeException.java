@@ -16,6 +16,7 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 @ApplicationException(rollback = true)
 public class InvalidKundeException extends AbstractKundeValidationException {
 	private static final long serialVersionUID = 4255133082483647701L;
+	private static final String MESSAGE_KEY = "kunde.Invalid";
 	private final AbstractKunde kunde;
 	
 	public InvalidKundeException(AbstractKunde kunde,
@@ -42,7 +43,7 @@ public class InvalidKundeException extends AbstractKundeValidationException {
 
 	@Override
 	public String getMessageKey() {
-		// TODO Auto-generated method stub
+		
 		return MESSAGE_KEY;
 	}
 }

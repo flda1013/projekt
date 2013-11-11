@@ -97,9 +97,9 @@ public class Bestellung implements Serializable {
 	@Min(value = MIN_ID, message = "{bestellverwaltung.bestellung.id.min}", groups = IdGroup.class)
 	private Long id = KEINE_ID;
 	
-//	@Version
-//	@Basic(optional = false)
-//	private int version = ERSTE_VERSION;
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "kunde_fk", nullable = false, insertable = false, updatable = false)

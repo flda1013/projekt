@@ -15,6 +15,7 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 @ApplicationException(rollback = true)
 public class InvalidBestellungException extends AbstractBestellungValidationException {
 	private static final long serialVersionUID = 4255133082483647701L;
+	private static final String MESSAGE_KEY = "bestellung.Invalid";
 	private final Date erzeugt;
 	private final Long kundeId;
 	
@@ -39,5 +40,11 @@ public class InvalidBestellungException extends AbstractBestellungValidationExce
 	
 	public Long getKundeId() {
 		return kundeId;
+	}
+
+	@Override
+	public String getMessageKey() {
+		
+		return MESSAGE_KEY;
 	}
 }

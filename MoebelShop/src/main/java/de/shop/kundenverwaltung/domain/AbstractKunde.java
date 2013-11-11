@@ -6,7 +6,6 @@ import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.CascadeType.REMOVE;
 import static javax.persistence.TemporalType.DATE;
 import static javax.persistence.TemporalType.TIMESTAMP;
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.FetchType.EAGER;
 
 import java.io.Serializable;
@@ -16,10 +15,16 @@ import java.net.URI;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+
+
+
 
 import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
@@ -67,6 +72,7 @@ import org.jboss.resteasy.annotations.providers.jaxb.Formatted;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.util.IdGroup;
 import de.shop.util.persistence.File;
+import de.shop.auth.domain.RolleType;
 
 
 // Alternativen bei @Inheritance
@@ -202,9 +208,9 @@ public abstract class AbstractKunde implements Serializable {
 	@Min(value = MIN_ID, message = "{kundenverwaltung.kunde.id.min}", groups = IdGroup.class)
 	private Long id = KEINE_ID;
 	
-//	@Version
-//	@Basic(optional = false)
-//	private int version = ERSTE_VERSION;
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 
 	@Column(length = NACHNAME_LENGTH_MAX)
 	@NotNull(message = "{kundenverwaltung.kunde.nachname.notNull}")
@@ -280,17 +286,18 @@ public abstract class AbstractKunde implements Serializable {
 	@XmlTransient
 	private Date aktualisiert;
 	
-//	@ElementCollection(fetch = EAGER)
-//	@CollectionTable(name = "kunde_rolle",
-//	                 joinColumns = @JoinColumn(name = "kunde_fk", nullable = false),
-//   	                 uniqueConstraints =  @UniqueConstraint(columnNames = { "kunde_fk", "rolle" }))
-//	@Column(table = "kunde_rolle", name = "rolle", length = 32, nullable = false)
-//	//private Set<RolleType> rollen;
+	@ElementCollection(fetch = EAGER)
+	@CollectionTable(name = "kunde_rolle",
+	                 joinColumns = @JoinColumn(name = "kunde_fk", nullable = false),
+   	                 uniqueConstraints =  @UniqueConstraint(columnNames = { "kunde_fk", "rolle" }))
+	@Column(table = "kunde_rolle", name = "rolle", length = 32, nullable = false)
+	private Set<RolleType> rollen;
 	
-//	@OneToOne(fetch = LAZY, cascade = { PERSIST, REMOVE })
-//	@JoinColumn(name = "file_fk")
-//	@XmlTransient
-//	private File file;
+
+	@OneToOne(cascade = { PERSIST, REMOVE })
+	@JoinColumn(name = "file_fk")
+	@XmlTransient
+	private File file;
 	
 
 	@PrePersist
@@ -340,13 +347,21 @@ public abstract class AbstractKunde implements Serializable {
 		this.id = id;
 	}
 
-//	public int getVersion() {
-//		return version;
-//	}
-//
-//	public void setVersion(int version) {
-//		this.version = version;
-//	}
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
 	public String getNachname() {
 		return nachname;
 	}
@@ -473,6 +488,34 @@ public abstract class AbstractKunde implements Serializable {
 		return this;
 	}
 	
+	
+	
+	public void setRollen(Set<RolleType> rollen) {
+		if (this.rollen == null) {
+			this.rollen = rollen;
+			return;
+		}
+		
+		// Wiederverwendung der vorhandenen Collection
+		this.rollen.clear();
+		if (rollen != null) {
+			this.rollen.addAll(rollen);
+		}
+	}
+	
+	
+	
+	public AbstractKunde addRollen(Collection<RolleType> rollen) {
+		LOGGER.tracef("neue Rollen: %s", rollen);
+		if (this.rollen == null) {
+			this.rollen = new HashSet<>();
+		}
+		this.rollen.addAll(rollen);
+		LOGGER.tracef("Rollen nachher: %s", this.rollen);
+		return this;
+	}
+	
+	
 	public URI getBestellungenUri() {
 		return bestellungenUri;
 	}
@@ -572,4 +615,23 @@ public abstract class AbstractKunde implements Serializable {
 		
 		return true;
 	}
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		final AbstractKunde neuesObjekt = AbstractKunde.class.cast(super.clone());
+		neuesObjekt.id = id;
+		neuesObjekt.version = version;
+		neuesObjekt.nachname = nachname;
+		neuesObjekt.vorname = vorname;
+		neuesObjekt.umsatz = umsatz;
+		neuesObjekt.email = email;
+		neuesObjekt.newsletter = newsletter;
+		neuesObjekt.password = password;
+		neuesObjekt.passwordWdh = passwordWdh;
+		neuesObjekt.adresse = adresse;
+		neuesObjekt.erzeugt = erzeugt;
+		neuesObjekt.aktualisiert = aktualisiert;
+		return neuesObjekt;
+	}
+
+	
 }

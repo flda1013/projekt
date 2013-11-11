@@ -3,11 +3,11 @@ package de.shop.artikelverwaltung.domain;
 import static de.shop.util.Constants.KEINE_ID;
 import static de.shop.util.Constants.MIN_ID;
 import static javax.persistence.TemporalType.TIMESTAMP;
-import static de.shop.util.Constants.ERSTE_VERSION;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
+
 
 
 
@@ -31,6 +31,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.jboss.logging.Logger;
 
 import de.shop.util.IdGroup;
@@ -92,9 +93,11 @@ public class Artikel implements Serializable {
 
 	
 	@Column(length = BEZEICHNUNG_LENGTH_MAX, nullable = false)
+	@NotEmpty(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
 	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
 	@Size(max = BEZEICHNUNG_LENGTH_MAX, message = "{artikelverwaltung.artikel.bezeichnung.length}")
 	private String bezeichnung = "";
+	
 	
 	private double preis;
 	

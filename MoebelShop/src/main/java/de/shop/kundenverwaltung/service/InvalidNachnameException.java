@@ -10,6 +10,7 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 @ApplicationException(rollback = true)
 public class InvalidNachnameException extends AbstractKundeValidationException {
 	private static final long serialVersionUID = -8973151010781329074L;
+	private static final String MESSAGE_KEY = "kunde.InvalidNachname";
 	
 	private final String nachname;
 	
@@ -24,7 +25,7 @@ public class InvalidNachnameException extends AbstractKundeValidationException {
 
 	@Override
 	public String getMessageKey() {
-		// TODO Auto-generated method stub
-		return MESSAGE_KEY;;
+		
+		return MESSAGE_KEY;
 	}
 }

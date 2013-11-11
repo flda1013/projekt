@@ -20,6 +20,15 @@ import org.jboss.resteasy.api.validation.ViolationReport;
 
 import de.shop.util.Log;
 
+/**
+ * Konvertierung diverser Exceptions in eine halbwegs vernuenftige Fehlermeldungen,
+ * falls die Exceptions nicht durch spezfische ExceptionMapper abgebildet werden
+ * 
+ * Wesentlicher Code von:
+ * http://securesoftwaredev.com/2013/08/19/how-to-implement-input-validation-for-rest-resources
+ * 
+ * Ergaenzt um ViolationReport und ResteasyConstraintViolation
+ */
 @Provider
 @Log
 public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {

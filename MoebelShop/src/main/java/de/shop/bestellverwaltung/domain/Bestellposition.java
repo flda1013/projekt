@@ -60,9 +60,9 @@ public class Bestellposition implements Serializable {
 	@Column(nullable = false, updatable = false)
 	private Long id = KEINE_ID;
 	
-//	@Version
-//	@Basic(optional = false)
-//	private int version = ERSTE_VERSION;
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 	
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)
@@ -106,14 +106,14 @@ public class Bestellposition implements Serializable {
 		this.id = id;
 	}
 	
-//	public int getVersion() {
-//		return version;
-//	}
-//
-//	public void setVersion(int version) {
-//		this.version = version;
-//	}
-//	
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+	
 	public Artikel getArtikel() {
 		return artikel;
 	}

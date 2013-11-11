@@ -1,5 +1,6 @@
 package de.shop.kundenverwaltung.service;
 
+
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -25,17 +27,25 @@ import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
+
+
+import de.shop.auth.service.AuthService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellposition_;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.domain.Bestellung_;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.AbstractKunde_;
-import de.shop.kundenverwaltung.domain.PasswordGroup;
+
 import de.shop.kundenverwaltung.domain.Wartungsvertrag;
-import de.shop.util.IdGroup;
+
 import de.shop.util.Log;
+import de.shop.util.NoMimeTypeException;
 import de.shop.util.ValidatorProvider;
+import de.shop.util.persistence.ConcurrentDeletedException;
+import de.shop.util.persistence.File;
+import de.shop.util.persistence.FileHelper;
+import de.shop.util.persistence.MimeType;
 
 /**
  * Anwendungslogik fuer die KundeService
@@ -61,6 +71,15 @@ public class KundeService implements Serializable {
 	
 	@Inject
 	private ValidatorProvider validatorProvider;
+	
+	@Inject
+	private transient ManagedExecutorService managedExecutorService;
+	
+	@Inject
+	private AuthService authService;
+	
+	@Inject
+	private FileHelper fileHelper;
 	
 	@PostConstruct
 	private void postConstruct() {
@@ -202,15 +221,15 @@ public class KundeService implements Serializable {
 	
 	
 	
-	private void validateKundeId(Long kundeId) {
-		final Validator validator = validatorProvider.getValidator(Locale.getDefault());
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
-				                                                                           "id",
-				                                                                           kundeId,
-				                                                                           IdGroup.class);
-		if (!violations.isEmpty())
-			throw new InvalidKundeIdException(kundeId, violations);
-	}
+//	private void validateKundeId(Long kundeId) {
+//		final Validator validator = validatorProvider.getValidator(Locale.getDefault());
+//		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
+//				                                                                           "id",
+//				                                                                           kundeId,
+//				                                                                           IdGroup.class);
+//		if (!violations.isEmpty())
+//			throw new InvalidKundeIdException(kundeId, violations);
+//	}
 
 	
 	public List<Long> findIdsByPrefix(String idPrefix) {
@@ -222,8 +241,8 @@ public class KundeService implements Serializable {
 	
 	/**
 	 */
-	public AbstractKunde findKundeByEmail(String email, Locale locale) {
-		validateEmail(email, locale);
+	public AbstractKunde findKundeByEmail(String email) {
+		
 		try {
 			final AbstractKunde kunde = em.createNamedQuery(AbstractKunde.FIND_KUNDE_BY_EMAIL, AbstractKunde.class)
 					                      .setParameter(AbstractKunde.PARAM_KUNDE_EMAIL, email)
@@ -247,13 +266,11 @@ public class KundeService implements Serializable {
 
 	/**
 	 */
-	public AbstractKunde createKunde(AbstractKunde kunde, Locale locale) {
+	public AbstractKunde createKunde(AbstractKunde kunde) {
 		if (kunde == null) {
 			return kunde;
 		}
 
-		// Werden alle Constraints beim Einfuegen gewahrt?
-		validateKunde(kunde, locale, Default.class, PasswordGroup.class);
 		
 		// Pruefung, ob die Email-Adresse schon existiert
 		try {
@@ -283,19 +300,19 @@ public class KundeService implements Serializable {
 	
 	/**
 	 */
-	public AbstractKunde updateKunde(AbstractKunde kunde, Locale locale) {
+	public AbstractKunde updateKunde(AbstractKunde kunde) {
 		if (kunde == null) {
 			return null;
 		}
 
 		// Werden alle Constraints beim Modifizieren gewahrt?
-		validateKunde(kunde, locale, Default.class, PasswordGroup.class, IdGroup.class);
+		//validateKunde(kunde, locale, Default.class, PasswordGroup.class, IdGroup.class);
 		
 		// kunde vom EntityManager trennen, weil anschliessend z.B. nach Id und Email gesucht wird
 		em.detach(kunde);
 		
 		// Gibt es ein anderes Objekt mit gleicher Email-Adresse?
-		final AbstractKunde	tmp = findKundeByEmail(kunde.getEmail(), locale);
+		final AbstractKunde	tmp = findKundeByEmail(kunde.getEmail());
 		if (tmp != null) {
 			em.detach(tmp);
 			if (tmp.getId().longValue() != kunde.getId().longValue()) {
@@ -308,6 +325,41 @@ public class KundeService implements Serializable {
 		return kunde;
 	}
 
+	public <T extends AbstractKunde> T updateKunde(T kunde, boolean geaendertPassword) {
+		if (kunde == null) {
+			return null;
+		}
+		
+		// kunde vom EntityManager trennen, weil anschliessend z.B. nach Id und Email gesucht wird
+		em.detach(kunde);
+		
+		// Wurde das Objekt konkurrierend geloescht?
+		AbstractKunde tmp = findKundeById(kunde.getId(), FetchType.NUR_KUNDE);
+		if (tmp == null) {
+			throw new ConcurrentDeletedException(kunde.getId());
+		}
+		em.detach(tmp);
+		
+		// Gibt es ein anderes Objekt mit gleicher Email-Adresse?
+		tmp = findKundeByEmail(kunde.getEmail());
+		if (tmp != null) {
+			em.detach(tmp);
+			if (tmp.getId().longValue() != kunde.getId().longValue()) {
+				// anderes Objekt mit gleichem Attributwert fuer email
+				throw new EmailExistsException(kunde.getEmail());
+			}
+		}
+		
+		// Password verschluesseln
+		if (geaendertPassword) {
+			passwordVerschluesseln(kunde);
+		}
+
+		kunde = em.merge(kunde);   // OptimisticLockException
+		kunde.setPasswordWdh(kunde.getPassword());
+		
+		return kunde;
+	}
 	/**
 	 */
 	public void deleteKunde(AbstractKunde kunde) {
@@ -432,5 +484,65 @@ public class KundeService implements Serializable {
 		em.persist(wartungsvertrag);
 		return wartungsvertrag;
 	}
+	
+	public AbstractKunde setFile(Long kundeId, byte[] bytes) {
+		final AbstractKunde kunde = findKundeById(kundeId, FetchType.NUR_KUNDE);
+		if (kunde == null) {
+			return null;
+		}
+		final MimeType mimeType = fileHelper.getMimeType(bytes);
+		setFile(kunde, bytes, mimeType);
+		return kunde;
+	}
+	
+	public AbstractKunde setFile(AbstractKunde kunde, byte[] bytes, String mimeTypeStr) {
+		final MimeType mimeType = MimeType.build(mimeTypeStr);
+		setFile(kunde, bytes, mimeType);
+		return kunde;
+	}
+	private void setFile(AbstractKunde kunde, byte[] bytes, MimeType mimeType) {
+		if (mimeType == null) {
+			throw new NoMimeTypeException();
+		}
+		
+		final String filename = fileHelper.getFilename(kunde.getClass(), kunde.getId(), mimeType);
+		
+		// Gibt es noch kein (Multimedia-) File
+		File file = kunde.getFile();
+		if (kunde.getFile() == null) {
+			file = new File(bytes, filename, mimeType);
+			LOGGER.tracef("Neue Datei %s", file);
+			kunde.setFile(file);
+			em.persist(file);
+		}
+		else {
+			file.set(bytes, filename, mimeType);
+			LOGGER.tracef("Ueberschreiben der Datei %s", file);
+			em.merge(file);
+		}
+
+		// Hochgeladenes Bild/Video/Audio in einem parallelen Thread als Datei fuer die Web-Anwendung abspeichern
+		final File newFile = kunde.getFile();
+		final Runnable storeFile = new Runnable() {
+			@Override
+			public void run() {
+				fileHelper.store(newFile);
+			}
+		};
+		managedExecutorService.execute(storeFile);
+	}
+	
+	private void passwordVerschluesseln(AbstractKunde kunde) {
+		LOGGER.debugf("passwordVerschluesseln BEGINN: %s", kunde);
+
+		final String unverschluesselt = kunde.getPassword();
+		final String verschluesselt = authService.verschluesseln(unverschluesselt);
+		kunde.setPassword(verschluesselt);
+		kunde.setPasswordWdh(verschluesselt);
+
+		LOGGER.debugf("passwordVerschluesseln ENDE: %s", verschluesselt);
+	}
+	
+	
 }
 

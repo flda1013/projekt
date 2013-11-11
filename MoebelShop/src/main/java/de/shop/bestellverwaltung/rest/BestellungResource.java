@@ -41,12 +41,9 @@ import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
-import static javax.ws.rs.core.MediaType.TEXT_PLAIN;
 import static javax.ws.rs.core.MediaType.TEXT_XML;
 import static de.shop.util.Constants.SELF_LINK;
 import static de.shop.util.Constants.ADD_LINK;
-import static de.shop.util.Constants.UPDATE_LINK;
-import static de.shop.util.Constants.REMOVE_LINK;
 
 //import de.shop.bestellverwaltung.domain.Lieferung;
 
@@ -54,8 +51,6 @@ import static de.shop.util.Constants.REMOVE_LINK;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.rest.KundeResource;
-import de.shop.kundenverwaltung.rest.UriHelperKunde;
-import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
 import de.shop.util.UriHelper;
@@ -318,7 +313,7 @@ public class BestellungResource {
 //	        final Locale locale = localeHelper.getLocale(headers);
 //	        final Bestellung orginalBestellung = bs.findBestellungById(bestellung.getId());
 //	        if (orginalBestellung == null) {
-//	            // TODO msg passend zu locale
+//	           
 //	            final String msg = "Keine Bestellung gefunden mit der ID " + bestellung.getId();
 //	            throw new NotFoundException(msg);
 //	        }
@@ -331,7 +326,7 @@ public class BestellungResource {
 //	        // Update durchfuehren
 //	        bestellung = bs.updateBestellung(orginalBestellung, locale);
 //	        if (bestellung == null) {
-//	            // TODO msg passend zu locale
+//	            
 //	            final String msg = "Keine Bestellung gefunden mit der ID " + orginalBestellung.getId();
 //	            throw new NotFoundException(msg);
 //	        }

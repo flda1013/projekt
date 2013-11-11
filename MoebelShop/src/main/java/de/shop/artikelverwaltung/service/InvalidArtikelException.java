@@ -7,13 +7,11 @@ import javax.validation.ConstraintViolation;
 import de.shop.artikelverwaltung.domain.Artikel;
 
 
-/**
- * Exception, die ausgel&ouml;st wird, wenn die Attributwerte eines Kunden nicht korrekt sind
- */
-public class InvalidArtikelException extends ArtikelValidationException {
+public class InvalidArtikelException extends AbstractArtikelValidationException {
 	
 	private static final long serialVersionUID = 2428491133712963949L;
 	private final Artikel artikel;
+	private static final String MESSAGE_KEY = "artikel.InvalidArtikel";
 	
 	public InvalidArtikelException(Artikel artikel,
 			                     Collection<ConstraintViolation<Artikel>> violations) {
@@ -23,6 +21,12 @@ public class InvalidArtikelException extends ArtikelValidationException {
 
 	public Artikel getArtikel() {
 		return artikel;
+	}
+
+	@Override
+	public String getMessageKey() {
+	
+		return MESSAGE_KEY;
 	}
 }
 

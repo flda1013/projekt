@@ -6,6 +6,7 @@ import javax.ejb.ApplicationException;
 public class EmailExistsException extends AbstractKundeServiceException {
 	private static final long serialVersionUID = 4867667611097919943L;
 	private final String email;
+	private static final String MESSAGE_KEY = "kunde.EmailExists";
 	
 	public EmailExistsException(String email) {
 		super("Die Email-Adresse " + email + " existiert bereits");
@@ -14,5 +15,11 @@ public class EmailExistsException extends AbstractKundeServiceException {
 
 	public String getEmail() {
 		return email;
+	}
+
+	@Override
+	public String getMessageKey() {
+	
+		return MESSAGE_KEY;
 	}
 }

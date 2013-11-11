@@ -24,10 +24,6 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
-
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
@@ -37,7 +33,6 @@ import de.shop.bestellverwaltung.domain.Lieferung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.Log;
-import de.shop.util.ValidatorProvider;
 
 @Log
 public class BestellungServiceImpl implements Serializable, BestellungService {
@@ -260,7 +255,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		em.detach(bestellung);
 		
 
-		// TODO Datenbanzugriffsschicht statt Mock
+
 		em.merge(bestellung);
 		
 		return bestellung;

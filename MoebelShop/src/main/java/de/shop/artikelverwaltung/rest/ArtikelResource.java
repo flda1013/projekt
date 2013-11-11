@@ -6,13 +6,11 @@ import static javax.ws.rs.core.MediaType.TEXT_XML;
 import static de.shop.util.Constants.SELF_LINK;
 import static de.shop.util.Constants.ADD_LINK;
 import static de.shop.util.Constants.UPDATE_LINK;
-import static de.shop.util.Constants.REMOVE_LINK;
 import static de.shop.util.Constants.KEINE_ID;
 import static de.shop.util.Constants.ERSTE_VERSION;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
-import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -38,9 +36,9 @@ import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
+import de.shop.artikelverwaltung.service.InvalidArtikelIdException;
 import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
-import de.shop.util.NotFoundException;
 import de.shop.util.UriHelper;
 
 
@@ -82,8 +80,8 @@ public class ArtikelResource {
 	public Response findArtikel(@PathParam("id") Long id) {
 		final Artikel artikel = as.findArtikelById(id);
 		if (artikel == null) {
-			final String msg = "Kein Artikel gefunden mit der ID " + id;
-			throw new NotFoundException(msg);
+			
+			throw new InvalidArtikelIdException(id);
 		}
 
 		return Response.ok(artikel)
@@ -136,27 +134,26 @@ public class ArtikelResource {
 		@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 		@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 		@Transactional
-	    public void updateArtikel(Artikel artikel) {
+	    public Response updateArtikel(@Valid Artikel artikel) {
+	    	
+	    	
 	        // Vorhandenen Artikel ermitteln
-	        final Locale locale = localeHelper.getLocale(headers);
 	        final Artikel orginalArtikel = as.findArtikelById(artikel.getId());
 	        if (orginalArtikel == null) {
-	            // TODO msg passend zu locale
-	            final String msg = "Kein Artikel gefunden mit der ID " + artikel.getId();
-	            throw new NotFoundException(msg);
+	        	
+	        	throw new InvalidArtikelIdException(artikel.getId());
+
 	        }
 	        LOGGER.tracef("Artikel vorher: %s", orginalArtikel);
 	    
 	        // Daten des vorhandenen Artikels ueberschreiben
 	        orginalArtikel.setValues(artikel);
-	        LOGGER.tracef("Kunde nachher: %s", orginalArtikel);
+	        LOGGER.tracef("Artikel nachher: %s", orginalArtikel);
 	        
 	        // Update durchfuehren
-	        artikel = as.updateArtikel(orginalArtikel, locale);
-	        if (artikel == null) {
-	            // TODO msg passend zu locale
-	            final String msg = "Kein Artikel gefunden mit der ID " + orginalArtikel.getId();
-	            throw new NotFoundException(msg);
-	        }
+	        artikel = as.updateArtikel(orginalArtikel);
+	        
+			return Response.noContent().build();
+				 
 	   }
 }

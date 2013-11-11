@@ -10,6 +10,7 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 @ApplicationException(rollback = true)
 public class InvalidEmailException extends AbstractKundeValidationException {
 	private static final long serialVersionUID = -8973151010781329074L;
+	private static final String MESSAGE_KEY = "kunde.EmailInvalid";
 	
 	private final String email;
 	
@@ -20,5 +21,11 @@ public class InvalidEmailException extends AbstractKundeValidationException {
 
 	public String getEmail() {
 		return email;
+	}
+
+	@Override
+	public String getMessageKey() {
+		
+		return MESSAGE_KEY;
 	}
 }

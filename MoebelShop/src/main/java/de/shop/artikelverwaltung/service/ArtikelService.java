@@ -5,10 +5,6 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import de.shop.util.EntityManagerProducer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -20,9 +16,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
 
 import org.jboss.logging.Logger;
 
@@ -30,7 +23,6 @@ import com.google.common.base.Strings;
 
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.util.Log;
-import de.shop.util.ValidatorProvider;
 
 
 @Log
@@ -63,7 +55,15 @@ public class ArtikelService implements Serializable {
 	/**
 	 */
 	public Artikel findArtikelById(Long id) {
-		final Artikel artikel = em.find(Artikel.class, id);
+		Artikel artikel = null;
+		
+			artikel = em.find(Artikel.class, id);
+			if(artikel == null)
+			{
+				throw new InvalidArtikelIdException(id);
+			}
+		
+		
 		return artikel;
 	}
 	
@@ -161,14 +161,13 @@ public class ArtikelService implements Serializable {
 		return artikel;
 	}
 	
-	public Artikel updateArtikel(Artikel artikel, Locale locale) {
+	public Artikel updateArtikel(Artikel artikel) {
 		if (artikel == null) {
 			return null;
 		}
 		em.detach(artikel);
 		// Werden alle Constraints beim Modifizieren gewahrt?
 
-		// TODO Datenbanzugriffsschicht statt Mock
 		em.merge(artikel);
 		
 		return artikel;

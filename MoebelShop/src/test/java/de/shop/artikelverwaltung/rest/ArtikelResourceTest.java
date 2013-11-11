@@ -12,18 +12,17 @@ import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
 import javax.ws.rs.core.Response;
 
 import de.shop.util.AbstractResourceTest;
 import de.shop.artikelverwaltung.domain.Artikel;
 
-import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_OK;
-import static javax.ws.rs.client.Entity.json;
+
 
 import java.lang.invoke.MethodHandles;
-import java.net.URI;
-import java.net.URISyntaxException;
+
 import java.util.logging.Logger;
 
 
@@ -45,6 +44,8 @@ public void findArtikelBeyIDVorhanden()
             .accept(APPLICATION_JSON)
             .get();
 	
+
+
 	
 	assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 	final Artikel artikel = response.readEntity(Artikel.class);

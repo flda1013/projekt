@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,6 +44,7 @@ public class Adresse implements Serializable {
 	public static final int STRASSE_LENGTH_MIN = 2;
 	public static final int STRASSE_LENGTH_MAX = 32;
 	public static final int HAUSNR_LENGTH_MAX = 4;
+	public static final int ERSTE_VERSION = 0;
 
 	@Id
 	@GeneratedValue
@@ -50,9 +52,9 @@ public class Adresse implements Serializable {
 	@Min(value = MIN_ID, message = "{kundenverwaltung.adresse.id.min}", groups = IdGroup.class)
 	private Long id = KEINE_ID;
 	
-//	@Version
-//	@Basic(optional = false)
-//	private int version = ERSTE_VERSION;
+	@Version
+	@Basic(optional = false)
+	private int version = ERSTE_VERSION;
 
 	@Column(length = PLZ_LENGTH_MAX, nullable = false)
 	@NotNull(message = "{kundenverwaltung.adresse.plz.notNull}")
@@ -113,13 +115,13 @@ public class Adresse implements Serializable {
 		this.id = id;
 	}
 	
-//	public int getVersion() {
-//		return version;
-//	}
-//
-//	public void setVersion(int version) {
-//		this.version = version;
-//	}
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
 
 	public String getPlz() {
 		return plz;
