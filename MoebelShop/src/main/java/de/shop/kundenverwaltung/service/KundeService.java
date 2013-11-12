@@ -91,8 +91,7 @@ public class KundeService implements Serializable {
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
 	}
 
-	/**
-	 */
+
 	public List<AbstractKunde> findAllKunden(FetchType fetch, OrderType order) {
 		List<AbstractKunde> kunden;
 		switch (fetch) {
@@ -121,8 +120,7 @@ public class KundeService implements Serializable {
 		return kunden;
 	}
 	
-	/**
-	 */
+
 	public List<AbstractKunde> findKundenByNachname(String nachname, FetchType fetch, Locale locale) {
 		validateNachname(nachname, locale);
 		
@@ -169,8 +167,8 @@ public class KundeService implements Serializable {
 		return nachnamen;
 	}
 
-	/**
-	 */
+	
+	
 	public AbstractKunde findKundeById(Long id, FetchType fetch) {
 
 		
@@ -217,21 +215,7 @@ public class KundeService implements Serializable {
 			return null;
 		}
 	}
-	
-	
-	
-	
-//	private void validateKundeId(Long kundeId) {
-//		final Validator validator = validatorProvider.getValidator(Locale.getDefault());
-//		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
-//				                                                                           "id",
-//				                                                                           kundeId,
-//				                                                                           IdGroup.class);
-//		if (!violations.isEmpty())
-//			throw new InvalidKundeIdException(kundeId, violations);
-//	}
-
-	
+		
 	public List<Long> findIdsByPrefix(String idPrefix) {
 		final List<Long> ids = em.createNamedQuery(AbstractKunde.FIND_IDS_BY_PREFIX, Long.class)
 				                 .setParameter(AbstractKunde.PARAM_KUNDE_ID_PREFIX, idPrefix + '%')
@@ -239,8 +223,7 @@ public class KundeService implements Serializable {
 		return ids;
 	}
 	
-	/**
-	 */
+	
 	public AbstractKunde findKundeByEmail(String email) {
 		
 		try {
@@ -254,18 +237,6 @@ public class KundeService implements Serializable {
 		}
 	}
 	
-	private void validateEmail(String email, Locale locale) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
-				                                                                           "email",
-				                                                                           email,
-				                                                                           Default.class);
-		if (!violations.isEmpty())
-			throw new InvalidEmailException(email, violations);
-	}
-
-	/**
-	 */
 	public AbstractKunde createKunde(AbstractKunde kunde) {
 		if (kunde == null) {
 			return kunde;
@@ -288,18 +259,7 @@ public class KundeService implements Serializable {
 		return kunde;		
 	}
 	
-	private void validateKunde(AbstractKunde kunde, Locale locale, Class<?>... groups) {
-		// Werden alle Constraints beim Einfuegen gewahrt?
-		final Validator validator = validatorProvider.getValidator(locale);
-		
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validate(kunde, groups);
-		if (!violations.isEmpty()) {
-			throw new InvalidKundeException(kunde, violations);
-		}
-	}
 	
-	/**
-	 */
 	public AbstractKunde updateKunde(AbstractKunde kunde) {
 		if (kunde == null) {
 			return null;
@@ -360,8 +320,7 @@ public class KundeService implements Serializable {
 		
 		return kunde;
 	}
-	/**
-	 */
+	
 	public void deleteKunde(AbstractKunde kunde) {
 		if (kunde == null) {
 			return;
@@ -387,8 +346,7 @@ public class KundeService implements Serializable {
 		em.remove(kunde);
 	}
 
-	/**
-	 */
+	
 	public List<AbstractKunde> findKundenByPLZ(String plz) {
 		final List<AbstractKunde> kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_PLZ, AbstractKunde.class)
                                              .setParameter(AbstractKunde.PARAM_KUNDE_ADRESSE_PLZ, plz)
@@ -396,8 +354,7 @@ public class KundeService implements Serializable {
 		return kunden;
 	}
 
-	/**
-	 */
+	
 	public List<AbstractKunde> findKundenBySeit(Date seit) {
 		final List<AbstractKunde> kunden = em.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_DATE, AbstractKunde.class)
                                              .setParameter(AbstractKunde.PARAM_KUNDE_SEIT, seit)
@@ -405,8 +362,7 @@ public class KundeService implements Serializable {
 		return kunden;
 	}
 	
-	/**
-	 */
+	
 	public List<AbstractKunde> findPrivatkundenFirmenkunden() {
 		final List<AbstractKunde> kunden = em.createNamedQuery(AbstractKunde.FIND_PRIVATKUNDEN_FIRMENKUNDEN,
                                                                AbstractKunde.class)
@@ -414,8 +370,7 @@ public class KundeService implements Serializable {
 		return kunden;
 	}
 	
-	/**
-	 */
+	
 	public List<AbstractKunde> findKundenByNachnameCriteria(String nachname) {
 		final CriteriaBuilder builder = em.getCriteriaBuilder();
 		final CriteriaQuery<AbstractKunde> criteriaQuery = builder.createQuery(AbstractKunde.class);
@@ -436,8 +391,7 @@ public class KundeService implements Serializable {
 		return kunden;
 	}
 	
-	/**
-	 */
+	
 	public List<AbstractKunde> findKundenMitMinBestMenge(short minMenge) {
 		final CriteriaBuilder builder = em.getCriteriaBuilder();
 		final CriteriaQuery<AbstractKunde> criteriaQuery  = builder.createQuery(AbstractKunde.class);

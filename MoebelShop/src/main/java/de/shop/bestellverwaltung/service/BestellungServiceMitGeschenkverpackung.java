@@ -2,7 +2,7 @@ package de.shop.bestellverwaltung.service;
 
 import java.lang.invoke.MethodHandles;
 import java.util.List;
-import java.util.Locale;
+
 
 import javax.decorator.Decorator;
 import javax.decorator.Delegate;

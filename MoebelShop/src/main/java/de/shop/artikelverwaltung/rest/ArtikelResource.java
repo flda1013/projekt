@@ -22,7 +22,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
-//import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -37,7 +36,6 @@ import org.jboss.logging.Logger;
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.artikelverwaltung.service.InvalidArtikelIdException;
-import de.shop.util.LocaleHelper;
 import de.shop.util.Log;
 import de.shop.util.UriHelper;
 
@@ -58,9 +56,6 @@ public class ArtikelResource {
 	
 	@Inject
 	private ArtikelService as;
-	
-	@Inject
-	private LocaleHelper localeHelper;
 	
 	@Context
 	private HttpHeaders headers;
