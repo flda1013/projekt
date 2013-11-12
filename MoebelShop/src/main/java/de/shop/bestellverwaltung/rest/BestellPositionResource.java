@@ -1,6 +1,9 @@
 package de.shop.bestellverwaltung.rest;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.MediaType.APPLICATION_XML;
+import static javax.ws.rs.core.MediaType.TEXT_XML;
+
 //import java.net.URI;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -13,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 //import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
+
 //import de.shop.artikelverwaltung.domain.Artikel;
 //import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
@@ -24,32 +28,20 @@ import de.shop.util.NotFoundException;
 
 
 @Path("/bestellposition")
-@Produces(APPLICATION_JSON)
+@Produces({ APPLICATION_JSON, APPLICATION_XML + ";qs=0.75", TEXT_XML + ";qs=0.5" })
 @Consumes
-@RequestScoped
 @Log
+@RequestScoped
 public class BestellPositionResource {
-//	@Context
-//	private UriInfo uriInfo;
-
-//	@Context
-//	private HttpHeaders headers;
 
 	@Inject
 	private UriHelperBestellPosition uriHelperBestellPosition;
 
-//	@Inject
-//	private LocaleHelper localeHelper;
-	
 	@Inject
 	private BestellPositionService bs;
-
-//	@Inject
-//	private ArtikelService as;
 	
 	@GET
 	@Path("{id:[1-9][0-9]*}")
-	//@Produces("application/json")
 	public Bestellposition findBestellpositionById(@PathParam("id") Long id, @Context UriInfo uriInfo) {
 		final Bestellposition bestellposition = bs.findBestellpositionById(id);
 		if (bestellposition == null) {

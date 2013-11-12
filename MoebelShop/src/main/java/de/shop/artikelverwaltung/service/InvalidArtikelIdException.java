@@ -8,7 +8,7 @@ public class InvalidArtikelIdException extends AbstractArtikelServiceException {
 	private static final String MESSAGE_KEY = "artikel.IdInvalid";
 	
 	public InvalidArtikelIdException(Long artikelId) {
-		super("Artikel mit der ID " + artikelId +" nicht gefunden");
+		super("Artikel mit ID = " + artikelId + "vorhanden.");
 		this.artikelId = artikelId;
 	}
 		

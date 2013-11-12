@@ -247,7 +247,7 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 	}
 	
 	@Override
-	public Bestellung updateBestellung(Bestellung bestellung, Locale locale) {
+	public Bestellung updateBestellung(Bestellung bestellung) {
 		if (bestellung == null) {
 			return null;
 		}

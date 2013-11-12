@@ -3,6 +3,7 @@ package de.shop.kundenverwaltung.service;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -29,6 +30,7 @@ import org.jboss.logging.Logger;
 
 
 
+
 import de.shop.auth.service.AuthService;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellposition_;
@@ -36,9 +38,7 @@ import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.domain.Bestellung_;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.AbstractKunde_;
-
 import de.shop.kundenverwaltung.domain.Wartungsvertrag;
-
 import de.shop.util.Log;
 import de.shop.util.NoMimeTypeException;
 import de.shop.util.ValidatorProvider;
@@ -65,6 +65,9 @@ public class KundeService implements Serializable {
 		KEINE,
 		ID
 	}
+	
+	@Inject
+	private Principal principal;
 	
 	@PersistenceContext
 	private transient EntityManager em;

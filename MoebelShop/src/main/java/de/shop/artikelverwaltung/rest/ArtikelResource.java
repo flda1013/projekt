@@ -148,7 +148,7 @@ public class ArtikelResource {
 	        // Update durchfuehren
 	        artikel = as.updateArtikel(orginalArtikel);
 	        
-			return Response.noContent().build();
+			return Response.ok(artikel).build();
 				 
 	   }
 }
