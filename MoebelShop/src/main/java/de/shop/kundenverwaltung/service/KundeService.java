@@ -3,7 +3,6 @@ package de.shop.kundenverwaltung.service;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -66,8 +65,7 @@ public class KundeService implements Serializable {
 		ID
 	}
 	
-	@Inject
-	private Principal principal;
+
 	
 	@PersistenceContext
 	private transient EntityManager em;
@@ -124,8 +122,8 @@ public class KundeService implements Serializable {
 	}
 	
 
-	public List<AbstractKunde> findKundenByNachname(String nachname, FetchType fetch, Locale locale) {
-		validateNachname(nachname, locale);
+	public List<AbstractKunde> findKundenByNachname(String nachname, FetchType fetch) {
+	
 		
 		List<AbstractKunde> kunden;
 		switch (fetch) {
@@ -151,25 +149,6 @@ public class KundeService implements Serializable {
 
 		return kunden;
 	}
-	
-	private void validateNachname(String nachname, Locale locale) {
-		final Validator validator = validatorProvider.getValidator(locale);
-		final Set<ConstraintViolation<AbstractKunde>> violations = validator.validateValue(AbstractKunde.class,
-				                                                                           "nachname",
-				                                                                           nachname,
-				                                                                           Default.class);
-		if (!violations.isEmpty())
-			throw new InvalidNachnameException(nachname, violations);
-	}
-	
-	public List<String> findNachnamenByPrefix(String nachnamePrefix) {
-		final List<String> nachnamen = em.createNamedQuery(AbstractKunde.FIND_NACHNAMEN_BY_PREFIX,
-				                                           String.class)
-				                         .setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME_PREFIX, nachnamePrefix + '%')
-				                         .getResultList();
-		return nachnamen;
-	}
-
 	
 	
 	public AbstractKunde findKundeById(Long id, FetchType fetch) {
