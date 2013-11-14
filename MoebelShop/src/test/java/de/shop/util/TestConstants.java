@@ -50,7 +50,9 @@ public final class TestConstants {
 	//Artikel
 	
 	public static final long ARTIKEL_ID_VORHANDEN = 301;
-	
+	public static final long ARTIKEL_ID_NICHT_VORHANDEN = 310;
+	public static final String ARTIKEL_BEZEICHNUNG = "Tisch: Mit Flecken";
+	public static final double ARTIKEL_PREIS = 10;
 	private TestConstants() {
 	}
 }

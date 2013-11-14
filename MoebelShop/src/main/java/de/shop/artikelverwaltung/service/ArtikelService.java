@@ -60,7 +60,7 @@ public class ArtikelService implements Serializable {
 			artikel = em.find(Artikel.class, id);
 			if(artikel == null)
 			{
-				throw new InvalidArtikelIdException(id);
+				return null;
 			}
 		
 		

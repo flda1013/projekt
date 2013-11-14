@@ -62,6 +62,7 @@ public class BestellungResource {
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
 	private static final String NOT_FOUND_USERNAME = "bestellung.notFound.username";
 	private static final String NOT_FOUND_ID_ARTIKEL = "artikel.notFound.id";
+	private static final String NOT_FOUND_ID = "bestellung.notFound.id";
 	
 	
 
@@ -112,7 +113,7 @@ public class BestellungResource {
 		final Bestellung bestellung = bs.findBestellungById(id);
 		if (bestellung == null) {
 			
-			throw new InvalidBestellungIdException(id);
+			throw new NotFoundException(NOT_FOUND_ID, id);
 		}
 		setStructuralLinks(bestellung, uriInfo);
 		// URLs innerhalb der gefundenen Bestellung anpassen
