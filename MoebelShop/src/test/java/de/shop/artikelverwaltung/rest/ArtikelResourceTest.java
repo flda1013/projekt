@@ -12,23 +12,23 @@ import static de.shop.util.TestConstants.USERNAME_ADMIN;
 import static de.shop.util.TestConstants.ARTIKEL_BEZEICHNUNG;
 import static de.shop.util.TestConstants.ARTIKEL_PREIS;
 import static de.shop.util.TestConstants.PASSWORD_FALSCH;
+import static de.shop.util.TestConstants.ARTIKEL_BEZEICHNUNG_FALSCH;
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.filter;
 import static javax.ws.rs.client.Entity.json;
 
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
+import org.jboss.resteasy.api.validation.ResteasyConstraintViolation;
+import org.jboss.resteasy.api.validation.ViolationReport;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-
-
-
-
 
 import javax.ws.rs.core.Response;
 
 import de.shop.util.AbstractResourceTest;
 import de.shop.artikelverwaltung.domain.Artikel;
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_OK;
 
@@ -38,6 +38,7 @@ import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.Locale.ENGLISH;
 
 import java.lang.invoke.MethodHandles;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -147,6 +148,43 @@ public void CreateArtikelFalscheAnmeldung()
 LOGGER.finer("ENDE");
 
 }
+@Test
+@InSequence(5)
+public void CreateArtikelAnmeldungValidationFehler()
+{
+	LOGGER.finer("BEGINN");
+	
+	final Artikel artikel = new Artikel();
+	artikel.setBezeichnung(ARTIKEL_BEZEICHNUNG_FALSCH);
+	artikel.setPreis(ARTIKEL_PREIS);
+	
+	final Response response = getHttpsClient(USERNAME_ADMIN, PASSWORD_ADMIN).target(ARTIKEL_URI)
+            .request()
+            .accept(APPLICATION_JSON)
+            .post(json(artikel));
+	
+	assertThat(response.getStatus()).isEqualTo(HTTP_BAD_REQUEST);
+	assertThat(response.getHeaderString("validation-exception")).isEqualTo("true");
+	final ViolationReport violationReport = response.readEntity(ViolationReport.class);
+	response.close();
+
+	final List<ResteasyConstraintViolation> violations = violationReport.getParameterViolations();
+	assertThat(violations).isNotEmpty();
+
+	ResteasyConstraintViolation violation =
+			                    filter(violations).with("message")
+	                                              .equalsTo("Die Artikel Bezeichnung darf nicht leer sein.")
+	                                              .get()
+	                                              .iterator()
+	                                              .next();
+	assertThat(violation.getValue()).isEqualTo(String.valueOf(ARTIKEL_BEZEICHNUNG_FALSCH));
+
+LOGGER.finer("ENDE");
+
+}
+
+
+
 }
 	
 

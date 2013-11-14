@@ -64,7 +64,7 @@ public class Bestellposition implements Serializable {
 	
 	@ManyToOne(optional = false)
     @JoinColumn(name = "artikel_fk", nullable = false)
-	@NotNull(message = "{bestellverwaltung.bestellposition.artikel.notNull}")
+//	@NotNull(message = "{bestellverwaltung.bestellposition.artikel.notNull}")
 	@XmlTransient
 	private Artikel artikel;
 

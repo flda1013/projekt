@@ -21,7 +21,7 @@ public final class TestConstants {
 	private static final String BASE_URI = HTTPS + "://" + HOST + ":" + PORT + "/" + WEB_PROJEKT + REST_PATH;
 
 	// Pfade und Pfad-Parameter
-	public static final String KUNDEN_URI = BASE_URI + "/kunden";
+	public static final String KUNDEN_URI = BASE_URI + "/kunde";
 	public static final String KUNDEN_ID_PATH_PARAM = "kundeId";
 	public static final String KUNDEN_ID_URI = KUNDEN_URI + "/{" + KUNDEN_ID_PATH_PARAM + "}";
 	public static final String KUNDEN_ID_FILE_URI = KUNDEN_ID_URI + "/file";
@@ -53,6 +53,12 @@ public final class TestConstants {
 	public static final long ARTIKEL_ID_NICHT_VORHANDEN = 310;
 	public static final String ARTIKEL_BEZEICHNUNG = "Tisch: Mit Flecken";
 	public static final double ARTIKEL_PREIS = 10;
+	public static final String ARTIKEL_BEZEICHNUNG_FALSCH = "";
+	
+	//Kunde
+	
+	public static final String NEUE_PLZ_FALSCH = "758";
+	public static final String NEUE_EMAIL_OHNE ="ohneAnmeldung@test.de";
 	private TestConstants() {
 	}
 }

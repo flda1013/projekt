@@ -44,7 +44,6 @@ import static de.shop.util.Constants.ADD_LINK;
 
 
 import de.shop.bestellverwaltung.service.BestellungService;
-import de.shop.bestellverwaltung.service.InvalidBestellungIdException;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.rest.KundeResource;
 import de.shop.util.Log;
