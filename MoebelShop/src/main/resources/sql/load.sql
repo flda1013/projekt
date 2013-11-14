@@ -20,8 +20,8 @@ INSERT INTO kunde (id, nachname, vorname, seit, art, familienstand_fk, geschlech
 INSERT INTO kunde (id, nachname, vorname, seit, art, familienstand_fk, geschlecht_fk, newsletter, rabatt, umsatz, email, password, erzeugt, aktualisiert,version) VALUES (105,'Epsilon','Emil','31.03.2005','P',2,'M',0,'0,0','1500,5','105@hska.de','105','05.08.2006 00:00:00','05.08.2006 00:00:00',0);
 
 
---CALL insert_file_kunde(101,1,0,'image.png','Privatkunde_101.png','png','I','01.01.2007 01:00:00','01.01.2007 01:00:00');
---CALL insert_file_kunde(102,2,0,'video.mp4','Privatkunde_102.mp4','mp4','V','01.01.2007 01:00:00','01.01.2007 01:00:00');
+CALL insert_file_kunde(101,1,0,'image.png','Privatkunde_101.png','png','I','01.01.2007 01:00:00','01.01.2007 01:00:00');
+CALL insert_file_kunde(102,2,0,'video.mp4','Privatkunde_102.mp4','mp4','V','01.01.2007 01:00:00','01.01.2007 01:00:00');
 
 INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (1,'admin');
 INSERT INTO kunde_rolle (kunde_fk, rolle) VALUES (1,'mitarbeiter');

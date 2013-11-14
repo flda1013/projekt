@@ -241,31 +241,6 @@ public class KundeService implements Serializable {
 		return kunde;		
 	}
 	
-	
-	public AbstractKunde updateKunde(AbstractKunde kunde) {
-		if (kunde == null) {
-			return null;
-		}
-
-		// Werden alle Constraints beim Modifizieren gewahrt?
-		//validateKunde(kunde, locale, Default.class, PasswordGroup.class, IdGroup.class);
-		
-		// kunde vom EntityManager trennen, weil anschliessend z.B. nach Id und Email gesucht wird
-		em.detach(kunde);
-		
-		// Gibt es ein anderes Objekt mit gleicher Email-Adresse?
-		final AbstractKunde	tmp = findKundeByEmail(kunde.getEmail());
-		if (tmp != null) {
-			em.detach(tmp);
-			if (tmp.getId().longValue() != kunde.getId().longValue()) {
-				// anderes Objekt mit gleichem Attributwert fuer email
-				throw new EmailExistsException(kunde.getEmail());
-			}
-		}
-
-		em.merge(kunde);
-		return kunde;
-	}
 
 	public <T extends AbstractKunde> T updateKunde(T kunde, boolean geaendertPassword) {
 		if (kunde == null) {
