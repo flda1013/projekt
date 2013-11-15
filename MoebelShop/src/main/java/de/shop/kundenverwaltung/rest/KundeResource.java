@@ -23,6 +23,8 @@ import static de.shop.util.Constants.LAST_LINK;
 
 
 
+
+
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ import java.util.Collection;
 import java.util.List;
 //import java.util.List;
 import java.util.Locale;
+
+
 
 
 
@@ -77,6 +81,7 @@ import de.shop.bestellverwaltung.rest.UriHelperBestellung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
+import de.shop.kundenverwaltung.service.InvalidKundeException;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
 import de.shop.util.Log;
@@ -96,6 +101,7 @@ public class KundeResource {
 	public static final String KUNDEN_ID_PATH_PARAM = "id";
 	private static final String NOT_FOUND_ID = "kunde.notFound.id";
 	private static final String NOT_FOUND_FILE = "kunde.notFound.File";
+	private static final String NO_UPDATE = "kunde.noUpdate";
 	private  static final AuthService as = new AuthService();
     @Context
     private UriInfo uriInfo;
@@ -333,17 +339,19 @@ public class KundeResource {
 	/**
 	 * Mit der URL /kunden einen Kunden per PUT aktualisieren
 	 * @param kunde zu aktualisierende Daten des Kunden
+	 * @throws Exception 
 	 */
 	@PUT
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Transactional
-	public Response updateKunde(@Valid AbstractKunde kunde) {
+	public Response updateKunde(@Valid AbstractKunde kunde) throws Exception {
 		// Vorhandenen Kunden ermitteln
 		final AbstractKunde origKunde = ks.findKundeById(kunde.getId(), FetchType.NUR_KUNDE);
 		if (origKunde == null) {
 			throw new NotFoundException(NOT_FOUND_ID, kunde.getId());
 		}
+		
 		LOGGER.tracef("Kunde vorher = %s", origKunde);
 	
 		// Daten des vorhandenen Kunden ueberschreiben
@@ -358,6 +366,8 @@ public class KundeResource {
 				       .links(getTransitionalLinks(kunde, uriInfo))
 				       .build();
 	}
+	
+	
 	@Path("{id:[1-9][0-9]*}/file")
 	@POST
 	@Consumes({ "image/jpeg", "image/pjpeg", "image/png" })  

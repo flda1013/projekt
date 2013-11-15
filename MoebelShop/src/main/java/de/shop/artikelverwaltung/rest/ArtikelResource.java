@@ -117,7 +117,6 @@ public class ArtikelResource {
 	public Response createArtikel(@Valid Artikel artikel) {
 		
 		artikel.setId(KEINE_ID);
-		artikel.setVersion(ERSTE_VERSION);
 		LOGGER.tracef("Artikel: %s", artikel);
 		artikel = as.createArtikel(artikel);
 		LOGGER.tracef("Angelegt Artikel: ", artikel);		

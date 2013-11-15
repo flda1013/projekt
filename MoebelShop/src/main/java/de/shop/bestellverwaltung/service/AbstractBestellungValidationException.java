@@ -18,4 +18,6 @@ public abstract class AbstractBestellungValidationException extends AbstractBest
 	public Collection<ConstraintViolation<Bestellung>> getViolations() {
 		return violations;
 	}
+
+
 }

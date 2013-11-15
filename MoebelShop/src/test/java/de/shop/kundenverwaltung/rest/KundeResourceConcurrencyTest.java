@@ -9,6 +9,7 @@ import static de.shop.util.TestConstants.KUNDEN_URI;
 import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.USERNAME;
 import static java.net.HttpURLConnection.HTTP_CONFLICT;
+import static de.shop.util.TestConstants.KUNDEN_ID_PATH_PARAM;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.client.Entity.json;
@@ -36,25 +37,25 @@ import de.shop.util.HttpsConcurrencyHelper;
 public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 	
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
-	private static final long TIMEOUT = 5;
+	private static final long TIMEOUT = 20;
 
-	private static final Long KUNDE_ID_UPDATE = Long.valueOf(120);
+	private static final Long KUNDE_ID_UPDATE = Long.valueOf(101);
 	private static final String NEUER_NACHNAME = "Testname";
 	private static final String NEUER_NACHNAME_2 = "Neuername";
 	
 	@Test
-	@InSequence(1)
+	@InSequence(50)
 	public void updateUpdate() throws InterruptedException, ExecutionException, TimeoutException {
 		LOGGER.finer("BEGINN");
 		
 		// Given
 		final Long kundeId = KUNDE_ID_UPDATE;
-    	final String neuerNachname = NEUER_NACHNAME;
+		final String neuerVorname = "ConcTest";
     	final String neuerNachname2 = NEUER_NACHNAME_2;
 		
 		// When
 		Response response = getHttpsClient().target(KUNDEN_ID_URI)
-                                            .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
+                                            .resolveTemplate(KUNDEN_ID_PATH_PARAM, kundeId)
                                             .request()
                                             .accept(APPLICATION_JSON)
                                             .get();
@@ -86,7 +87,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 		
     	// Fehlschlagendes Update
 		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
-		kunde.setNachname(neuerNachname);
+		kunde.setVorname(neuerVorname);
 		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
                                                       .request()
                                                       .accept(APPLICATION_JSON)

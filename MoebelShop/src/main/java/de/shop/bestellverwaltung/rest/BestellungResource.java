@@ -213,6 +213,7 @@ public class BestellungResource {
 	 */
 	@POST
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+	@Produces
 	@Transactional
 	public Response createBestellung(@Valid Bestellung bestellung) {
 		if (bestellung == null) {
@@ -301,10 +302,11 @@ public class BestellungResource {
 				       .build();
 	}
 	
-	    @PUT
-	    @Consumes(APPLICATION_JSON)
-	    @Produces
-	    public Response updateBestellung(Bestellung bestellung) {
+    @PUT
+	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+	@Produces({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
+	@Transactional
+	    public Response updateBestellung(@Valid Bestellung bestellung) {
 	        // Vorhandenen Artikel ermitteln
 	        final Bestellung orginalBestellung = bs.findBestellungById(bestellung.getId());
 	        if (orginalBestellung == null) {

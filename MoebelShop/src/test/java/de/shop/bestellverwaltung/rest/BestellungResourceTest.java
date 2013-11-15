@@ -168,12 +168,12 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		
 		Bestellposition bp = new Bestellposition();
 		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId1));
-		bp.setAnzahl((short) 1);
+		bp.setAnzahl((short) 0);
 		bestellung.addBestellposition(bp);
 
 		bp = new Bestellposition();
 		bp.setArtikelUri(new URI(ARTIKEL_URI + "/" + artikelId2));
-		bp.setAnzahl((short) 1);
+		bp.setAnzahl((short) 0);
 		bestellung.addBestellposition(bp);
 		
 		// When
@@ -182,7 +182,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
                                                                     .request()
                                                                     .accept(APPLICATION_JSON)
                                                                     // engl. Fehlermeldungen ohne Umlaute ;-)
-                                                                    .acceptLanguage(ENGLISH)
+                                                                     .acceptLanguage(ENGLISH)
                                                                     .post(json(bestellung));
 		
 		// Then
@@ -196,26 +196,11 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		
 		ResteasyConstraintViolation violation =
 				                    filter(violations).with("message")
-                                                      .equalsTo("No number of order positions found. ")
+                                                      .equalsTo("The number must have at least a lot of first.")
                                                       .get()
                                                       .iterator()
                                                       .next();
 		assertThat(violation.getValue()).isEqualTo(String.valueOf(bp.getAnzahl()));
-		
-		violation = filter(violations).with("message")
-                                      .equalsTo("No correct article price.")
-                                      .get()
-                                      .iterator()
-                                      .next();
-		assertThat(violation.getValue()).isEqualTo(String.valueOf(bp.getArtikel().getPreis()));
-
-		violation = filter(violations).with("message")
-				                      .equalsTo("No product description.")
-				                      .get()
-				                      .iterator()
-				                      .next();
-		assertThat(violation.getValue()).isEqualTo(bp.getArtikel().getBezeichnung());
-		
 		
 		LOGGER.finer("ENDE");
 	}

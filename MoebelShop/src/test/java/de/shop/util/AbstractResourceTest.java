@@ -42,7 +42,7 @@ import org.junit.BeforeClass;
  * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
  */
 public abstract class AbstractResourceTest {
-	private static ResteasyClientBuilder resteasyClientBuilder;
+	public static ResteasyClientBuilder resteasyClientBuilder;
 	private static SSLSocketFactory socketFactory;
 	private AbstractHttpClient httpClient;
 	private Client client;
@@ -84,7 +84,7 @@ public abstract class AbstractResourceTest {
 	}
 	
 	// fuer HttpsHelper
-	static AbstractHttpClient newHttpClient() {
+	public static AbstractHttpClient newHttpClient() {
 		final AbstractHttpClient httpClient = new DefaultHttpClient(); // def: BasicCredentialsProvider fuer BASIC Auth
 		httpClient.getConnectionManager()
 		          .getSchemeRegistry()
@@ -108,7 +108,7 @@ public abstract class AbstractResourceTest {
 		return client;
 	}
 	
-	static ResteasyClientBuilder getResteasyClientBuilder() {
+	public static ResteasyClientBuilder getResteasyClientBuilder() {
 		return resteasyClientBuilder;
 	}
 }

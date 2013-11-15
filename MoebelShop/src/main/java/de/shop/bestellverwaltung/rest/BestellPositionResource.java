@@ -8,7 +8,9 @@ import static javax.ws.rs.core.MediaType.TEXT_XML;
 
 
 
+
 import java.net.URI;
+
 
 
 
@@ -16,6 +18,7 @@ import java.net.URI;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -26,6 +29,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 //import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;
+
 
 
 
@@ -75,7 +79,7 @@ public class BestellPositionResource {
 	@Consumes({ APPLICATION_JSON, APPLICATION_XML, TEXT_XML })
 	@Produces
 	@Transactional
-	public Bestellposition createBestellPosition(Bestellposition bestellposition) {
+	public Bestellposition createBestellPosition(@Valid Bestellposition bestellposition) {
 		final URI artikelUri = bestellposition.getArtikelUri();
 		final String artikelUriString = artikelUri.toString();
 		final String stringArtikelId = artikelUriString.substring(artikelUriString.lastIndexOf("/") + 1);

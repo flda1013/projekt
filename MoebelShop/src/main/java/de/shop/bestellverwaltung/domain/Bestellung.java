@@ -241,7 +241,7 @@ public class Bestellung implements Serializable {
 		lieferungen.add(lieferung);
 	}
 	
-	@JsonIgnore
+	@XmlTransient
 	public List<Lieferung> getLieferungenAsList() {
 		return lieferungen == null ? null : new ArrayList<>(lieferungen);
 	}
@@ -256,13 +256,13 @@ public class Bestellung implements Serializable {
 	public void setLieferungenUri(URI lieferungenUri) {
 		this.lieferungenUri = lieferungenUri;
 	}
-//	public int getVersion() {
-//		return version;
-//	}
-//
-//	public void setVersion(int version) {
-//		this.version = version;
-//	}
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
 
 // Datum Get-Set
 	@JsonProperty("datum")
@@ -290,7 +290,7 @@ public class Bestellung implements Serializable {
 	}
 
 	public void setValues(Bestellung b) {
-		
+		version = b.version;
 		erzeugt = b.erzeugt;
 		aktualisiert = b.aktualisiert;
 		

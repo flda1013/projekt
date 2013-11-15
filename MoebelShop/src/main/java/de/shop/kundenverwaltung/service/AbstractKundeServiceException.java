@@ -1,7 +1,14 @@
 package de.shop.kundenverwaltung.service;
 
-import de.shop.util.AbstractShopException;
+import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.ext.Provider;
 
+import de.shop.util.AbstractShopException;
+import de.shop.util.Log;
+
+@Provider
+@ApplicationScoped
+@Log
 public abstract class AbstractKundeServiceException extends AbstractShopException {
 	private static final long serialVersionUID = -2849585609393128387L;
 

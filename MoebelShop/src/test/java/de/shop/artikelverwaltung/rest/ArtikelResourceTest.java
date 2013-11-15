@@ -173,7 +173,7 @@ public void CreateArtikelAnmeldungValidationFehler()
 
 	ResteasyConstraintViolation violation =
 			                    filter(violations).with("message")
-	                                              .equalsTo("Die Artikel Bezeichnung darf nicht leer sein.")
+	                                              .equalsTo("Der Produktname kann nicht leer sein.")
 	                                              .get()
 	                                              .iterator()
 	                                              .next();

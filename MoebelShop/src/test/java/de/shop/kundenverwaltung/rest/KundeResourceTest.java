@@ -12,11 +12,13 @@ import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.net.HttpURLConnection.HTTP_UNSUPPORTED_TYPE;
 import static java.util.Locale.ENGLISH;
 import static javax.ws.rs.client.Entity.entity;
-import static de.shop.util.TestConstants.IMAGE_MIMETYPE;
-import static de.shop.util.TestConstants.KUNDEN_ID_FILE_URI;
-import static de.shop.util.TestConstants.KUNDE_ID_UPLOAD;
-import static de.shop.util.TestConstants.IMAGE_PATH_UPLOAD;
 import static de.shop.util.TestConstants.IMAGE_PATH_DOWNLOAD;
+import static de.shop.util.TestConstants.IMAGE_INVALID_MIMETYPE;
+import static de.shop.util.TestConstants.KUNDEN_ID_FILE_URI;
+import static de.shop.util.TestConstants.IMAGE_INVALID_PATH;
+import static de.shop.util.TestConstants.KUNDE_ID_UPLOAD;
+import static de.shop.util.TestConstants.IMAGE_MIMETYPE;
+import static de.shop.util.TestConstants.IMAGE_PATH_UPLOAD;
 import static de.shop.util.TestConstants.ARTIKEL_BEZEICHNUNG_FALSCH;
 import static de.shop.util.TestConstants.ARTIKEL_ID_PATH_PARAM;
 import static de.shop.util.TestConstants.ARTIKEL_ID_URI;
@@ -375,15 +377,16 @@ public class KundeResourceTest extends AbstractResourceTest {
 		// Erneutes Update funktioniert, da die Versionsnr. aktualisiert ist
 		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
                                                      .request()
+                                                     .accept(APPLICATION_JSON)
                                                      .put(json(kunde));
 		assertThat(response.getStatus()).isEqualTo(HTTP_OK);
 		response.close();
-		
-		
+
 		//TODO dieser Teil endet nicht in einem Conflict warum?!
 		// Erneutes Update funktioniert NICHT, da die Versionsnr. NICHT aktualisiert ist
 		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
                                                      .request()
+                                                     .accept(APPLICATION_JSON)
                                                      .put(json(kunde));
 		assertThat(response.getStatus()).isEqualTo(HTTP_CONFLICT);
 		response.close();
@@ -401,7 +404,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final Long kundeId = KUNDE_ID_UPLOAD;
 		final String path = IMAGE_PATH_UPLOAD;
 		final String mimeType = IMAGE_MIMETYPE;
-		
+
 		// Datei einlesen
 		final byte[] uploadBytes = Files.readAllBytes(Paths.get(path));
 		

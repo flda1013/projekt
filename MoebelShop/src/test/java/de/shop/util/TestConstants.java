@@ -63,9 +63,13 @@ public final class TestConstants {
 	public static final long KUNDE_ID_NICHT_VORHANDEN = 500;
 	public static final long KUNDE_ID_UPDATE =102;
 	public static final long KUNDE_ID_UPLOAD = 101;
-	public static final String IMAGE_PATH_DOWNLOAD = "C:/temp/db";
-	public static final String IMAGE_PATH_UPLOAD = "C:/temp/db";
-	public static final String IMAGE_MIMETYPE = "image.png";
+	public static final String IMAGE_FILENAME = "image1.png";
+	public static final String IMAGE_PATH_UPLOAD = "src/test/resources/rest/" + IMAGE_FILENAME;
+	public static final String IMAGE_MIMETYPE = "image/png";
+	public static final String IMAGE_PATH_DOWNLOAD = "target/" + IMAGE_FILENAME;
+	public static final String IMAGE_INVALID = "image1.png";
+	public static final String IMAGE_INVALID_PATH = "src/test/resources/rest/" + IMAGE_INVALID;
+	public static final String IMAGE_INVALID_MIMETYPE = "image/png";
 	private TestConstants() {
 	}
 }

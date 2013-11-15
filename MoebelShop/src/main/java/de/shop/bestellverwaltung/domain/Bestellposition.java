@@ -72,7 +72,7 @@ public class Bestellposition implements Serializable {
 	private URI artikelUri;
 
 	@Column(name = "anzahl", nullable = false)
-	@Min(value = ANZAHL_MIN, message = "{bestellverwaltung.bestellposition.anzahl.min}")
+	@Min(value = ANZAHL_MIN, message = "{bestellverwaltung.bestellPosition.anzahl.Min}")
 	private short anzahl;
 	
 	public Bestellposition() {

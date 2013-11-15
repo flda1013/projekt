@@ -91,7 +91,7 @@ public class AuthService implements Serializable {
 		if(kunde == null)
 			return false;
 		
-		//TODO Umkommentieren
+		
 		final String verschluesselt = verschluesseln(password);
 		return verschluesselt.equals(kunde.getPassword());
 
