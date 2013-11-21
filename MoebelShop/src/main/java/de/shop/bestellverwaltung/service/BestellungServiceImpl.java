@@ -22,6 +22,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import org.jboss.logging.Logger;
 
 import de.shop.artikelverwaltung.domain.Artikel;
@@ -29,8 +30,10 @@ import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.domain.Lieferung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
+import de.shop.kundenverwaltung.service.EmailExistsException;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.util.Log;
+import de.shop.util.persistence.ConcurrentDeletedException;
 
 @Log
 public class BestellungServiceImpl implements Serializable, BestellungService {
@@ -250,12 +253,47 @@ public class BestellungServiceImpl implements Serializable, BestellungService {
 		if (bestellung == null) {
 			return null;
 		}
+		
+		// kunde vom EntityManager trennen, weil anschliessend z.B. nach Id und Email gesucht wird
 		em.detach(bestellung);
 		
+		// Wurde das Objekt konkurrierend geloescht?
+		Bestellung tmp = findBestellungById(bestellung.getId());
+		if (tmp == null) {
+			throw new ConcurrentDeletedException(bestellung.getId());
+		}
+		em.detach(tmp);
+		
+		// Gibt es ein anderes Objekt mit gleicher Email-Adresse?
+	
 
-
-		em.merge(bestellung);
+		bestellung = em.merge(bestellung);   // OptimisticLockException
+		
 		
 		return bestellung;
+		
+		
 	}
+	public AbstractKunde createKunde(AbstractKunde kunde) {
+		if (kunde == null) {
+			return kunde;
+		}
+
+		
+		// Pruefung, ob die Email-Adresse schon existiert
+		try {
+			em.createNamedQuery(AbstractKunde.FIND_KUNDE_BY_EMAIL, AbstractKunde.class)
+			  .setParameter(AbstractKunde.PARAM_KUNDE_EMAIL, kunde.getEmail())
+			  .getSingleResult();
+			throw new EmailExistsException(kunde.getEmail());
+		}
+		catch (NoResultException e) {
+			// Noch kein Kunde mit dieser Email-Adresse
+			LOGGER.trace("Email-Adresse existiert noch nicht");
+		}
+		
+		em.persist(kunde);
+		return kunde;		
+	}
+
 }

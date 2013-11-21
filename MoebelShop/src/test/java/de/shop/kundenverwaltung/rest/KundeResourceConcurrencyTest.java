@@ -4,12 +4,12 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.junit.runner.RunWith;
 
 import de.shop.util.AbstractResourceTest;
+import static de.shop.util.TestConstants.KUNDEN_ID_PATH_PARAM;
 import static de.shop.util.TestConstants.KUNDEN_ID_URI;
 import static de.shop.util.TestConstants.KUNDEN_URI;
 import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.USERNAME;
 import static java.net.HttpURLConnection.HTTP_CONFLICT;
-import static de.shop.util.TestConstants.KUNDEN_ID_PATH_PARAM;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.client.Entity.json;
@@ -22,17 +22,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
+
 import javax.ws.rs.core.Response;
+
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Test;
+
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.util.HttpsConcurrencyHelper;
 
 
-//Logging durch java.util.logging
-/**
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
- */
 @RunWith(Arquillian.class)
 public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 	
@@ -42,7 +41,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 	private static final Long KUNDE_ID_UPDATE = Long.valueOf(101);
 	private static final String NEUER_NACHNAME = "Testname";
 	private static final String NEUER_NACHNAME_2 = "Neuername";
-	
+
 	@Test
 	@InSequence(50)
 	public void updateUpdate() throws InterruptedException, ExecutionException, TimeoutException {
@@ -50,7 +49,7 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 		
 		// Given
 		final Long kundeId = KUNDE_ID_UPDATE;
-		final String neuerVorname = "ConcTest";
+		final String neuerVorname = NEUER_NACHNAME;
     	final String neuerNachname2 = NEUER_NACHNAME_2;
 		
 		// When
@@ -98,7 +97,6 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 		response.close();
 		
 		LOGGER.finer("ENDE");
-	}	
-	
+	}
 
 }

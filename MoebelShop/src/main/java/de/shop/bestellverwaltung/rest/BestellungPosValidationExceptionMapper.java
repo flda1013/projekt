@@ -12,9 +12,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import de.shop.bestellverwaltung.domain.Bestellposition;
-import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.bestellverwaltung.service.AbstractBestellungPosValidationException;
-import de.shop.bestellverwaltung.service.AbstractBestellungValidationException;
 import de.shop.util.Log;
 
 @Provider

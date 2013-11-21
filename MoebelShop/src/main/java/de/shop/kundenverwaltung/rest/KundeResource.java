@@ -7,42 +7,11 @@ import static javax.ws.rs.core.MediaType.TEXT_XML;
 import static de.shop.util.Constants.KEINE_ID;
 import static de.shop.util.Constants.FIRST_LINK;
 import static de.shop.util.Constants.LAST_LINK;
-//import static de.shop.util.Constants.ADD_LINK;
-//import static de.shop.util.Constants.FIRST_LINK;
-//import static de.shop.util.Constants.KEINE_ID;
-//import static de.shop.util.Constants.LAST_LINK;
-//import static de.shop.util.Constants.LIST_LINK;
-//import static de.shop.util.Constants.REMOVE_LINK;
-//import static de.shop.util.Constants.SELF_LINK;
-//import static de.shop.util.Constants.UPDATE_LINK;
-
-
-
-
-
-
-
-
-
-
 import java.lang.invoke.MethodHandles;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-//import java.util.List;
-import java.util.Locale;
-
-
-
-
-
-
-
-
-
-
-//import javax.ws.rs.core.Link;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
@@ -50,7 +19,6 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
-//import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -81,13 +49,11 @@ import de.shop.bestellverwaltung.rest.UriHelperBestellung;
 import de.shop.bestellverwaltung.service.BestellungService;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
-import de.shop.kundenverwaltung.service.InvalidKundeException;
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
 import de.shop.util.Log;
 import de.shop.util.NotFoundException;
 import de.shop.util.UriHelper;
-//import de.shop.kundenverwaltung.domain.Firmenkunde;
 import de.shop.util.persistence.File;
 
 @Path("/kunde")

@@ -7,7 +7,6 @@ import static de.shop.util.Constants.SELF_LINK;
 import static de.shop.util.Constants.ADD_LINK;
 import static de.shop.util.Constants.UPDATE_LINK;
 import static de.shop.util.Constants.KEINE_ID;
-import static de.shop.util.Constants.ERSTE_VERSION;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URI;

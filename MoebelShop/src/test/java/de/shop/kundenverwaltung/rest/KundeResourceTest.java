@@ -409,7 +409,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		final byte[] uploadBytes = Files.readAllBytes(Paths.get(path));
 		
 		// When
-		Response response = getHttpsClient("101", "101").target(KUNDEN_ID_FILE_URI)
+		Response response = getHttpsClient("USERNAME", "PASSWORD").target(KUNDEN_ID_FILE_URI)
                                                               .resolveTemplate(KUNDEN_ID_PATH_PARAM,
                                                             		           kundeId)
                                                               .request()
@@ -427,7 +427,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		
 		byte[] downloadBytes;
 		
-		response = getHttpsClient("101", "101").target(KUNDEN_ID_FILE_URI)
+		response = getHttpsClient("USERNAME", "PASSWORD").target(KUNDEN_ID_FILE_URI)
                 .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
                 .request()
                 .accept(mimeType)
@@ -461,7 +461,7 @@ public class KundeResourceTest extends AbstractResourceTest {
 		
 		// When
 		final Response response =
-				       getHttpsClient("101", "101").target(KUNDEN_ID_FILE_URI)
+				       getHttpsClient("USERNAME", "PASSWORD").target(KUNDEN_ID_FILE_URI)
                                                          .resolveTemplate(KundeResource.KUNDEN_ID_PATH_PARAM, kundeId)
                                                          .request()
                                                          .post(entity(uploadBytes, mimeType));

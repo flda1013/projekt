@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -21,10 +19,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
-
 import org.jboss.logging.Logger;
 
 

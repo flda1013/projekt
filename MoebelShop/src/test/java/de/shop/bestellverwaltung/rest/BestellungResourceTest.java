@@ -6,6 +6,8 @@ import static de.shop.util.TestConstants.ARTIKEL_ID_URI;
 import static de.shop.util.TestConstants.USERNAME_ADMIN;
 import static de.shop.util.TestConstants.PASSWORD_ADMIN;
 import static de.shop.util.TestConstants.ARTIKEL_URI;
+import static de.shop.util.TestConstants.ARTIKEL_BEZEICHNUNG;
+import static de.shop.util.TestConstants.ARTIKEL_PREIS;
 import static de.shop.util.TestConstants.BESTELLUNGEN_ID_KUNDE_URI;
 import static de.shop.util.TestConstants.BESTELLUNGEN_ID_PATH_PARAM;
 import static de.shop.util.TestConstants.BESTELLUNGEN_ID_URI;
@@ -17,7 +19,9 @@ import static de.shop.util.TestConstants.PASSWORD;
 import static de.shop.util.TestConstants.USERNAME;
 import static java.net.HttpURLConnection.HTTP_CREATED;
 import static java.net.HttpURLConnection.HTTP_OK;
+import static de.shop.util.TestConstants.PASSWORD_FALSCH;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 import static java.util.Locale.ENGLISH;
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 
@@ -28,11 +32,9 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.filter;
 
 import java.lang.invoke.MethodHandles;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,6 +47,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
+
+
+
+import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.bestellverwaltung.domain.Bestellposition;
 import de.shop.bestellverwaltung.domain.Bestellung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
@@ -84,7 +90,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE");
 	}
 	@Test
-	@InSequence(2)
+	@InSequence(21)
 	public void findBestellungIdNichtVorhanden() {
 		
 		LOGGER.finer("BEGINN");
@@ -104,7 +110,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		
 	}
 	@Test
-	@InSequence(10)
+	@InSequence(22)
 	public void createBestellung() throws URISyntaxException {
 		LOGGER.finer("BEGINN");
 		
@@ -155,7 +161,7 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE");
 	}
 	@Test
-	@InSequence(41)
+	@InSequence(23)
 	public void createBestellungInvalid() throws URISyntaxException {
 		LOGGER.finer("BEGINN");
 		
@@ -205,8 +211,43 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE");
 	}
 	
+	
 	@Test
-	@InSequence(4)
+	@InSequence(24)
+	public void createBestellungFalschesPassword() {
+		LOGGER.finer("BEGINN");
+		
+		// Given
+		// Bei falschem Passwort muss der Inhalt des JSON-Datensatzes egal sein
+		final Bestellung bestellung = new Bestellung();
+		
+		final Bestellposition bestellPosition = new Bestellposition();
+		
+		final Artikel artikel = new Artikel();
+		artikel.setBezeichnung(ARTIKEL_BEZEICHNUNG);
+		artikel.setPreis(ARTIKEL_PREIS);
+		
+		bestellPosition.setArtikel(artikel);
+		List<Bestellposition> bestellPositionList = new ArrayList<Bestellposition>();
+		bestellPositionList.add(bestellPosition);
+		
+		bestellung.setBestellpositionen(bestellPositionList);
+		
+		// When
+		final Response response = getHttpsClient(USERNAME, PASSWORD_FALSCH).target(BESTELLUNGEN_URI)
+                                                                           .request()
+                                                                           .post(json(bestellung));
+		
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_UNAUTHORIZED);
+		response.close();
+		
+		LOGGER.finer("ENDE");
+	}
+	
+	
+	@Test
+	@InSequence(25)
 	public void findKundeByBestellungId() {
 		LOGGER.finer("BEGINN");
 		
@@ -247,7 +288,27 @@ public class BestellungResourceTest extends AbstractResourceTest {
 		LOGGER.finer("ENDE");
 		
 	}
-	
+	@Test
+	@InSequence(25)
+	public void findKundeByBestellungIdNichtVorhanden() {
+		LOGGER.finer("BEGINN");
+		
+		//Given
+		Long bestellungId = Long.valueOf(600);
+			
+		Response response = getHttpsClient().target(BESTELLUNGEN_ID_KUNDE_URI)
+				 								  .resolveTemplate(BESTELLUNGEN_ID_PATH_PARAM, bestellungId)
+				 								  .request()
+				 								  .accept(APPLICATION_JSON)
+				 								  .get();
+		
+		assertThat(response.getStatus()).isEqualTo(HTTP_NOT_FOUND);
+		final String fehlermeldung = response.readEntity(String.class);
+		assertThat(fehlermeldung).startsWith("Kein Kunde zu der Bestellung")
+		                         .endsWith("gefunden.");
+		LOGGER.finer("ENDE");
+		
+	}
 	
 
 }

@@ -62,7 +62,7 @@ public class BestellungResource {
 	private static final String NOT_FOUND_USERNAME = "bestellung.notFound.username";
 	private static final String NOT_FOUND_ID_ARTIKEL = "artikel.notFound.id";
 	private static final String NOT_FOUND_ID = "bestellung.notFound.id";
-	
+	private static final String NOT_FOUND_ID_KUNDE = "kunde.notFound.bestellung.id";
 	
 
 	@Context
@@ -194,8 +194,7 @@ public class BestellungResource {
 	public Response findKundeByBestellungId(@PathParam("id") Long id) {
 		final AbstractKunde kunde = bs.findKundeById(id);
 		if (kunde == null) {
-			final String msg = "Keine Bestellung gefunden mit der ID " + id;
-			throw new NotFoundException(msg);
+			throw new NotFoundException(NOT_FOUND_ID_KUNDE, id);
 		}
 
 		kundeResource.setStructuralLinks(kunde, uriInfo);
