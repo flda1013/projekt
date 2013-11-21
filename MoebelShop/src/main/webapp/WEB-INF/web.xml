@@ -120,8 +120,7 @@
  <security-constraint>
   <web-resource-collection>
    <web-resource-name>Kunden erzeugen und modifizieren</web-resource-name>
-   <url-pattern>/rest/kunden</url-pattern>
-   <http-method>POST</http-method>
+   <url-pattern>/rest/kunde</url-pattern>
    <http-method>PUT</http-method>
   </web-resource-collection>
   <auth-constraint>
