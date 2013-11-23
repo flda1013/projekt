@@ -28,22 +28,21 @@ import org.jboss.logging.Logger;
 
 import de.shop.util.PreExistingGroup;
 
-
 @Entity
 @Table(name = "wartungsvertrag")
-@NamedQueries({
-	@NamedQuery(name  = Wartungsvertrag.FIND_WARTUNGSVERTRAEGE_BY_KUNDE_ID,
-                query = "SELECT w"
-                        + " FROM   Wartungsvertrag w"
-			            + " WHERE  w.kunde.id = :" + Wartungsvertrag.PARAM_KUNDE_ID)
-})
+@NamedQueries({ @NamedQuery(name = Wartungsvertrag.FIND_WARTUNGSVERTRAEGE_BY_KUNDE_ID, query = "SELECT w"
+		+ " FROM   Wartungsvertrag w"
+		+ " WHERE  w.kunde.id = :"
+		+ Wartungsvertrag.PARAM_KUNDE_ID) })
 @IdClass(Wartungsvertrag.WartungsvertragId.class)
 public class Wartungsvertrag implements Serializable {
 	private static final long serialVersionUID = 4024746327993094633L;
-	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
-	
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles
+			.lookup().lookupClass());
+
 	private static final String PREFIX = "Wartungsvertrag.";
-	public static final String FIND_WARTUNGSVERTRAEGE_BY_KUNDE_ID = PREFIX + "findWartungsvertraegeByKundeId";
+	public static final String FIND_WARTUNGSVERTRAEGE_BY_KUNDE_ID = PREFIX
+			+ "findWartungsvertraegeByKundeId";
 	public static final String PARAM_KUNDE_ID = "kundeId";
 
 	@Id
@@ -64,7 +63,7 @@ public class Wartungsvertrag implements Serializable {
 	@NotNull(message = "{kundenverwaltung.wartungsvertrag.kunde.notNull}", groups = PreExistingGroup.class)
 	@JsonIgnore
 	private AbstractKunde kunde;
-	
+
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
 	@JsonIgnore
@@ -78,25 +77,25 @@ public class Wartungsvertrag implements Serializable {
 	public Wartungsvertrag() {
 		super();
 	}
-	
+
 	public Wartungsvertrag(long nr, Date datum, String inhalt) {
 		super();
 		this.nr = nr;
 		this.datum = datum == null ? null : (Date) datum.clone();
 		this.inhalt = inhalt;
 	}
-	
+
 	@PrePersist
 	private void prePersist() {
 		erzeugt = new Date();
 		aktualisiert = new Date();
 	}
-	
+
 	@PostPersist
 	private void postPersist() {
 		LOGGER.debugf("Neuer Wartungsvertrag mit nr=%d/datum=%s", nr, datum);
 	}
-	
+
 	@PreUpdate
 	private void preUpdate() {
 		aktualisiert = new Date();
@@ -147,14 +146,15 @@ public class Wartungsvertrag implements Serializable {
 	}
 
 	public void setAktualisiert(Date aktualisiert) {
-		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
+		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert
+				.clone();
 	}
 
 	@Override
 	public String toString() {
-		return "Wartungsvertrag [nr=" + nr + ", datum=" + datum + ", inhalt=" + inhalt
-		       + ", erzeugt=" + erzeugt
-		       + ", aktualisiert=" + aktualisiert + ']';
+		return "Wartungsvertrag [nr=" + nr + ", datum=" + datum + ", inhalt="
+				+ inhalt + ", erzeugt=" + erzeugt + ", aktualisiert="
+				+ aktualisiert + ']';
 	}
 
 	@Override
@@ -178,38 +178,41 @@ public class Wartungsvertrag implements Serializable {
 			return false;
 		}
 		final Wartungsvertrag other = (Wartungsvertrag) obj;
-		
+
 		if (inhalt == null) {
 			if (other.inhalt != null) {
 				return false;
 			}
-		}
+		} 
+		
 		else if (!inhalt.equals(other.inhalt)) {
 			return false;
 		}
-		
+
 		if (kunde == null) {
 			if (other.kunde != null) {
 				return false;
 			}
-		}
+		} 
+		
 		else if (!kunde.equals(other.kunde)) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * Klasse f&uuml;r den zusammengesetzten Prim&auml;rschl&uuml;ssel bei Wartungsvertr&auml;gen 
+	 * Klasse f&uuml;r den zusammengesetzten Prim&auml;rschl&uuml;ssel bei
+	 * Wartungsvertr&auml;gen
 	 */
 	@Embeddable
 	public static class WartungsvertragId implements Serializable {
 		private static final long serialVersionUID = 5524909768642735623L;
-		
+
 		private long nr;
 		private Date datum;
-		
+
 		@Override
 		public String toString() {
 			return "WartungsvertragId [nr=" + nr + ", datum=" + datum + "]";
@@ -236,16 +239,17 @@ public class Wartungsvertrag implements Serializable {
 				return false;
 			}
 			final WartungsvertragId other = (WartungsvertragId) obj;
-			
+
 			if (nr != other.nr) {
 				return false;
 			}
-			
+
 			if (datum == null) {
 				if (other.datum != null) {
 					return false;
 				}
-			}
+			} 
+			
 			else if (!datum.equals(other.datum)) {
 				return false;
 			}

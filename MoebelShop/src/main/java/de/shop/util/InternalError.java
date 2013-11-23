@@ -6,7 +6,7 @@ public class InternalError extends RuntimeException {
 	public InternalError(Throwable t) {
 		super("Ein interner Fehler ist aufgetreten", t);
 	}
-	
+
 	public InternalError(String msg) {
 		super("Ein interner Fehler ist aufgetreten: " + msg);
 	}

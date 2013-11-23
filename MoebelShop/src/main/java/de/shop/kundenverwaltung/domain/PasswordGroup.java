@@ -1,3 +1,4 @@
 package de.shop.kundenverwaltung.domain;
 
-public interface PasswordGroup { }
+public interface PasswordGroup {
+}

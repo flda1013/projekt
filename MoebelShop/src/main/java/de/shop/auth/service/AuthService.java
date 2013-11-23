@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.security.auth.Subject;
 import javax.security.jacc.PolicyContext;
 import javax.security.jacc.PolicyContextException;
@@ -34,8 +33,6 @@ import org.jboss.as.controller.client.ModelControllerClient;
 import org.jboss.dmr.ModelNode;
 import org.jboss.logging.Logger;
 import org.jboss.security.SimpleGroup;
-
-
 
 import com.google.common.base.Strings;
 
@@ -51,65 +48,65 @@ import de.shop.util.Log;
 public class AuthService implements Serializable {
 
 	private static final long serialVersionUID = 5719521298774482673L;
-	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles
+			.lookup().lookupClass());
 	private static final String LOCALHOST = "localhost";
-	private static final int MANAGEMENT_PORT = 9990;  // JBossAS hatte den Management-Port 9999
-	
-	@Inject 
-	private transient EntityManager em;
-	
+	private static final int MANAGEMENT_PORT = 9990; // JBossAS hatte den
+														// Management-Port 9999
+
 	@Inject
 	private KundeService ks;
-	
+
 	@PostConstruct
 	private void postConstruct() {
-		LOGGER.debugf("CDI-faehiges Bean %s wurde erzeugt" , this);
+		LOGGER.debugf("CDI-faehiges Bean %s wurde erzeugt", this);
 	}
-	
+
 	@PreDestroy
 	private void preDesytroy() {
-		LOGGER.debugf("CDI faehiges Bean %s wurde gelöscht",this);
+		LOGGER.debugf("CDI faehiges Bean %s wurde gelöscht", this);
 	}
-	
+
 	public String verschluesseln(String password) {
-		if(password == null)
+		if (password == null)
 			return null;
-		
-		return createPasswordHash(HASH_ALGORITHM, HASH_ENCODING,HASH_CHARSET , null, password);
+
+		return createPasswordHash(HASH_ALGORITHM, HASH_ENCODING, HASH_CHARSET,
+				null, password);
 	}
-	
+
 	public void addRollen(Long kundeId, Collection<RolleType> rollen) {
 		if (rollen == null || rollen.isEmpty()) {
 			return;
 		}
 
-		ks.findKundeById(kundeId, FetchType.NUR_KUNDE)
-		  .addRollen(rollen);
+		ks.findKundeById(kundeId, FetchType.NUR_KUNDE).addRollen(rollen);
 		flushSecurityCache(kundeId.toString());
 	}
+
 	public boolean validatePassword(AbstractKunde kunde, String password) {
-		if(kunde == null)
+		if (kunde == null)
 			return false;
-		
-		
+
 		final String verschluesselt = verschluesseln(password);
 		return verschluesselt.equals(kunde.getPassword());
 
 	}
-	
+
 	public void removeRollen(Long kundeId, Collection<RolleType> rollen) {
 		if (rollen == null || rollen.isEmpty()) {
 			return;
 		}
 
-//		ks.findKundeById(kundeId, FetchType.NUR_KUNDE)
-//		  .removeRollen(rollen);
+		// ks.findKundeById(kundeId, FetchType.NUR_KUNDE)
+		// .removeRollen(rollen);
 		flushSecurityCache(kundeId.toString());
 	}
-	
+
 	private static void flushSecurityCache(String username) {
 		// ModelControllerClient ist abgeleitet vom Interface Autoclosable
-		try (ModelControllerClient client = ModelControllerClient.Factory.create(LOCALHOST, MANAGEMENT_PORT)) {
+		try (ModelControllerClient client = ModelControllerClient.Factory
+				.create(LOCALHOST, MANAGEMENT_PORT)) {
 			final ModelNode address = new ModelNode();
 			address.add("subsystem", "security");
 			address.add("security-domain", SECURITY_DOMAIN);
@@ -122,24 +119,24 @@ public class AuthService implements Serializable {
 			final ModelNode result = client.execute(operation);
 			final String resultString = result.get("outcome").asString();
 			if (!"success".equals(resultString)) {
-				throw new IllegalStateException("FEHLER bei der Operation \"flush-cache\" fuer den Security-Cache: "
-						                        + resultString);
+				throw new IllegalStateException(
+						"FEHLER bei der Operation \"flush-cache\" fuer den Security-Cache: "
+								+ resultString);
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public List<RolleType> getEigeneRollen() {		
+
+	public List<RolleType> getEigeneRollen() {
 		final List<RolleType> rollen = new LinkedList<>();
-		
+
 		// Authentifiziertes Subject ermitteln
 		Subject subject = null;
 		try {
-			subject = Subject.class.cast(PolicyContext.getContext("javax.security.auth.Subject.container"));
-		}
-		catch (PolicyContextException e) {
+			subject = Subject.class.cast(PolicyContext
+					.getContext("javax.security.auth.Subject.container"));
+		} catch (PolicyContextException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new RuntimeException(e);
 		}
@@ -148,7 +145,8 @@ public class AuthService implements Serializable {
 		}
 
 		// Gruppe "Roles" ermitteln
-		final Set<Principal> principals = subject.getPrincipals(Principal.class);
+		final Set<Principal> principals = subject
+				.getPrincipals(Principal.class);
 		for (Principal p : principals) {
 			if (!(p instanceof SimpleGroup)) {
 				continue;
@@ -158,36 +156,36 @@ public class AuthService implements Serializable {
 			if (!"Roles".equals(sg.getName())) {
 				continue;
 			}
-			
+
 			// Rollen ermitteln
 			final Enumeration<Principal> members = sg.members();
 			while (members.hasMoreElements()) {
 				final String rolle = members.nextElement().toString();
 				if (rolle != null) {
-					rollen.add(RolleType.valueOf(rolle.toUpperCase(Locale.getDefault())));
+					rollen.add(RolleType.valueOf(rolle.toUpperCase(Locale
+							.getDefault())));
 				}
 			}
 		}
 		return rollen;
 	}
-	
+
 	public static void main(String[] args) throws IOException {
 		for (;;) {
 			System.out.print("Password (Abbruch durch <Return>): ");
 			final BufferedReader reader = new BufferedReader(
-					                          new InputStreamReader(System.in, Charset.defaultCharset()));
+					new InputStreamReader(System.in, Charset.defaultCharset()));
 			final String password = reader.readLine();
 			if (Strings.isNullOrEmpty(password)) {
 				break;
 			}
-			final String passwordHash = createPasswordHash(HASH_ALGORITHM, HASH_ENCODING, HASH_CHARSET, null, password);
-			System.out.println("Verschluesselt: " + passwordHash + System.getProperty("line.separator"));
+			final String passwordHash = createPasswordHash(HASH_ALGORITHM,
+					HASH_ENCODING, HASH_CHARSET, null, password);
+			System.out.println("Verschluesselt: " + passwordHash
+					+ System.getProperty("line.separator"));
 		}
-		
+
 		System.out.println("FERTIG");
 	}
-	
-	
-	
-	
+
 }

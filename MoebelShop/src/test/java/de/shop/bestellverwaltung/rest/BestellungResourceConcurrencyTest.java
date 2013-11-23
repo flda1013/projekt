@@ -36,17 +36,15 @@ import de.shop.util.HttpsConcurrencyHelper;
 
 @RunWith(Arquillian.class)
 public class BestellungResourceConcurrencyTest extends AbstractResourceTest {
-	
+
 	private static final Logger LOGGER = Logger.getLogger(MethodHandles
 			.lookup().lookupClass().getName());
 	private static final long TIMEOUT = 20;
 
 	private static final Long BESTELLUNG_ID_UPDATE = Long.valueOf(400);
-	private static final Long neuerKundePar = Long.valueOf(104);
-	private static final Long neuerKundePar2 = Long.valueOf(102);
-	
+	private static final Long NEUER_KUNDE_PAR = Long.valueOf(104);
+	private static final Long NEUER_KUNDE_PAR_ZWEI = Long.valueOf(102);
 
-	
 	@Test
 	@InSequence(80)
 	public void updateUpdate() throws InterruptedException, ExecutionException,
@@ -55,8 +53,8 @@ public class BestellungResourceConcurrencyTest extends AbstractResourceTest {
 
 		// Given
 		final Long bestellungId = BESTELLUNG_ID_UPDATE;
-		final Long neuerKunde = neuerKundePar;
-		final Long neuerKunde2 = neuerKundePar2;
+		final Long neuerKunde = NEUER_KUNDE_PAR;
+		final Long neuerKunde2 = NEUER_KUNDE_PAR_ZWEI;
 
 		// When
 		Response response = getHttpsClient().target(BESTELLUNGEN_ID_URI)
@@ -66,20 +64,15 @@ public class BestellungResourceConcurrencyTest extends AbstractResourceTest {
 		final Bestellung bestellung = response.readEntity(Bestellung.class);
 
 		response = getHttpsClient().target(KUNDEN_ID_URI)
-                .resolveTemplate(KUNDEN_ID_PATH_PARAM, neuerKunde)
-                .request()
-                .accept(APPLICATION_JSON)
-                .get();
+				.resolveTemplate(KUNDEN_ID_PATH_PARAM, neuerKunde).request()
+				.accept(APPLICATION_JSON).get();
 		final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
 
-		
 		response = getHttpsClient().target(KUNDEN_ID_URI)
-                .resolveTemplate(KUNDEN_ID_PATH_PARAM, neuerKunde2)
-                .request()
-                .accept(APPLICATION_JSON)
-                .get();
+				.resolveTemplate(KUNDEN_ID_PATH_PARAM, neuerKunde2).request()
+				.accept(APPLICATION_JSON).get();
 		final AbstractKunde kunde2 = response.readEntity(AbstractKunde.class);
-		
+
 		bestellung.setKunde(kunde);
 
 		final Callable<Integer> concurrentUpdate = new Callable<Integer>() {
@@ -107,7 +100,7 @@ public class BestellungResourceConcurrencyTest extends AbstractResourceTest {
 		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem
 		// Nachnamen bauen
 		bestellung.setKunde(kunde2);
-		
+
 		response = getHttpsClient(USERNAME, PASSWORD).target(BESTELLUNGEN_URI)
 				.request().accept(APPLICATION_JSON).put(json(bestellung));
 

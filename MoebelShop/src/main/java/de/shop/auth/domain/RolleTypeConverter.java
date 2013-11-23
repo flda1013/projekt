@@ -4,7 +4,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter(autoApply = true)
-public class RolleTypeConverter implements AttributeConverter<RolleType, String> {
+public class RolleTypeConverter implements
+		AttributeConverter<RolleType, String> {
 	@Override
 	public String convertToDatabaseColumn(RolleType rolleType) {
 		if (rolleType == null) {

@@ -1,6 +1,5 @@
 package de.shop.util;
 
-
 public final class Constants {
 	public static final String REST_PATH = "/rest";
 
@@ -12,24 +11,24 @@ public final class Constants {
 	public static final String REMOVE_LINK = "remove";
 	public static final String FIRST_LINK = "first";
 	public static final String LAST_LINK = "last";
-	
-    // JNDI-NAME fuer UserTransaction
+
+	// JNDI-NAME fuer UserTransaction
 	public static final String TRANSACTION_NAME = "java:jboss/UserTransaction";
-	
+
 	// JPA
 	public static final Long KEINE_ID = null;
 	public static final long MIN_ID = 1L;
 	public static final long MIN = 1;
 	public static final int ERSTE_VERSION = 0;
 	public static final int MAX_AUTOCOMPLETE = 10;
-	
+
 	// JAAS
 	public static final String SECURITY_DOMAIN = "shop";
-	
+
 	public static final String HASH_ALGORITHM = "SHA-256";
 	public static final String HASH_ENCODING = "base64";
 	public static final String HASH_CHARSET = "UTF-8";
-	
+
 	private Constants() {
 	}
 }

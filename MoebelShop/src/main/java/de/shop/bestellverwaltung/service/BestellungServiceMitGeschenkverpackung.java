@@ -3,7 +3,6 @@ package de.shop.bestellverwaltung.service;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 
-
 import javax.decorator.Decorator;
 import javax.decorator.Delegate;
 import javax.enterprise.inject.Any;
@@ -17,9 +16,11 @@ import de.shop.bestellverwaltung.domain.Lieferung;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 
 @Decorator
-public abstract class BestellungServiceMitGeschenkverpackung implements BestellungService {
-	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
-	
+public abstract class BestellungServiceMitGeschenkverpackung implements
+		BestellungService {
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles
+			.lookup().lookupClass());
+
 	@Inject
 	@Delegate
 	@Any
@@ -48,14 +49,15 @@ public abstract class BestellungServiceMitGeschenkverpackung implements Bestellu
 	@Override
 	public Bestellung createBestellung(Bestellung bestellung, String username) {
 		LOGGER.warn("Geschenkverpackung noch nicht implementiert");
-		
-		return bs.createBestellung(bestellung,username);
+
+		return bs.createBestellung(bestellung, username);
 	}
-	
+
 	@Override
-	public Bestellung createBestellung(Bestellung bestellung, AbstractKunde kunde) {
+	public Bestellung createBestellung(Bestellung bestellung,
+			AbstractKunde kunde) {
 		LOGGER.warn("Geschenkverpackung noch nicht implementiert");
-		
+
 		return bs.createBestellung(bestellung, kunde);
 	}
 

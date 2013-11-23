@@ -4,20 +4,22 @@ import javax.ejb.ApplicationException;
 
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 
-
 /**
- * Exception, die ausgel&ouml;st wird, wenn ein Kunde gel&ouml;scht werden soll, aber mindestens eine Bestellung hat
+ * Exception, die ausgel&ouml;st wird, wenn ein Kunde gel&ouml;scht werden soll,
+ * aber mindestens eine Bestellung hat
  */
 @ApplicationException(rollback = true)
-public class KundeDeleteBestellungException extends AbstractKundeServiceException {
+public class KundeDeleteBestellungException extends
+		AbstractKundeServiceException {
 	private static final long serialVersionUID = 2237194289969083093L;
 	private final Long kundeId;
 	private final int anzahlBestellungen;
 	private static final String MESSAGE_KEY = "kunde.DeleteBestellung";
-	
+
 	public KundeDeleteBestellungException(AbstractKunde kunde) {
-		super("Kunde mit ID=" + kunde.getId() + " kann nicht geloescht werden: "
-			  + kunde.getBestellungen().size() + " Bestellung(en)");
+		super("Kunde mit ID=" + kunde.getId()
+				+ " kann nicht geloescht werden: "
+				+ kunde.getBestellungen().size() + " Bestellung(en)");
 		this.kundeId = kunde.getId();
 		this.anzahlBestellungen = kunde.getBestellungen().size();
 	}
@@ -25,14 +27,14 @@ public class KundeDeleteBestellungException extends AbstractKundeServiceExceptio
 	public Long getKundeId() {
 		return kundeId;
 	}
+
 	public int getAnzahlBestellungen() {
 		return anzahlBestellungen;
 	}
 
 	@Override
 	public String getMessageKey() {
-		
+
 		return MESSAGE_KEY;
 	}
 }
-

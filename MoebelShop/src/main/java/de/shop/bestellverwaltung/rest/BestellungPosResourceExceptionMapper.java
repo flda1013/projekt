@@ -11,20 +11,17 @@ import javax.ws.rs.ext.Provider;
 import de.shop.bestellverwaltung.service.AbstractBestellungPosServiceException;
 import de.shop.util.Log;
 
-
 @Provider
 @ApplicationScoped
 @Log
-public class BestellungPosResourceExceptionMapper implements ExceptionMapper<AbstractBestellungPosServiceException> {
+public class BestellungPosResourceExceptionMapper implements
+		ExceptionMapper<AbstractBestellungPosServiceException> {
 	@Override
 	public Response toResponse(AbstractBestellungPosServiceException e) {
 		final String msg = e.getMessage();
-		final Response response = Response.status(CONFLICT)
-		                                  .type(TEXT_PLAIN)
-		                                  .entity(msg)
-		                                  .build();
+		final Response response = Response.status(CONFLICT).type(TEXT_PLAIN)
+				.entity(msg).build();
 		return response;
 	}
 
 }
-

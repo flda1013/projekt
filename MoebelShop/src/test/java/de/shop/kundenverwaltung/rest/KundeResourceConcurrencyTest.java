@@ -31,11 +31,11 @@ import org.junit.Test;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.util.HttpsConcurrencyHelper;
 
-
 @RunWith(Arquillian.class)
 public class KundeResourceConcurrencyTest extends AbstractResourceTest {
-	
-	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
+
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles
+			.lookup().lookupClass().getName());
 	private static final long TIMEOUT = 20;
 
 	private static final Long KUNDE_ID_UPDATE = Long.valueOf(101);
@@ -44,58 +44,58 @@ public class KundeResourceConcurrencyTest extends AbstractResourceTest {
 
 	@Test
 	@InSequence(50)
-	public void updateUpdate() throws InterruptedException, ExecutionException, TimeoutException {
+	public void updateUpdate() throws InterruptedException, ExecutionException,
+			TimeoutException {
 		LOGGER.finer("BEGINN");
-		
+
 		// Given
 		final Long kundeId = KUNDE_ID_UPDATE;
 		final String neuerVorname = NEUER_NACHNAME;
-    	final String neuerNachname2 = NEUER_NACHNAME_2;
-		
+		final String neuerNachname2 = NEUER_NACHNAME_2;
+
 		// When
 		Response response = getHttpsClient().target(KUNDEN_ID_URI)
-                                            .resolveTemplate(KUNDEN_ID_PATH_PARAM, kundeId)
-                                            .request()
-                                            .accept(APPLICATION_JSON)
-                                            .get();
+				.resolveTemplate(KUNDEN_ID_PATH_PARAM, kundeId).request()
+				.accept(APPLICATION_JSON).get();
 
-    	final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
+		final AbstractKunde kunde = response.readEntity(AbstractKunde.class);
 
-    	// Konkurrierendes Update
-		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
+		// Konkurrierendes Update
+		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem
+		// Nachnamen bauen
 		kunde.setNachname(neuerNachname2);
-		
+
 		final Callable<Integer> concurrentUpdate = new Callable<Integer>() {
 			@Override
 			public Integer call() {
 				final Response response = new HttpsConcurrencyHelper()
-				                          .getHttpsClient(USERNAME, PASSWORD)
-                                          .target(KUNDEN_URI)
-                                          .request()
-                                          .accept(APPLICATION_JSON)
-                                          .put(json(kunde));
+						.getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
+						.request().accept(APPLICATION_JSON).put(json(kunde));
 				final int status = response.getStatus();
 				response.close();
 				return Integer.valueOf(status);
 			}
 		};
-    	final Integer status = Executors.newSingleThreadExecutor()
-    			                        .submit(concurrentUpdate)
-    			                        .get(TIMEOUT, SECONDS);   // Warten bis der "parallele" Thread fertig ist
+		final Integer status = Executors.newSingleThreadExecutor()
+				.submit(concurrentUpdate).get(TIMEOUT, SECONDS); // Warten bis
+																	// der
+																	// "parallele"
+																	// Thread
+																	// fertig
+																	// ist
 		assertThat(status.intValue()).isEqualTo(HTTP_OK);
-		
-    	// Fehlschlagendes Update
-		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
+
+		// Fehlschlagendes Update
+		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem
+		// Nachnamen bauen
 		kunde.setVorname(neuerVorname);
 		response = getHttpsClient(USERNAME, PASSWORD).target(KUNDEN_URI)
-                                                      .request()
-                                                      .accept(APPLICATION_JSON)
-                                                      .put(json(kunde));
-	    	
+				.request().accept(APPLICATION_JSON).put(json(kunde));
+
 		// Then
 		assertThat(response.getStatus()).isEqualTo(HTTP_CONFLICT);
 		response.close();
-		
+
 		LOGGER.finer("ENDE");
 	}
 

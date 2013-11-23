@@ -24,41 +24,43 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.jboss.logging.Logger;
 
-
 @Entity
-@Table(name = "file_tbl")   // "file" ist in Oracle kein gueltiger Tabellenname
+@Table(name = "file_tbl")
+// "file" ist in Oracle kein gueltiger Tabellenname
 @XmlTransient
 @Vetoed
 public class File implements Serializable {
-	
+
 	private static final long serialVersionUID = 2632441781256478734L;
-	
-	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
+
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles
+			.lookup().lookupClass());
 
 	public static final int FILENAME_LENGTH_MAX = 128;
-	
+
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	private Long id = KEINE_ID;
-	
+
 	@Version
 	@Basic(optional = false)
 	private int version = ERSTE_VERSION;
-	
+
 	@Lob
 	@Basic(optional = false)
-	private byte[] bytes;  // Spaltentyp OID bei PostgreSQL, BLOB bei Oracle und LONGBLOB bei MySQL
-	
+	private byte[] bytes; // Spaltentyp OID bei PostgreSQL, BLOB bei Oracle und
+							// LONGBLOB bei MySQL
+
 	@Column(length = FILENAME_LENGTH_MAX, unique = true, nullable = false)
 	private String filename;
 
 	@Column(length = 5, nullable = false)
 	private MimeType mimeType;
-	
+
 	@Column(name = "multimedia_type", length = 1, nullable = false)
 	private MultimediaType multimediaType;
-	
+
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
 	private Date erzeugt;
@@ -66,11 +68,11 @@ public class File implements Serializable {
 	@Column(nullable = false)
 	@Temporal(TIMESTAMP)
 	private Date aktualisiert;
-	
+
 	public File() {
 		super();
 	}
-	
+
 	public File(byte[] bytes, String dateiname, MimeType mimeType) {
 		super();
 		set(bytes, dateiname, mimeType);
@@ -98,6 +100,7 @@ public class File implements Serializable {
 	public int getVersion() {
 		return version;
 	}
+
 	public void setVersion(int version) {
 		this.version = version;
 	}
@@ -117,7 +120,7 @@ public class File implements Serializable {
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-	
+
 	public MimeType getMimeType() {
 		return mimeType;
 	}
@@ -147,11 +150,13 @@ public class File implements Serializable {
 	}
 
 	public void setAktualisiert(Date aktualisiert) {
-		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert.clone();
+		this.aktualisiert = aktualisiert == null ? null : (Date) aktualisiert
+				.clone();
 	}
 
 	public final void set(byte[] bytes, String filename, MimeType mimeType) {
-		// Hibernate braucht den Aufruf der set-Methoden, um ein Update (Dirty-Flag!) zu erkennen
+		// Hibernate braucht den Aufruf der set-Methoden, um ein Update
+		// (Dirty-Flag!) zu erkennen
 		setBytes(bytes);
 		setFilename(filename);
 		setMimeType(mimeType);
@@ -162,16 +167,18 @@ public class File implements Serializable {
 	@Override
 	public String toString() {
 		final int groesse = bytes == null ? 0 : bytes.length;
-		return "File [id=" + id + ", version=" + version + ", groesse=" + groesse
-			   + ", filename=" + filename + ", mimeType=" + mimeType + ", multimediaType=" + multimediaType
-			   + ", erzeugt=" + erzeugt + ", aktualisiert=" + aktualisiert + "]";
+		return "File [id=" + id + ", version=" + version + ", groesse="
+				+ groesse + ", filename=" + filename + ", mimeType=" + mimeType
+				+ ", multimediaType=" + multimediaType + ", erzeugt=" + erzeugt
+				+ ", aktualisiert=" + aktualisiert + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((filename == null) ? 0 : filename.hashCode());
+		result = prime * result
+				+ ((filename == null) ? 0 : filename.hashCode());
 		return result;
 	}
 
@@ -191,7 +198,8 @@ public class File implements Serializable {
 			if (other.filename != null) {
 				return false;
 			}
-		}
+		} 
+		
 		else if (!filename.equals(other.filename)) {
 			return false;
 		}

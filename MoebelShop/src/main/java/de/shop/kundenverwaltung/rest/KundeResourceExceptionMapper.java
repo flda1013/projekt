@@ -11,20 +11,17 @@ import javax.ws.rs.ext.Provider;
 import de.shop.kundenverwaltung.service.AbstractKundeServiceException;
 import de.shop.util.Log;
 
-
 @Provider
 @ApplicationScoped
 @Log
-public class KundeResourceExceptionMapper implements ExceptionMapper<AbstractKundeServiceException> {
+public class KundeResourceExceptionMapper implements
+		ExceptionMapper<AbstractKundeServiceException> {
 	@Override
 	public Response toResponse(AbstractKundeServiceException e) {
 		final String msg = e.getMessage();
-		final Response response = Response.status(CONFLICT)
-		                                  .type(TEXT_PLAIN)
-		                                  .entity(msg)
-		                                  .build();
+		final Response response = Response.status(CONFLICT).type(TEXT_PLAIN)
+				.entity(msg).build();
 		return response;
 	}
 
 }
-

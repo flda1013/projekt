@@ -11,7 +11,8 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen Zimmermann</a>
+ * @author <a href="mailto:Juergen.Zimmermann@HS-Karlsruhe.de">J&uuml;rgen
+ *         Zimmermann</a>
  */
 @Qualifier
 @Target({ FIELD, PARAMETER })
@@ -19,4 +20,3 @@ import javax.inject.Qualifier;
 @Documented
 public @interface AbsenderName {
 }
-

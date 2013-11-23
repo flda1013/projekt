@@ -18,26 +18,24 @@ import de.shop.util.Log;
 @Provider
 @ApplicationScoped
 @Log
-public class BestellungPosValidationExceptionMapper  implements ExceptionMapper<AbstractBestellungPosValidationException> {
-		private static final String NEWLINE = System.getProperty("line.separator");
+public class BestellungPosValidationExceptionMapper implements
+		ExceptionMapper<AbstractBestellungPosValidationException> {
+	private static final String NEWLINE = System.getProperty("line.separator");
 
-		@Override
-		public Response toResponse(AbstractBestellungPosValidationException e) {
-			final Collection<ConstraintViolation<Bestellposition>> violations = e.getViolations();
-			final StringBuilder sb = new StringBuilder();
-			for (ConstraintViolation<Bestellposition> v : violations) {
-				sb.append(v.getMessage());
-				sb.append(NEWLINE);
-			}
-			
-			final String responseStr = sb.toString();
-			final Response response = Response.status(CONFLICT)
-			                                  .type(TEXT_PLAIN)
-			                                  .entity(responseStr)
-			                                  .build();
-			return response;
+	@Override
+	public Response toResponse(AbstractBestellungPosValidationException e) {
+		final Collection<ConstraintViolation<Bestellposition>> violations = e
+				.getViolations();
+		final StringBuilder sb = new StringBuilder();
+		for (ConstraintViolation<Bestellposition> v : violations) {
+			sb.append(v.getMessage());
+			sb.append(NEWLINE);
 		}
 
+		final String responseStr = sb.toString();
+		final Response response = Response.status(CONFLICT).type(TEXT_PLAIN)
+				.entity(responseStr).build();
+		return response;
 	}
 
-
+}

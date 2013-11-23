@@ -16,4 +16,3 @@ import javax.inject.Qualifier;
 @Documented
 public @interface NeueBestellung {
 }
-

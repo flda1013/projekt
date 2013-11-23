@@ -29,41 +29,41 @@ import de.shop.artikelverwaltung.domain.Artikel;
 @Entity
 @Table(name = "bestellposition")
 @NamedQueries({
-    @NamedQuery(name  = Bestellposition.FIND_LADENHUETER,
-   	            query = "SELECT a"
-   	            	    + " FROM   Artikel a"
-   	            	    + " WHERE  a NOT IN (SELECT bp.artikel FROM Bestellposition bp)"),
-   	            	
-   	@NamedQuery(name  = Bestellposition.FIND_BESTELLPOSITION_BY_ID,
-   	           	query = "SELECT bp"
-   	            	   	+ " FROM   Bestellposition bp"
-   	            	   	+ " WHERE  bp.id = :" + Bestellposition.PARAM_ID)
-})
+		@NamedQuery(name = Bestellposition.FIND_LADENHUETER, query = "SELECT a"
+				+ " FROM   Artikel a"
+				+ " WHERE  a NOT IN (SELECT bp.artikel FROM Bestellposition bp)"),
+
+		@NamedQuery(name = Bestellposition.FIND_BESTELLPOSITION_BY_ID, query = "SELECT bp"
+				+ " FROM   Bestellposition bp"
+				+ " WHERE  bp.id = :"
+				+ Bestellposition.PARAM_ID) })
 @XmlRootElement
 public class Bestellposition implements Serializable {
 	private static final long serialVersionUID = 2222771733641950913L;
-	private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass());
-	
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles
+			.lookup().lookupClass());
+
 	private static final String PREFIX = "Bestellposition.";
 	public static final String FIND_LADENHUETER = PREFIX + "findLadenhueter";
-	public static final String FIND_BESTELLPOSITION_BY_ID = PREFIX + "findBestellpositionById";
+	public static final String FIND_BESTELLPOSITION_BY_ID = PREFIX
+			+ "findBestellpositionById";
 	private static final int ANZAHL_MIN = 1;
 	public static final String PARAM_ID = "id";
-	
+
 	public static final int ERSTE_VERSION = 0;
-	
+
 	@Id
 	@GeneratedValue
 	@Column(nullable = false, updatable = false)
 	private Long id = KEINE_ID;
-	
+
 	@Version
 	@Basic(optional = false)
 	private int version = ERSTE_VERSION;
-	
+
 	@ManyToOne(optional = false)
-    @JoinColumn(name = "artikel_fk", nullable = false)
-//	@NotNull(message = "{bestellverwaltung.bestellposition.artikel.notNull}")
+	@JoinColumn(name = "artikel_fk", nullable = false)
+	// @NotNull(message = "{bestellverwaltung.bestellposition.artikel.notNull}")
 	@XmlTransient
 	private Artikel artikel;
 
@@ -73,23 +73,23 @@ public class Bestellposition implements Serializable {
 	@Column(name = "anzahl", nullable = false)
 	@Min(value = ANZAHL_MIN, message = "{bestellverwaltung.bestellPosition.anzahl.Min}")
 	private short anzahl;
-	
+
 	public Bestellposition() {
 		super();
 	}
-	
+
 	public Bestellposition(Artikel artikel) {
 		super();
 		this.artikel = artikel;
 		this.anzahl = 1;
 	}
-	
+
 	public Bestellposition(Artikel artikel, short anzahl) {
 		super();
 		this.artikel = artikel;
 		this.anzahl = anzahl;
 	}
-	
+
 	@PostPersist
 	private void postPersist() {
 		LOGGER.debugf("Neue Bestellposition mit ID=%d", id);
@@ -102,7 +102,7 @@ public class Bestellposition implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public int getVersion() {
 		return version;
 	}
@@ -110,7 +110,7 @@ public class Bestellposition implements Serializable {
 	public void setVersion(int version) {
 		this.version = version;
 	}
-	
+
 	public Artikel getArtikel() {
 		return artikel;
 	}
@@ -118,11 +118,11 @@ public class Bestellposition implements Serializable {
 	public void setArtikel(Artikel artikel) {
 		this.artikel = artikel;
 	}
-	
+
 	public URI getArtikelUri() {
 		return artikelUri;
 	}
-	
+
 	public void setArtikelUri(URI artikelUri) {
 		this.artikelUri = artikelUri;
 	}
@@ -130,15 +130,16 @@ public class Bestellposition implements Serializable {
 	public short getAnzahl() {
 		return anzahl;
 	}
+
 	public void setAnzahl(short anzahl) {
 		this.anzahl = anzahl;
 	}
-		
+
 	@Override
 	public String toString() {
 		final Long artikelId = artikel == null ? null : artikel.getId();
 		return "Bestellposition [id=" + id + ", artikel=" + artikelId
-			   + ", artikelUri=" + artikelUri + ", anzahl=" + anzahl + "]";
+				+ ", artikelUri=" + artikelUri + ", anzahl=" + anzahl + "]";
 	}
 
 	@Override
@@ -163,29 +164,35 @@ public class Bestellposition implements Serializable {
 			return false;
 		}
 		final Bestellposition other = (Bestellposition) obj;
-		
-		// Bei persistenten Bestellpositionen koennen zu verschiedenen Bestellungen gehoeren
-		// und deshalb den gleichen Artikel (s.u.) referenzieren, deshalb wird Id hier beruecksichtigt
+
+		// Bei persistenten Bestellpositionen koennen zu verschiedenen
+		// Bestellungen gehoeren
+		// und deshalb den gleichen Artikel (s.u.) referenzieren, deshalb wird
+		// Id hier beruecksichtigt
 		if (id == null) {
 			if (other.id != null) {
 				return false;
 			}
 		}
+
 		else if (!id.equals(other.id)) {
 			return false;
 		}
 
-		// Wenn eine neue Bestellung angelegt wird, dann wird jeder zu bestellende Artikel
+		// Wenn eine neue Bestellung angelegt wird, dann wird jeder zu
+		// bestellende Artikel
 		// genau 1x referenziert (nicht zu verwechseln mit der "anzahl")
 		if (artikel == null) {
 			if (other.artikel != null) {
 				return false;
 			}
 		}
+
 		else if (!artikel.equals(other.artikel)) {
 			return false;
 		}
-		
+
 		return true;
 	}
+	
 }

@@ -20,13 +20,13 @@ public class Config implements Serializable {
 	// In META-INF\ejb-jar.xml kann der Wert gesetzt bzw. ueberschrieben werden
 	@Resource(name = "absenderMail")
 	private String absenderMail;
-		
+
 	@Resource(name = "absenderName")
 	private String absenderName;
-	
+
 	@Resource(name = "locales")
 	private String localesStr;
-	
+
 	private List<Locale> locales;
 	private Locale defaultLocale = Locale.GERMAN;
 
@@ -36,18 +36,16 @@ public class Config implements Serializable {
 			locales = Lists.newArrayList(defaultLocale);
 			return;
 		}
-		
-	    final Iterable<String> tokens = Splitter.on(',')
-	    		                                .trimResults()
-	    		                                .omitEmptyStrings()
-	    		                                .split(localesStr);
-	    locales = new ArrayList<>();
-	    for (String token : tokens) {
-	    	locales.add(new Locale(token));
-	    }
-	    
-	    if (locales != null && !locales.isEmpty()) {
-	    	defaultLocale = locales.get(0);
+
+		final Iterable<String> tokens = Splitter.on(',').trimResults()
+				.omitEmptyStrings().split(localesStr);
+		locales = new ArrayList<>();
+		for (String token : tokens) {
+			locales.add(new Locale(token));
+		}
+
+		if (locales != null && !locales.isEmpty()) {
+			defaultLocale = locales.get(0);
 		}
 	}
 
@@ -85,7 +83,8 @@ public class Config implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Config [locales=" + locales + ", defaultLocale=" + defaultLocale + ", absenderMail=" + absenderMail
+		return "Config [locales=" + locales + ", defaultLocale="
+				+ defaultLocale + ", absenderMail=" + absenderMail
 				+ ", absenderName=" + absenderName + "]";
 	}
 }

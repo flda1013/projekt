@@ -4,7 +4,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 @Converter(autoApply = true)
-public class GeschlechtTypeConverter implements AttributeConverter<GeschlechtType, String> {
+public class GeschlechtTypeConverter implements
+		AttributeConverter<GeschlechtType, String> {
 	@Override
 	public String convertToDatabaseColumn(GeschlechtType geschlechtType) {
 		if (geschlechtType == null) {

@@ -30,71 +30,71 @@ import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.util.AbstractResourceTest;
 import de.shop.util.HttpsConcurrencyHelper;
 
-	@RunWith(Arquillian.class)
-	public class ArtikelResourceConcurrencyTest extends AbstractResourceTest {
-		
-		private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().getName());
-		private static final long TIMEOUT = 20;
+@RunWith(Arquillian.class)
+public class ArtikelResourceConcurrencyTest extends AbstractResourceTest {
 
-		private static final Long ARTIKEL_ID_UPDATE = Long.valueOf(301);
-		private static final String NEUE_BEZEICHNUNG = "Testbezeichnung";
-		private static final String NEUE_BEZEICHNUNG_2 = "Neuebezeichnung";
-		
-		@Test
-		@InSequence(50)
-		public void updateUpdate() throws InterruptedException, ExecutionException, TimeoutException {
-			LOGGER.finer("BEGINN");
-			
-			// Given
-			final Long artikelId = ARTIKEL_ID_UPDATE;
-			final String neueBezeichnung = "ConcTest";
-	    	final String neueBezeichnung2 = NEUE_BEZEICHNUNG_2;
-			
-			// When
-			Response response = getHttpsClient().target(ARTIKEL_ID_URI)
-	                                            .resolveTemplate(ARTIKEL_ID_PATH_PARAM, artikelId)
-	                                            .request()
-	                                            .accept(APPLICATION_JSON)
-	                                            .get();
+	private static final Logger LOGGER = Logger.getLogger(MethodHandles
+			.lookup().lookupClass().getName());
+	private static final long TIMEOUT = 20;
 
-	    	final Artikel artikel = response.readEntity(Artikel.class);
+	private static final Long ARTIKEL_ID_UPDATE = Long.valueOf(301);
+	private static final String NEUE_BEZEICHNUNG = "Testbezeichnung";
+	private static final String NEUE_BEZEICHNUNG_2 = "Neuebezeichnung";
 
-	    	// Konkurrierendes Update
-			// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
-			artikel.setBezeichnung(neueBezeichnung2);
-			
-			final Callable<Integer> concurrentUpdate = new Callable<Integer>() {
-				@Override
-				public Integer call() {
-					final Response response = new HttpsConcurrencyHelper()
-					                          .getHttpsClient(USERNAME, PASSWORD)
-	                                          .target(ARTIKEL_URI)
-	                                          .request()
-	                                          .accept(APPLICATION_JSON)
-	                                          .put(json(artikel));
-					final int status = response.getStatus();
-					response.close();
-					return Integer.valueOf(status);
-				}
-			};
-	    	final Integer status = Executors.newSingleThreadExecutor()
-	    			                        .submit(concurrentUpdate)
-	    			                        .get(TIMEOUT, SECONDS);   // Warten bis der "parallele" Thread fertig ist
-			assertThat(status.intValue()).isEqualTo(HTTP_OK);
-			
-	    	// Fehlschlagendes Update
-			// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem Nachnamen bauen
-			artikel.setBezeichnung(neueBezeichnung);
-			response = getHttpsClient(USERNAME, PASSWORD).target(ARTIKEL_URI)
-	                                                      .request()
-	                                                      .accept(APPLICATION_JSON)
-	                                                      .put(json(artikel));
-		    	
-			// Then
-			assertThat(response.getStatus()).isEqualTo(HTTP_CONFLICT);
-			response.close();
-			
-			LOGGER.finer("ENDE");
-		}	
+	@Test
+	@InSequence(50)
+	public void updateUpdate() throws InterruptedException, ExecutionException,
+			TimeoutException {
+		LOGGER.finer("BEGINN");
+
+		// Given
+		final Long artikelId = ARTIKEL_ID_UPDATE;
+		final String neueBezeichnung = NEUE_BEZEICHNUNG;
+		final String neueBezeichnung2 = NEUE_BEZEICHNUNG_2;
+
+		// When
+		Response response = getHttpsClient().target(ARTIKEL_ID_URI)
+				.resolveTemplate(ARTIKEL_ID_PATH_PARAM, artikelId).request()
+				.accept(APPLICATION_JSON).get();
+
+		final Artikel artikel = response.readEntity(Artikel.class);
+
+		// Konkurrierendes Update
+		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem
+		// Nachnamen bauen
+		artikel.setBezeichnung(neueBezeichnung2);
+
+		final Callable<Integer> concurrentUpdate = new Callable<Integer>() {
+			@Override
+			public Integer call() {
+				final Response response = new HttpsConcurrencyHelper()
+						.getHttpsClient(USERNAME, PASSWORD).target(ARTIKEL_URI)
+						.request().accept(APPLICATION_JSON).put(json(artikel));
+				final int status = response.getStatus();
+				response.close();
+				return Integer.valueOf(status);
+			}
+		};
+		final Integer status = Executors.newSingleThreadExecutor()
+				.submit(concurrentUpdate).get(TIMEOUT, SECONDS); // Warten bis
+																	// der
+																	// "parallele"
+																	// Thread
+																	// fertig
+																	// ist
+		assertThat(status.intValue()).isEqualTo(HTTP_OK);
+
+		// Fehlschlagendes Update
+		// Aus den gelesenen JSON-Werten ein neues JSON-Objekt mit neuem
+		// Nachnamen bauen
+		artikel.setBezeichnung(neueBezeichnung);
+		response = getHttpsClient(USERNAME, PASSWORD).target(ARTIKEL_URI)
+				.request().accept(APPLICATION_JSON).put(json(artikel));
+
+		// Then
+		assertThat(response.getStatus()).isEqualTo(HTTP_CONFLICT);
+		response.close();
+
+		LOGGER.finer("ENDE");
 	}
-
+}

@@ -20,4 +20,4 @@ package de.shop.kundenverwaltung.domain;
 //	public FamilienstandType convertToEntityAttribute(String internal) {
 //		return FamilienstandType.build(internal);
 //	}
-//}
+// }

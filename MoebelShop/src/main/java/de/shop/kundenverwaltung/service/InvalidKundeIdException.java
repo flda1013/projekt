@@ -11,10 +11,11 @@ import de.shop.kundenverwaltung.domain.AbstractKunde;
 public class InvalidKundeIdException extends AbstractKundeValidationException {
 	private static final long serialVersionUID = -8973151010781329074L;
 	private static final String MESSAGE_KEY = "kunde.IdInvalid";
-	
+
 	private final Long kundeId;
-	
-	public InvalidKundeIdException(Long kundeId, Collection<ConstraintViolation<AbstractKunde>> violations) {
+
+	public InvalidKundeIdException(Long kundeId,
+			Collection<ConstraintViolation<AbstractKunde>> violations) {
 		super(violations);
 		this.kundeId = kundeId;
 	}
@@ -25,7 +26,7 @@ public class InvalidKundeIdException extends AbstractKundeValidationException {
 
 	@Override
 	public String getMessageKey() {
-		
+
 		return MESSAGE_KEY;
 	}
 }
