@@ -143,6 +143,7 @@
    <web-resource-name>Bestellungen erzeugen</web-resource-name>
    <url-pattern>/rest/bestellungen</url-pattern>
    <http-method>POST</http-method>
+   <http-method>PUT</http-method>
   </web-resource-collection>
   <auth-constraint>
    <role-name>admin</role-name>
