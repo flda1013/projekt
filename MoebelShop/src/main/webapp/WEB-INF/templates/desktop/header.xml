@@ -54,6 +54,10 @@
 				</h:panelGrid>
 				<r:message id="fehlermeldungLogin" for="username"/>
 			</h:form>
+			<h:form>
+			<h:link id="Registrieren" value="Registrieren" outcome="/kundenverwaltung/createPrivatkunde">
+				</h:link>
+			</h:form>
 
 			<h:form id="spracheForm">
 				<r:dropDownMenu id="sprache">
