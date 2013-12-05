@@ -221,7 +221,7 @@ public abstract class AbstractKunde implements Serializable {
 	private Date seit;
 
 	@Column(nullable = false, precision = 5, scale = 4)
-	private BigDecimal rabatt;
+	private BigDecimal rabatt = new BigDecimal(0.0);
 
 	@Column(nullable = false, precision = 15, scale = 3)
 	private BigDecimal umsatz;
@@ -237,10 +237,6 @@ public abstract class AbstractKunde implements Serializable {
 	@XmlTransient
 	private String passwordWdh;
 	
-	@Transient
-	@AssertTrue(message = "{kundenverwaltung.kunde.agb}")
-	private boolean agbAkzeptiert;
-
 	// @AssertTrue(groups = PasswordGroup.class, message =
 	// "{kundenverwaltung.kunde.password.notEqual}")
 	// public boolean isPasswordEqual() {

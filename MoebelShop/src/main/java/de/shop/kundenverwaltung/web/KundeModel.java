@@ -34,6 +34,7 @@ import org.richfaces.push.cdi.Push;
 import org.richfaces.ui.iteration.SortOrder;
 import org.richfaces.ui.toggle.panelMenu.UIPanelMenuItem;
 
+import de.shop.auth.service.AuthService;
 import de.shop.auth.web.AuthModel;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
 import de.shop.kundenverwaltung.domain.Adresse;
@@ -112,6 +113,9 @@ public class KundeModel implements Serializable {
 	
 	@Inject
 	private Messages messages;
+	
+	@Inject
+	private AuthService as;
 
 	@Inject
 	@Push(topic = "marketing")
@@ -381,13 +385,14 @@ public class KundeModel implements Serializable {
 			final String outcome = createPrivatkundeErrorMsg(null);
 			return outcome;
 		}
-
+		
 		// Liste von Strings als Set von Enums konvertieren
 		final Set<HobbyType> hobbiesPrivatkunde = new HashSet<>();
 		for (String s : hobbies) {
 			hobbiesPrivatkunde.add(HobbyType.valueOf(s));
 		}
 		neuerPrivatkunde.setHobbies(hobbiesPrivatkunde);
+       neuerPrivatkunde.setPassword(as.verschluesseln(neuerPrivatkunde.getPassword()));
 		try {
 			abK = ks.createKunde(neuerPrivatkunde);
 		}

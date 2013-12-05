@@ -38,7 +38,9 @@ import com.google.common.base.Strings;
 
 import de.shop.auth.domain.RolleType;
 import de.shop.kundenverwaltung.domain.AbstractKunde;
+
 import java.io.InputStreamReader;
+
 import de.shop.kundenverwaltung.service.KundeService;
 import de.shop.kundenverwaltung.service.KundeService.FetchType;
 import de.shop.util.Log;
@@ -98,8 +100,8 @@ public class AuthService implements Serializable {
 			return;
 		}
 
-		// ks.findKundeById(kundeId, FetchType.NUR_KUNDE)
-		// .removeRollen(rollen);
+//		 ks.findKundeById(kundeId, FetchType.NUR_KUNDE)
+//		 .removeRollen(rollen);
 		flushSecurityCache(kundeId.toString());
 	}
 
@@ -187,5 +189,13 @@ public class AuthService implements Serializable {
 
 		System.out.println("FERTIG");
 	}
+	
+	public String findKundeByUserName(String Name)
+	{
+		 AbstractKunde k = ks.findKundeByUserName(Name);
+		 return Long.toString(k.getId());
+	}
+
+
 
 }

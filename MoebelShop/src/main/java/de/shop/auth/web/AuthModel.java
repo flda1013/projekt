@@ -241,10 +241,10 @@ public class AuthModel implements Serializable {
 	
 //	@Log
 //	public List<String> findUsernameListByUsernamePrefix(String usernamePrefix) {
-//		final List<String> usernameList = authService.findUsernameListByUsernamePrefix(usernamePrefix);
+//		final List<String> usernameList = authService.findKundeByUserName(usernamePrefix);
 //		return usernameList;
 //	}
-	
+//	
 	@Log
 	public String findRollenByUsername() {
 		// Gibt es den Usernamen ueberhaupt?

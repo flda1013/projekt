@@ -301,7 +301,7 @@ public class KundeService implements Serializable {
 				.getResultList();
 		return kunden;
 	}
-
+	
 	public List<AbstractKunde> findKundenBySeit(Date seit) {
 		final List<AbstractKunde> kunden = em
 				.createNamedQuery(AbstractKunde.FIND_KUNDEN_BY_DATE,
