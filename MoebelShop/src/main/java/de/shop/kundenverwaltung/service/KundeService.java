@@ -46,9 +46,11 @@ public class KundeService implements Serializable {
 	public enum FetchType {
 		NUR_KUNDE, MIT_BESTELLUNGEN, MIT_WARTUNGSVERTRAEGEN
 	}
-
+	public enum OrderByType{
+		UNORDERED
+	}
 	public enum OrderType {
-		KEINE, ID
+		KEINE, ID, 
 	}
 
 	@Inject
@@ -73,7 +75,7 @@ public class KundeService implements Serializable {
 		LOGGER.debugf("CDI-faehiges Bean %s wird geloescht", this);
 	}
 
-	public List<AbstractKunde> findAllKunden(FetchType fetch, OrderType order) {
+	public List<AbstractKunde> findAllKunden(FetchType fetch, OrderByType order) {
 		List<AbstractKunde> kunden;
 		switch (fetch) {
 		case NUR_KUNDE:
