@@ -41,6 +41,7 @@
 						</c:if>
 					</h:link>
 				</r:panelMenuItem>
+				
 				<r:panelMenuItem id="kundenverwaltungUploadItem" rendered="#{r:isUserInRole('admin')}">
 					<h:link id="kundenverwaltungUpload"
 					        outcome="/kundenverwaltung/upload"
@@ -48,6 +49,17 @@
 					        rendered="#{authModel.loggedIn}">
 						<c:if test="#{not empty javax.enterprise.context.conversation.id}">
 							<f:param id="uploadCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+						</c:if>
+					</h:link>
+				</r:panelMenuItem>
+				
+				<r:panelMenuItem id="kundenverwaltungUpdateItem" rendered="#{r:isUserInRole('admin')}">
+					<h:link id="kundenverwaltungUpdate"
+					        outcome="/kundenverwaltung/updatePrivatkunde"
+					        value="Kunde aktualisieren"
+					        rendered="#{authModel.loggedIn}">
+						<c:if test="#{not empty javax.enterprise.context.conversation.id}">
+							<f:param id="updatePrivatkundeCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
 						</c:if>
 					</h:link>
 				</r:panelMenuItem>
