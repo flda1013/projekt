@@ -48,6 +48,7 @@ import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -88,10 +89,10 @@ import de.shop.auth.domain.RolleType;
 				+ " FROM AbstractKunde k LEFT JOIN FETCH k.bestellungen"),
 		@NamedQuery(name = AbstractKunde.FIND_KUNDEN_ORDER_BY_ID, query = "SELECT   k"
 				+ " FROM  AbstractKunde k" + " ORDER BY k.id"),
-		@NamedQuery(name = AbstractKunde.FIND_IDS_BY_PREFIX, query = "SELECT   k.id"
-				+ " FROM  AbstractKunde k"
-				+ " WHERE CONCAT('', k.id) LIKE :"
-				+ AbstractKunde.PARAM_KUNDE_ID_PREFIX + " ORDER BY k.id"),
+		@NamedQuery(name = AbstractKunde.FIND_IDS_BY_PREFIX, query = "SELECT k "
+                          + "  FROM AbstractKunde k " 
+                          + " WHERE CONCAT('', k.id) LIKE :idPrefix "
+                          + "     ORDER BY k.id "),
 		@NamedQuery(name = AbstractKunde.FIND_KUNDEN_BY_NACHNAME, query = "SELECT k"
 				+ " FROM   AbstractKunde k"
 				+ " WHERE  UPPER(k.nachname) = UPPER(:"
