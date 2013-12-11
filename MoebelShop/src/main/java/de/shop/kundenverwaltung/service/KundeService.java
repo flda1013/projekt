@@ -195,26 +195,6 @@ public class KundeService implements Serializable {
 						idPrefix + '%').getResultList();
 		return ids;
 	}
-	
-	public List<AbstractKunde> findKundenByIdPrefix(String id)
-	{
-		final List<AbstractKunde> kunde  = em.createNamedQuery(		
-				AbstractKunde.FIND_IDS_BY_PREFIX, AbstractKunde.class)
-				.setParameter(AbstractKunde.PARAM_KUNDE_ID_PREFIX, id + '%')
-				.getResultList();
-		
-		return kunde;
-	}
-	
-	public List<String> findNachnamenByPrefix(String nachnamePrefix)
-	{
-		final List<String> nachnamen  = em.createNamedQuery(		
-				AbstractKunde.FIND_NACHNAMEN_BY_PREFIX, String.class)
-				.setParameter(AbstractKunde.PARAM_KUNDE_NACHNAME_PREFIX, nachnamePrefix + '%')
-				.getResultList();
-		
-		return nachnamen;
-	}
 
 	public AbstractKunde findKundeByEmail(String email) {
 
@@ -429,7 +409,7 @@ public class KundeService implements Serializable {
 		setFile(kunde, bytes, mimeType);
 		return kunde;
 	}
-	
+
 	private void setFile(AbstractKunde kunde, byte[] bytes, MimeType mimeType) {
 		if (mimeType == null) {
 			throw new NoMimeTypeException();

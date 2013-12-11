@@ -95,9 +95,6 @@ public class KundeModel implements Serializable {
 	private static final String CLIENT_ID_DELETE_BUTTON = "form:deleteButton";
 	private static final String MSG_KEY_DELETE_KUNDE_BESTELLUNG = "kunde.deleteMitBestellung";
 	
-	private static final String CLIENT_ID_KUNDEN_NACHNAME ="form:nachnameInput";
-	private static final String MSG_KEY_KUNDEN_NOT_FOUND_BY_NACHNAME = "kunde.NotFound.Nachname";
-	
 	@PersistenceContext(type = EXTENDED)
 	private transient EntityManager em;
 	
@@ -139,7 +136,7 @@ public class KundeModel implements Serializable {
 	private AbstractKunde kunde;
 	private List<String> hobbies;
 	
-	@Pattern(regexp = AbstractKunde.NACHNAME_PATTERN, message = "{kundenverwaltung.nachname.pattern}")
+	@Pattern(regexp = AbstractKunde.NACHNAME_PATTERN, message = "{kunde.nachname.pattern}")
 	private String nachname;
 	
 	private List<AbstractKunde> kunden = Collections.emptyList();
@@ -295,19 +292,27 @@ public class KundeModel implements Serializable {
 	 * @param idPrefix Praefix fuer potenzielle Kunden-IDs
 	 * @return Liste der potenziellen Kunden
 	 */
-	@Log
-	public List<AbstractKunde> findKundenByIdPrefix(String idPrefix) {
-		List<AbstractKunde> kundenPrefix = null;
-	
-		
-		kundenPrefix = ks.findKundenByIdPrefix(idPrefix);
-		if (kundenPrefix == null || kundenPrefix.isEmpty()) {
-			// Kein Kunde zu gegebenem ID-Praefix vorhanden
-			return Collections.emptyList();
-		}
-		
-		return kundenPrefix;
-	}
+//	@Log
+//	public List<AbstractKunde> findKundenByIdPrefix(String idPrefix) {
+//		List<AbstractKunde> kundenPrefix = null;
+//		Long id = null; 
+//		try {
+//			id = Long.valueOf(idPrefix);
+//		}
+//		catch (NumberFormatException e) {
+//			findKundeByIdErrorMsg(idPrefix);
+//			return null;
+//		}
+//		
+//		kundenPrefix = ks.findKundenByIdPrefix(id);
+//		if (kundenPrefix == null || kundenPrefix.isEmpty()) {
+//			// Kein Kunde zu gegebenem ID-Praefix vorhanden
+//			findKundeByIdErrorMsg(idPrefix);
+//			return null;
+//		}
+//		
+//		return kundenPrefix;
+//	}
 	
 	@Log
 	public void loadKundeById() {
@@ -347,17 +352,17 @@ public class KundeModel implements Serializable {
 	 * @param nachnamePrefix Praefix fuer gesuchte Nachnamen
 	 * @return Liste der potenziellen Nachnamen
 	 */
-	@Log
-	public List<String> findNachnamenByPrefix(String nachnamePrefix) {
-		List<String> nachnamen = null;
-		// NICHT: Liste von Kunden. Sonst waeren gleiche Nachnamen mehrfach vorhanden.
-		nachnamen = ks.findNachnamenByPrefix(nachnamePrefix);
-		if (nachnamen == null || nachnamen.isEmpty()) {
-			return Collections.emptyList();
-		}
-		
-		return nachnamen;
-	}
+//	@Log
+//	public List<String> findNachnamenByPrefix(String nachnamePrefix) {
+//		// NICHT: Liste von Kunden. Sonst waeren gleiche Nachnamen mehrfach vorhanden.
+//		final List<String> nachnamen = ks.findNachnamenByPrefix(nachnamePrefix);
+//		if (nachnamen == null || nachnamen.isEmpty()) {
+//			messages.error(MSG_KEY_KUNDEN_NOT_FOUND_BY_NACHNAME, locale, CLIENT_ID_KUNDEN_NACHNAME, nachnamePrefix);
+//			return Collections.emptyList();
+//		}
+//		
+//		return nachnamen;
+//	}
 	
 	@TransactionAttribute    // Bestellungen ggf. nachladen
 	@Log

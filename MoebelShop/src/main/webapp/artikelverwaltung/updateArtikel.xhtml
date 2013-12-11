@@ -9,14 +9,12 @@
 	  xmlns:r="http://richfaces.org/rich">
 	<body>
 	<ui:composition template="/WEB-INF/templates/desktop/main.xml">
-	<ui:define name="metadata">
-				<f:event type="preRenderView" listener="#{kundeModel.hobbyTypeToString}"/>
-			</ui:define>
+	
 			
 			<ui:param name="pageTitle" value="Artikel aktualisieren"/>
 			
 			<ui:define name="content">
-			<c:set var="kunde" value="#{artikelModel.artikel}" scope="view"/>
+			<c:set var="artikel" value="#{artikelModel.artikel}" scope="view"/>
 			
 				<h1>
 					<h:outputFormat id="headingArtikel" value="#{msgKv['updateArtikel.heading']}" rendered="#{not empty artikel}">
@@ -38,9 +36,7 @@
 				
 				<h:form id="updateArtikelForm" rendered="#{not empty artikel">
 					<r:focus id="formFocus"/>
-					<!--
-					<r:jQuery id="nachnameFocus" selector="#nachname" query="focus()"/>
-					-->
+					
 					
 					<h:panelGrid id="updateArtikelTabelle"
 					        columns="3">
@@ -48,6 +44,19 @@
 						<h:inputText id="bezeichnung"
 						             value="#{artikel.bezeichnung}"
 						             valueChangeListener="#{artikel.geaendert}">
-							<r:validator oninvalid="$(#{r:element('nachname')}).addClass('invalid')"
-	                                     onvalid="$(#{r:element('nachname')}).removeClass('invalid')"/>
+							<r:validator oninvalid="$(#{r:element('bezeichnung')}).addClass('invalid')"
+	                                     onvalid="$(#{r:element('bezeichnung')}).removeClass('invalid')"/>
 						</h:inputText>
+						<r:messages id="fehlermeldungenBezeichnung" for="bezeichnung"/>
+						
+						<h:outputLabel id="preisLabel" for="preis" value="#{msgKv['updatePrivatkunde.preis']}"/>
+						<h:inputText id="preis" value="#{artikel.preis}" valueChangeListener="#{artikel.geaendert}"/>
+						<f:verbatim/>
+						
+					</h:panelGrid>
+				</h:form>
+			</ui:define>
+		</ui:composition>
+	</body>
+</html>	
+						

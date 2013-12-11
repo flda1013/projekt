@@ -87,7 +87,26 @@
 					               action="#{artikelModel.selectArtikel}">
 						#{msg['nav.artikelverwaltung.selectArtikel']}
 					</h:commandLink>
-				</r:panelMenuItem>				
+				</r:panelMenuItem>	
+				<r:panelMenuItem id="artikelVerwaltungUpdateItem" rendered="#{r:isUserInRole('admin')}">
+					<h:link id="artikelVerwaltungUpdate"
+					        outcome="/artikelverwaltung/updateArtikel"
+					        value="Artikel aktualisieren"
+					        rendered="#{authModel.loggedIn}">
+						<c:if test="#{not empty javax.enterprise.context.conversation.id}">
+							<f:param id="updatePrivatkundeCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+						</c:if>
+					</h:link>
+				</r:panelMenuItem>	
+				<r:panelMenuItem id="artikelVerwaltungCreateArtikelItem" rendered="#{r:isUserInRole('admin')}">
+					<h:link id="artikelverwaltungCreateArtikel"
+					        outcome="/artikelverwaltung/createArtikel"
+						    value="Neuer Artikel">
+						<c:if test="#{not empty javax.enterprise.context.conversation.id}">
+							<f:param id="createArtikelCid" name="cid" value="#{javax.enterprise.context.conversation.id}"/>
+						</c:if>
+					</h:link>
+				</r:panelMenuItem>		
 			</r:panelMenuGroup>
 
 			<r:panelMenuGroup id="bestellverwaltung"
