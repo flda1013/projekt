@@ -46,6 +46,11 @@ import de.shop.util.IdGroup;
 				+ " FROM     Artikel a" + " WHERE    a.bezeichnung LIKE :"
 				+ Artikel.PARAM_BEZEICHNUNG
 				+ "          AND a.ausgesondert = FALSE" + " ORDER BY a.id ASC"),
+		@NamedQuery(name  = Artikel.FIND_LADENHUETER,
+   	            query = "SELECT    a"
+   	            + " FROM   Artikel a"
+   	            + " WHERE  a NOT IN (SELECT bp.artikel FROM Bestellposition bp)"),
+
 		@NamedQuery(name = Artikel.FIND_ARTIKEL_MAX_PREIS, query = "SELECT      a"
 				+ " FROM     Artikel a"
 				+ " WHERE    a.preis < :"
@@ -61,6 +66,7 @@ public class Artikel implements Serializable {
 	private static final int BEZEICHNUNG_LENGTH_MAX = 32;
 
 	private static final String PREFIX = "Artikel.";
+	public static final String FIND_LADENHUETER = PREFIX + "findLadenhueter";
 	public static final String FIND_VERFUEGBARE_ARTIKEL = PREFIX
 			+ "findVerfuegbareArtikel";
 	public static final String FIND_ARTIKEL_BY_BEZ = PREFIX
@@ -83,7 +89,8 @@ public class Artikel implements Serializable {
 	private Long id = KEINE_ID;
 
 	@Column(length = BEZEICHNUNG_LENGTH_MAX, nullable = false)
-	@NotEmpty(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
+	//TODO Zimmermann Frage warum da 4 Fehlermeldungen kommen und wo die stehen sind nirgends zu finden
+//	@NotEmpty(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
 	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
 	@Size(max = BEZEICHNUNG_LENGTH_MAX, message = "{artikelverwaltung.artikel.bezeichnung.length}")
 	private String bezeichnung = "";

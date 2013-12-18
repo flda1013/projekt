@@ -48,7 +48,6 @@ import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
@@ -218,7 +217,7 @@ public abstract class AbstractKunde implements Serializable {
 
 	@Temporal(DATE)
 	@Past(message = "{kundenverwaltung.kunde.seit.past}")
-	private Date seit;
+	private Date seit = new Date();
 
 	@Column(nullable = false, precision = 5, scale = 4)
 	private BigDecimal rabatt = new BigDecimal(0.0);

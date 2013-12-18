@@ -171,6 +171,7 @@ public class ArtikelService implements Serializable {
 		if (artikel == null) {
 			return null;
 		}
+		// Artikel vom EntityManager trennen, weil anschliessend z.B. nach Id und
 		em.detach(artikel);
 
 		final Artikel tmp = findArtikelById(artikel.getId());
@@ -180,10 +181,14 @@ public class ArtikelService implements Serializable {
 		}
 		em.detach(tmp);
 		
-
-		em.merge(artikel);
-
+		artikel = em.merge(artikel); // OptimisticLockException
+		
 		return artikel;
 	}
 
+	public List<Artikel> ladenhueter(int anzahl) {
+		return em.createNamedQuery(Artikel.FIND_LADENHUETER, Artikel.class)
+				 .setMaxResults(anzahl)
+				 .getResultList();
+	}
 }
