@@ -95,7 +95,7 @@
   <context-param>
     <description>Alternativen: blueSky, classic, deepMarine, emeraldTown, japanCherry, ruby, wine</description>
     <param-name>org.richfaces.skin</param-name>
-    <param-value>blueSky</param-value>
+    <param-value>ruby</param-value>
   </context-param>
   <context-param>
     <param-name>org.atmosphere.useBlocking</param-name>
@@ -153,9 +153,11 @@
     <extension>ecss</extension>
     <mime-type>text/css</mime-type>
   </mime-mapping>
+  <!--
   <error-page>
     <location>/error/defaultError.jsf</location>
   </error-page>
+  -->
   <error-page>
     <error-code>403</error-code>
     <location>/error/accessDenied.jsf</location>

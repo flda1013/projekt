@@ -5,18 +5,13 @@ import static de.shop.util.Constants.JSF_REDIRECT_SUFFIX;
 
 import java.io.Serializable;
 import java.lang.invoke.MethodHandles;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.TransactionAttribute;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Event;
-import javax.enterprise.inject.Model;
 import javax.faces.context.Flash;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
@@ -31,16 +26,9 @@ import org.richfaces.push.cdi.Push;
 import de.shop.artikelverwaltung.domain.Artikel;
 import de.shop.artikelverwaltung.service.ArtikelService;
 import de.shop.auth.web.AuthModel;
-import de.shop.kundenverwaltung.domain.AbstractKunde;
-import de.shop.kundenverwaltung.domain.Adresse;
-import de.shop.kundenverwaltung.domain.HobbyType;
-import de.shop.kundenverwaltung.domain.Privatkunde;
-import de.shop.kundenverwaltung.service.EmailExistsException;
-import de.shop.kundenverwaltung.service.KundeService.FetchType;
 import de.shop.util.AbstractShopException;
 import de.shop.util.Log;
 import de.shop.util.persistence.ConcurrentDeletedException;
-import de.shop.util.web.Captcha;
 import de.shop.util.web.Client;
 import de.shop.util.web.Messages;
 
@@ -79,7 +67,6 @@ public class ArtikelModel implements Serializable {
 	private String bezeichnung;
 	private Artikel artikel;
 	private Long artikelId;
-	private String captchaInput;
 	
 	private List<Artikel> ladenhueter;
 
@@ -97,8 +84,6 @@ public class ArtikelModel implements Serializable {
 	@Inject
 	private AuthModel auth;
 	
-	@Inject
-	private Captcha captcha;
 	
 	@Inject
 	@Client
@@ -215,7 +200,7 @@ public class ArtikelModel implements Serializable {
 		return null;
 	}
 	
-	@TransactionAttribute
+	@Transactional 
 	@Log
 	public String update() {
 		auth.preserveLogin();
@@ -279,6 +264,7 @@ public class ArtikelModel implements Serializable {
 	}
 
 	
+	@SuppressWarnings("unused")
 	private String createArtikelErrorMsg(AbstractShopException e) {
 		if (e == null) {
 			messages.error(MSG_KEY_CREATE_PRIVATKUNDE_WRONG_CAPTCHA, locale, CLIENT_ID_CREATE_CAPTCHA_INPUT);
@@ -314,8 +300,9 @@ public class ArtikelModel implements Serializable {
 		
 		artikel = ausgewaehlterArtikel;
 		
-		return Artikel.class.equals(ausgewaehlterArtikel.getClass()
-				JSF_UPDATE_ARTIKEL;
+		return Artikel.class.equals(ausgewaehlterArtikel.getClass())
+				 ? JSF_UPDATE_ARTIKEL
+						   : JSF_UPDATE_ARTIKEL;
 		
 			  
 	}

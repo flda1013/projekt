@@ -27,8 +27,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jboss.logging.Logger;
 
 import de.shop.util.IdGroup;
@@ -89,8 +87,6 @@ public class Artikel implements Serializable {
 	private Long id = KEINE_ID;
 
 	@Column(length = BEZEICHNUNG_LENGTH_MAX, nullable = false)
-	//TODO Zimmermann Frage warum da 4 Fehlermeldungen kommen und wo die stehen sind nirgends zu finden
-//	@NotEmpty(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
 	@NotNull(message = "{artikelverwaltung.artikel.bezeichnung.notNull}")
 	@Size(max = BEZEICHNUNG_LENGTH_MAX, message = "{artikelverwaltung.artikel.bezeichnung.length}")
 	private String bezeichnung = "";
