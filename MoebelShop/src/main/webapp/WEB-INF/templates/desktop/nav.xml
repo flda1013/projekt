@@ -53,7 +53,7 @@
 					</h:link>
 				</r:panelMenuItem>
 				
-				<r:panelMenuItem id="kundenverwaltungUpdateItem" rendered="#{r:isUserInRole('admin')}">
+				<r:panelMenuItem id="kundenverwaltungUpdateItem" rendered="#{r:isUserInRole('admin, mitarbeiter, kunde')}">
 					<h:link id="kundenverwaltungUpdate"
 					        outcome="/kundenverwaltung/updatePrivatkunde"
 					        value="#{msg['nav.kundenverwaltung.aktu']}"
@@ -88,7 +88,7 @@
 						#{msg['nav.artikelverwaltung.selectArtikel']}
 					</h:commandLink>
 				</r:panelMenuItem>	
-				<r:panelMenuItem id="artikelVerwaltungUpdateItem" rendered="#{r:isUserInRole('admin')}">
+				<r:panelMenuItem id="artikelVerwaltungUpdateItem" rendered="#{r:isUserInRole('admin, mitarbeiter')}">
 					<h:link id="artikelVerwaltungUpdate"
 					        outcome="/artikelverwaltung/updateArtikel"
 					        value="#{msg['nav.artikelverwaltung.aktu']}" rendered="#{authModel.loggedIn}">
@@ -97,7 +97,7 @@
 						</c:if>
 					</h:link>
 				</r:panelMenuItem>	
-				<r:panelMenuItem id="artikelVerwaltungCreateArtikelItem" rendered="#{r:isUserInRole('admin')}">
+				<r:panelMenuItem id="artikelVerwaltungCreateArtikelItem" rendered="#{r:isUserInRole('admin, mitarbeiter')}">
 					<h:link id="artikelverwaltungCreateArtikel"
 					        outcome="/artikelverwaltung/createArtikel"
 						    value="#{msg['nav.artikelverwaltung.createArtikel']}">
