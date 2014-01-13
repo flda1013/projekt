@@ -16,6 +16,6 @@
 	</h:panelGroup>
 
 	<h:panelGroup id="copyright">
-		<b>SWE Projekt Gruppe 7</b>
+		<b>SWE2 Projekt Gruppe 5</b>
 	</h:panelGroup>
 </ui:composition>
